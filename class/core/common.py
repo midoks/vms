@@ -14,6 +14,8 @@ import hashlib
 from random import Random
 from flask import redirect
 
+import db
+
 
 def execShell(cmdstring, cwd=None, timeout=None, shell=True):
 
@@ -911,8 +913,8 @@ def getSSHStatus():
 def init():
 
     initDB()
-    initInitD()
-    initUserInfo()
+    # initInitD()
+    # initUserInfo()
 
 
 def local():
@@ -930,7 +932,7 @@ def checkClose():
 def initDB():
     try:
         sql = db.Sql().dbfile('default')
-        csql = mw.readFile('data/sql/default.sql')
+        csql = readFile('data/sql/default.sql')
         csql_list = csql.split(';')
         for index in range(len(csql_list)):
             sql.execute(csql_list[index], ())
@@ -940,32 +942,32 @@ def initDB():
 
 
 def initInitD():
-    script = mw.getRunDir() + '/scripts/init.d/mw.tpl'
-    script_bin = mw.getRunDir() + '/scripts/init.d/mw'
-    # if os.path.exists(script_bin):
-    #     return
+    script = getRunDir() + '/scripts/init.d/vms.tpl'
+    script_bin = getRunDir() + '/scripts/init.d/vms'
+    if os.path.exists(script_bin):
+        return
 
-    content = mw.readFile(script)
+    content = readFile(script)
     content = content.replace("{$SERVER_PATH}", mw.getRunDir())
 
-    mw.writeFile(script_bin, content)
-    mw.execShell('chmod +x ' + script_bin)
+    writeFile(script_bin, content)
+    execShell('chmod +x ' + script_bin)
 
-    mw.setHostAddr(mw.getLocalIp())
+    setHostAddr(mw.getLocalIp())
 
-    if not mw.isAppleSystem():
-        initd_bin = '/etc/init.d/mw'
+    if not isAppleSystem():
+        initd_bin = '/etc/init.d/vms'
         if not os.path.exists(initd_bin):
             import shutil
             shutil.copyfile(script_bin, initd_bin)
-            mw.execShell('chmod +x ' + initd_bin)
+            execShell('chmod +x ' + initd_bin)
         # 加入自启动
-        mw.execShell('chkconfig --add mw')
+        execShell('chkconfig --add vms')
 
 
 def initUserInfo():
 
-    data = mw.M('users').where('id=?', (1,)).getField('password')
+    data = M('users').where('id=?', (1,)).getField('password')
     if data == '21232f297a57a5a743894a0e4a801fc3':
         pwd = mw.getRandomString(8).lower()
         file_pw = mw.getRunDir() + '/data/default.pl'

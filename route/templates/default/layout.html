@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
-    <title>vms | 视频管理面板</title>
+    <title>vms | 视频管理面板&{{data.version}}</title>
     <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
     <link href="/static/css/font.css?v={{data.version}}" rel="stylesheet">
     <link href="/static/css/weadmin.css?v={{data.version}}" rel="stylesheet">
@@ -19,7 +19,7 @@
   <!-- 顶部开始 -->
   <div class="container">
     <div class="logo">
-      <a href="/">视频管理系统 | {{data.version}}</a>
+      <a href="/">VMS视频管理系统</a>
     </div>
     <div class="left_open">
       <!-- <i title="展开左侧栏" class="iconfont">&#xe699;</i> -->
@@ -121,7 +121,7 @@
 
       $(function () {
         // http.getMenu();
-        menu.getMenu('/static/json/menu.json');
+        menu.getMenu('/static/json/menu.json?v='+new Date().getTime());
         admin.tab.tabInit();
         
         

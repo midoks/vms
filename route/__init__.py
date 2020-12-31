@@ -68,6 +68,9 @@ socketio = SocketIO()
 socketio.init_app(app)
 
 
+common.init()
+
+
 # 取数据对象
 def get_input_data(data):
     pdata = common.dict_obj()
@@ -100,7 +103,7 @@ def publicObject(toObject, func, action=None, get=None):
             return data
     except Exception as e:
         data = {'msg': '访问异常:' + str(e) + '!', "status": False}
-        return mw.getJson(data)
+        return common.getJson(data)
 
 
 @app.route("/test")
@@ -210,23 +213,19 @@ def index(reqClass=None, reqAction=None, reqData=None):
 
     if (reqClass == None):
         reqClass = 'index'
-    classFile = ('config', 'index')
-    # if not reqClass in classFile:
-    #     return redirect('/')
+    classFile = ('config', 'index', 'video', 'api')
 
-    import config_api
-    data = config_api.config_api().get()
-    if reqAction == None:
-        # if not isLogined():
-        #     return redirect('/login')
-        # if reqClass == 'config':
+    if reqClass in classFile:
+        import config_api
+        data = config_api.config_api().get()
+        if reqAction == None:
+            return render_template(reqClass + '.html', data=data)
+        else:
+            return render_template(reqClass + '/' + reqAction + '.html', data=data)
 
-        return render_template(reqClass + '.html', data=data)
-    else:
-        return render_template(reqClass + '.html', data=data)
-
-    className = reqClass + '_api'
-
+    className = reqClass
+    print(className)
     eval_str = "__import__('" + className + "')." + className + '()'
     newInstance = eval(eval_str)
+    print(newInstance)
     return publicObject(newInstance, reqAction)

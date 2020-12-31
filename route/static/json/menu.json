@@ -10,33 +10,12 @@
 				"id": 2,
 				"name": "列表",
 				"icon": "",
-				"url": "./pages/member/list.html"
-			}, {
-				"id": 3,
-				"name": "会员删除",
+				"url": "/video/index"
+			},{
+				"id": 2,
+				"name": "测试",
 				"icon": "",
-				"url": "./pages/member/del.html"
-			}, {
-				"id": 4,
-				"name": "会员管理",
-				"icon": "&#xe70b;",
-				"url": "",
-				"children": [{
-					"id": 5,
-					"name": "输入框操作",
-					"icon": "",
-					"url": "./pages/member/addInput.html"
-				}, {
-					"id": 6,
-					"name": "三级菜单演示",
-					"icon": "",
-					"url": "./pages/404.html"
-				}, {
-					"id": 7,
-					"name": "导航菜单演示",
-					"icon": "&#xe70b;",
-					"url": "./pages/404.html"
-				}]
+				"url": "/video/test"
 			}]
 		},
 		{
