@@ -8,7 +8,7 @@
 			"url": "",
 			"children": [{
 				"id": 2,
-				"name": "会员列表",
+				"name": "列表",
 				"icon": "",
 				"url": "./pages/member/list.html"
 			}, {
