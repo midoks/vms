@@ -102,7 +102,7 @@ def publicObject(toObject, func, action=None, get=None):
             data = eval(efunc)
             return data
     except Exception as e:
-        data = {'msg': '访问异常:' + str(e) + '!', "status": False}
+        data = {'code': -1, 'msg': '访问异常:' + str(e) + '!', "status": False}
         return common.getJson(data)
 
 

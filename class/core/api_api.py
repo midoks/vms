@@ -30,14 +30,29 @@ class api_api:
 
         start = (int(p) - 1) * (int(limit))
 
-        videoM = common.M('api')
-        _list = videoM.field('id,appkey,appsecret,addtime').limit(
+        apiM = common.M('api')
+        _list = apiM.field('id,appkey,appsecret,addtime').limit(
             (str(start)) + ',' + limit).order('id desc').select()
 
-        count = videoM.count()
+        count = apiM.count()
 
         _ret['data'] = _list
         _ret['count'] = count
         _ret['code'] = 0
+
+        return common.getJson(_ret)
+
+    def delApi(self):
+
+        sid = request.form.get('id', '1').encode('utf-8')
+
+        apiM = common.M('api')
+        r = apiM.where("id=?", (sid,)).delete()
+        _ret = {}
+        _ret['code'] = 0
+        _ret['msg'] = '删除成功'
+        if not r:
+            _ret['code'] = 1
+            _ret['msg'] = '删除失败'
 
         return common.getJson(_ret)

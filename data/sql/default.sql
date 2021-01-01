@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `api` (
   `addtime` TEXT
 );
 
-INSERT INTO `api` (`id`, `appkey`, `appsecret`, `uptime`, `addtime`) VALUES
+INSERT INTO `api` (`id`, `appkey`, `appsecret`, `addtime`) VALUES
 (1, 'demo','e10adc3949ba59abbe56e057f20f883e','2016-12-10 15:12:56');
 
 
