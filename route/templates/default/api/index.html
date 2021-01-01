@@ -24,7 +24,7 @@
   </div>
 
   <div class="weadmin-body">
-  	<table class="layui-hide" id="api" lay-filter="test"></table>
+  	<table class="layui-hide" id="api" lay-filter="tableFilter"></table>
   </div>
 
   <script src="/static/lib/layui/layui.js?v={{data.version}}"></script>
@@ -57,6 +57,20 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
       ,{fixed: 'right', width: 165, align:'center', toolbar: '#toolBar'}
     ]]
   });
+
+
+  table.on("tool(tableFilter)", function (obj) {
+    let data = obj.data;
+    switch (obj.event) {
+      case "del":
+        apiDel(data.id);
+    }
+  });
+
+
+  function apiDel(id){
+    console.log(id)
+  }
 ///
 });
   
