@@ -7,15 +7,27 @@
 			"icon": "&#xe6b8;",
 			"url": "",
 			"children": [{
-				"id": 2,
+				"id": 11,
 				"name": "列表",
 				"icon": "",
 				"url": "/video/index"
 			},{
-				"id": 2,
+				"id": 12,
 				"name": "测试",
 				"icon": "",
 				"url": "/video/test"
+			}]
+		},
+		{
+			"id": 2,
+			"name": "API管理",
+			"icon": "&#xe714;",
+			"url": "",
+			"children": [{
+				"id": 21,
+				"name": "列表",
+				"icon": "",
+				"url": "/api/index"
 			}]
 		},
 		{

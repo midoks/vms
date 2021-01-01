@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `network` (
   `total_down` INTEGER,
   `down_packets` INTEGER,
   `up_packets` INTEGER,
+  `uptime` INTEGER,
   `addtime` INTEGER
 );
 

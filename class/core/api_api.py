@@ -15,7 +15,7 @@ sys.path.append(os.getcwd() + "/class/core")
 import common
 
 
-class video_api:
+class api_api:
 
     def __init__(self):
         pass
@@ -30,8 +30,8 @@ class video_api:
 
         start = (int(p) - 1) * (int(limit))
 
-        videoM = common.M('video')
-        _list = videoM.field('id,name,size,status,addtime').limit(
+        videoM = common.M('api')
+        _list = videoM.field('id,appkey,appsecret,addtime').limit(
             (str(start)) + ',' + limit).order('id desc').select()
 
         count = videoM.count()

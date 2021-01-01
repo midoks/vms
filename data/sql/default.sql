@@ -6,12 +6,13 @@ CREATE TABLE IF NOT EXISTS `video` (
   `filename` TEXT,
   `size` INTEGER,
   `status` INTEGER,
+  `uptime` TEXT,
   `addtime` TEXT
 );
 
 
 INSERT INTO `video` (`id`, `type`, `name`, `filename`, `size`, `status`, `addtime`) VALUES
-(1, '1', '21232f297a57a5a743894a0e4a801fc3', '12', '12', 0, '2016-12-10 15:12:56');
+(1, '1', '21232f297a57a5a743894a0e4a801fc3', '12', '12', 0, '2016-12-10 15:12:56','2016-12-10 15:12:56');
 
 
 CREATE TABLE IF NOT EXISTS `video_list` (
@@ -30,10 +31,16 @@ CREATE TABLE IF NOT EXISTS `logs` (
   `addtime` TEXT
 );
 
-CREATE TABLE IF NOT EXISTS `site_types` (
+CREATE TABLE IF NOT EXISTS `api` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
-  `name` TEXT
+  `appkey` VARCHAR(20),
+  `appsecret` CHAR(32),
+  `addtime` TEXT
 );
+
+INSERT INTO `api` (`id`, `appkey`, `appsecret`, `uptime`, `addtime`) VALUES
+(1, 'demo','e10adc3949ba59abbe56e057f20f883e','2016-12-10 15:12:56');
+
 
 
 CREATE TABLE IF NOT EXISTS `users` (

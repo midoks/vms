@@ -14,7 +14,7 @@
 <body>
   <div class="weadmin-nav">
     <span class="layui-breadcrumb">
-      <a href="javascript:;">首页</a> <a href="javascript:;">视频管理</a>
+      <a href="javascript:;">首页</a> <a href="javascript:;">API管理</a>
       <a href="javascript:;"> <cite>列表</cite></a>
     </span>
     <a class="layui-btn layui-btn-sm" style="margin-top:3px;float:right"
@@ -24,36 +24,8 @@
   </div>
 
   <div class="weadmin-body">
-  	<div class="layui-row">
-      <form class="layui-form layui-col-md12 we-search">
-        视频搜索：
-        <div class="layui-inline">
-          <input class="layui-input" placeholder="开始日" name="start" id="start" />
-        </div>
-        <div class="layui-inline">
-          <input class="layui-input" placeholder="截止日" name="end" id="end" />
-        </div>
-        <div class="layui-inline">
-          <input type="text" name="username" placeholder="请输入名称" autocomplete="off" class="layui-input" />
-        </div>
-        <button class="layui-btn" lay-submit="" lay-filter="sreach">
-          <i class="layui-icon layui-icon-search"></i>
-        </button>
-      </form>
-    </div>
-    <div class="weadmin-block">
-      <button class="layui-btn layui-btn-danger" onclick="delAll()">
-        <i class="layui-icon layui-icon-delete"></i>批量删除
-      </button>
-      <button class="layui-btn" onclick="WeAdminShow('添加用户','./add.html',600,400)">
-        <i class="layui-icon layui-icon-add-circle-fine"></i>添加
-      </button>
-      <span class="fr" style="line-height:40px">共有数据：88 条</span>
-    </div>
-
-  	<table class="layui-hide" id="video" lay-filter="test"></table>
+  	<table class="layui-hide" id="api" lay-filter="test"></table>
   </div>
-
 
   <script src="/static/lib/layui/layui.js?v={{data.version}}"></script>
   <script src="/static/js/eleDel.js" type="text/javascript"></script>
@@ -69,9 +41,9 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 	  ,slider = layui.slider //滑块
   //执行一个 table 实例
   table.render({
-    elem: '#video'
+    elem: '#api'
     ,height: 420
-    ,url: '/video_api/index' //数据接口
+    ,url: '/api_api/index' //数据接口
     ,title: '列表'
     ,page: true //开启分页
     ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
@@ -79,9 +51,9 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     ,cols: [[ //表头
       {type: 'checkbox', fixed: 'left'}
       ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
-      ,{field: 'name', title: '名称', width:120}
-      ,{field: 'size', title: '文件大小', width: 120, sort: true, totalRow: true}
-      ,{field: 'addtime', title: '添加时间', width: 165, sort: true, totalRow: true}
+      ,{field: 'appkey', title: 'APPKEY', width:150}
+      ,{field: 'appsecret', title: 'APPSECRET', width: 300, sort: true, totalRow: true}
+      ,{field: 'addtime', title: '添加时间', width: 200, sort: true, totalRow: true}
       ,{fixed: 'right', width: 165, align:'center', toolbar: '#toolBar'}
     ]]
   });
@@ -92,8 +64,6 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 
 
 <script type="text/html" id="toolBar">
-  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 </body>
