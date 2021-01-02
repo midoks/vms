@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title></title>
+  <meta name="renderer" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <link href="/static/css/font.css?v={{data.version}}" rel="stylesheet">
+  <link href="/static/css/weadmin.css?v={{data.version}}" rel="stylesheet">
+</head>
+
+<body>
+  <div class="weadmin-nav">
+    <span class="layui-breadcrumb">
+      <a href="javascript:;">首页</a> <a href="javascript:;">API管理</a>
+      <a href="javascript:;"> <cite>列表</cite></a>
+    </span>
+    <a class="layui-btn layui-btn-sm" style="margin-top:3px;float:right"
+      href="javascript:location.replace(location.href);" title="刷新">
+      <i class="layui-icon layui-icon-refresh"></i>
+    </a>
+  </div>
+
+  <div class="weadmin-body">
+  	<table class="layui-hide" id="api" lay-filter="tableFilter"></table>
+  </div>
+
+  <script src="/static/lib/layui/layui.js?v={{data.version}}"></script>
+  <script src="/static/js/eleDel.js" type="text/javascript"></script>
+  <script type="text/javascript">
+layui.use(['jquery','laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element', 'slider'], function(){
+	var laydate = layui.laydate //日期
+	  ,laypage = layui.laypage //分页
+	  ,layer = layui.layer //弹层
+	  ,table = layui.table //表格
+	  ,carousel = layui.carousel //轮播
+	  ,upload = layui.upload //上传
+	  ,element = layui.element //元素操作
+	  ,slider = layui.slider //滑块
+    ,$ = layui.jquery
+  //执行一个 table 实例
+  table.render({
+    elem: '#api'
+    ,height: 420
+    ,url: '/api_api/index' //数据接口
+    ,title: '列表'
+    ,page: true //开启分页
+    ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+    ,totalRow: true //开启合计行
+    ,cols: [[ //表头
+      {type: 'checkbox', fixed: 'left'}
+      ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
+      ,{field: 'appkey', title: 'APPKEY', width:150}
+      ,{field: 'appsecret', title: 'APPSECRET', width: 300, sort: true, totalRow: true}
+      ,{field: 'addtime', title: '添加时间', width: 200, sort: true, totalRow: true}
+      ,{fixed: 'right', width: 165, align:'center', toolbar: '#toolBar'}
+    ]]
+  });
+
+
+  table.on("tool(tableFilter)", function (obj) {
+    let data = obj.data;
+    switch (obj.event) {
+      case "del":
+        apiDel(data.id);
+    }
+  });
+
+  function apiDel(id){
+    $.getJSON('/api_api/del',{id:id},function(data){
+        layer.msg(data.msg);
+        setTimeout(function(){
+            location.reload();
+        },2000);
+    });
+  }
+///
+});
+  
+  </script>
+
+
+<script type="text/html" id="toolBar">
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+</body>
+
+</html>
