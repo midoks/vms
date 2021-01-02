@@ -12,79 +12,120 @@
 </head>
 
 <body>
-  <div class="weadmin-nav">
-    <span class="layui-breadcrumb">
-      <a href="javascript:;">首页</a> <a href="javascript:;">API管理</a>
-      <a href="javascript:;"> <cite>列表</cite></a>
-    </span>
-    <a class="layui-btn layui-btn-sm" style="margin-top:3px;float:right"
-      href="javascript:location.replace(location.href);" title="刷新">
-      <i class="layui-icon layui-icon-refresh"></i>
-    </a>
-  </div>
-
   <div class="weadmin-body">
-  	<table class="layui-hide" id="api" lay-filter="tableFilter"></table>
+    <form class="layui-form">
+
+      <div class="layui-form-item">
+        <label for="L_username" class="layui-form-label">
+          <span class="we-red">*</span>APPKEY
+        </label>
+        <div class="layui-input-inline">
+          <input type="text" id="L_username" name="username" lay-verify="required|nikename" autocomplete="off"
+            class="layui-input">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label for="L_email" class="layui-form-label">
+          <span class="we-red">*</span>APPSECRET
+        </label>
+        <div class="layui-input-inline">
+          <input type="text" id="L_phone" name="phone" lay-verify="required|phone" autocomplete="" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label for="L_repass" class="layui-form-label">
+        </label>
+        <button class="layui-btn" lay-filter="add" lay-submit="">确定</button>
+      </div>
+    </form>
   </div>
+  <script src="../../lib/layui/layui.js" charset="utf-8"></script>
 
-  <script src="/static/lib/layui/layui.js?v={{data.version}}"></script>
-  <script src="/static/js/eleDel.js" type="text/javascript"></script>
-  <script type="text/javascript">
-layui.use(['jquery','laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element', 'slider'], function(){
-	var laydate = layui.laydate //日期
-	  ,laypage = layui.laypage //分页
-	  ,layer = layui.layer //弹层
-	  ,table = layui.table //表格
-	  ,carousel = layui.carousel //轮播
-	  ,upload = layui.upload //上传
-	  ,element = layui.element //元素操作
-	  ,slider = layui.slider //滑块
-    ,$ = layui.jquery
-  //执行一个 table 实例
-  table.render({
-    elem: '#api'
-    ,height: 420
-    ,url: '/api_api/index' //数据接口
-    ,title: '列表'
-    ,page: true //开启分页
-    ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
-    ,totalRow: true //开启合计行
-    ,cols: [[ //表头
-      {type: 'checkbox', fixed: 'left'}
-      ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
-      ,{field: 'appkey', title: 'APPKEY', width:150}
-      ,{field: 'appsecret', title: 'APPSECRET', width: 300, sort: true, totalRow: true}
-      ,{field: 'addtime', title: '添加时间', width: 200, sort: true, totalRow: true}
-      ,{fixed: 'right', width: 165, align:'center', toolbar: '#toolBar'}
-    ]]
-  });
-
-
-  table.on("tool(tableFilter)", function (obj) {
-    let data = obj.data;
-    switch (obj.event) {
-      case "del":
-        apiDel(data.id);
-    }
-  });
-
-  function apiDel(id){
-    $.getJSON('/api_api/del',{id:id},function(data){
-        layer.msg(data.msg);
-        setTimeout(function(){
-            location.reload();
-        },2000);
+  <script>
+    layui.extend({
+      admin: '{/}../../static/js/admin'
     });
-  }
-///
-});
-  
+    layui.use(['form', 'jquery', 'util', 'admin', 'layer'], function () {
+      var form = layui.form,
+        $ = layui.jquery,
+        util = layui.util,
+        admin = layui.admin,
+        layer = layui.layer;
+
+      //自定义验证规则
+      form.verify({
+        nikename: function (value) {
+          if (value.length < 5) {
+            return '昵称至少得5个字符啊';
+          }
+        },
+        pass: [/(.+){6,12}$/, '密码必须6到12位'],
+        repass: function (value) {
+          if ($('#L_pass').val() != $('#L_repass').val()) {
+            return '两次密码不一致';
+          }
+        }
+      });
+      //失去焦点时判断值为空不验证，一旦填写必须验证
+      $('input[name="email"]').blur(function () {
+        //这里是失去焦点时的事件
+        if ($('input[name="email"]').val()) {
+          $('input[name="email"]').attr('lay-verify', 'email');
+        } else {
+          $('input[name="email"]').removeAttr('lay-verify');
+        }
+      });
+
+      //监听提交
+      form.on('submit(add)', function (data) {
+        //console.log(data.field);
+        var f = data.field;
+        //console.log(f.username);
+        //console.log(f.sex);       
+        //var sex = $('input:radio[name="sex"]:checked').val();
+
+        //发异步，把数据提交给php
+        layer.alert("增加成功", {
+          icon: 6
+        }, function () {
+          //获取提交成功的时间
+          var time = new Date();
+          var timeNow = util.toDateString(time);
+          // 获得frame索引
+          var index = parent.layer.getFrameIndex(window.name);
+
+          var _len = parent.$('#memberList tr').length;
+          alert(_len);
+          parent.$('#memberList').append(
+            '<tr data-id="' + _len + '">' +
+            '<td>' +
+            '<div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="' + _len + '"><i class="layui-icon">&#xe605;</i></div>' +
+            '</td>' +
+            '<td>' + _len + '</td>' +
+            '<td>' + f.username + '</td>' +
+            '<td>' + f.sex + '</td>' +
+            '<td>' + f.phone + '</td>' +
+            '<td>' + f.email + '</td>' +
+            '<td>北京市西城区</td>' +
+            '<td>' + timeNow + '</td>' +
+            '<td class="td-status"><span class="layui-btn layui-btn-normal layui-btn-xs">已启用</span></td>' +
+            '<td class="td-manage">' +
+            '<a onclick="member_stop(this,\'10001\')" href="javascript:;" title="启用"><i class="layui-icon">&#xe601;</i></a>' +
+            '<a title="编辑" onclick="WeAdminShow(\'编辑\',\'./edit.html\',600,400)" href="javascript:;"><i class="layui-icon">&#xe642;</i></a>' +
+            '<a onclick="WeAdminShow(\'修改密码\',\'./password.html\',600,400)" title="修改密码" href="javascript:;"><i class="layui-icon">&#xe631;</i></a>' +
+            '<a title="删除" onclick="member_del(this,\'要删除的id\')" href="javascript:;"><i class="layui-icon">&#xe640;</i></a>' +
+            '</td>' +
+            '</tr>'
+          );
+          //关闭当前frame
+          parent.layer.close(index);
+        });
+        return false;
+      });
+
+    });
   </script>
-
-
-<script type="text/html" id="toolBar">
-  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-</script>
 </body>
 
 </html>

@@ -28,9 +28,9 @@
   </div>
 
   <script src="/static/lib/layui/layui.js?v={{data.version}}"></script>
-  <script src="/static/js/eleDel.js" type="text/javascript"></script>
+  <script src="/static/js/eleDel.js?v={{data.version}}" type="text/javascript"></script>
   <script type="text/javascript">
-layui.use(['jquery','laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element', 'slider'], function(){
+layui.use(['jquery','laydate', 'laypage', 'admin','layer', 'table', 'carousel', 'upload', 'element', 'slider'], function(){
 	var laydate = layui.laydate //日期
 	  ,laypage = layui.laypage //分页
 	  ,layer = layui.layer //弹层
@@ -47,7 +47,8 @@ layui.use(['jquery','laydate', 'laypage', 'layer', 'table', 'carousel', 'upload'
     ,url: '/api_api/index' //数据接口
     ,title: '列表'
     ,page: true //开启分页
-    ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+    // ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+    ,toolbar: "#toolbarTpl"
     ,totalRow: true //开启合计行
     ,cols: [[ //表头
       {type: 'checkbox', fixed: 'left'}
@@ -59,9 +60,18 @@ layui.use(['jquery','laydate', 'laypage', 'layer', 'table', 'carousel', 'upload'
     ]]
   });
 
+  table.on("toolbar(tableFilter)", function (obj) {
+    let data = obj.data;
+    switch (obj.event) {
+      case "add":
+        apiAdd();
+        break;
+    }
+  });
 
   table.on("tool(tableFilter)", function (obj) {
     let data = obj.data;
+    console.log(obj.event);
     switch (obj.event) {
       case "del":
         apiDel(data.id);
@@ -76,11 +86,23 @@ layui.use(['jquery','laydate', 'laypage', 'layer', 'table', 'carousel', 'upload'
         },2000);
     });
   }
+
+  function apiAdd(){
+    WeAdminShow('添加','/api/add' ,400, 230);
+  }
+
 ///
 });
   
-  </script>
+</script>
 
+<!-- 头工具栏模板 -->
+<script type="text/html" id="toolbarTpl">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+  </div>
+
+</script>
 
 <script type="text/html" id="toolBar">
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
