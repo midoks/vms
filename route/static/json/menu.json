@@ -13,7 +13,7 @@
 				"url": "/video/index"
 			},{
 				"id": 12,
-				"name": "测试",
+				"name": "视频上传",
 				"icon": "",
 				"url": "/video/upload"
 			}]
