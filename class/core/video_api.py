@@ -11,6 +11,9 @@ import pwd
 from flask import session
 from flask import request
 
+from werkzeug.utils import secure_filename
+from flask import send_from_directory
+
 sys.path.append(os.getcwd() + "/class/core")
 import common
 
@@ -21,6 +24,23 @@ class video_api:
         pass
 
     ##### ----- start ----- ###
+    def uploadApi(self):
+        file = request.files['file']
+        print(file)
+        filename = file.filename
+
+        # r = send_from_directory(
+        # '/Users/midoks/go/src/github.com/midoks/vms/test', filename)
+
+        r = file.save(os.path.join(
+            '/Users/midoks/go/src/github.com/midoks/vms/tmp', filename))
+
+        print('rrr:', r)
+        _ret = {}
+        _ret['code'] = 0
+        _ret['msg'] = 'ok'
+
+        return common.getJson(_ret)
 
     def indexApi(self):
         _ret = {}

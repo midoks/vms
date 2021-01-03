@@ -31,6 +31,8 @@ import common
 
 
 app = Flask(__name__, template_folder='templates/default')
+
+app.config['UPLOAD_FOLDER'] = '/Users/midoks/go/src/github.com/midoks/vms/test'
 # app.config.version = config_api.config_api().getVersion()
 # app.config['SECRET_KEY'] = os.urandom(24)
 # app.secret_key = uuid.UUID(int=uuid.getnode()).hex[-12:]

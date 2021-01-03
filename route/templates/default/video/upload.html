@@ -21,7 +21,7 @@
 <div class="layui-card">
   <div class="layui-card-header">上传</div>
   <div class="layui-card-body">
-    <button type="button" class="layui-btn" id="test1">
+    <button type="button" class="layui-btn" id="upload">
 	  <i class="layui-icon">&#xe67c;</i>上传视频
 	</button>
 
@@ -37,7 +37,7 @@ layui.use('upload', function(){
    
   //执行实例
   var uploadInst = upload.render({
-    elem: '#test1' //绑定元素
+    elem: '#upload' //绑定元素
     ,url: '/video_api/upload' //上传接口
     ,accept: 'file'
     ,done: function(res){
