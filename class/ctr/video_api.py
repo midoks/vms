@@ -29,6 +29,9 @@ class video_api:
         file = request.files['file']
         filename = file.filename
 
+        if not os.path.exists(os.getcwd() + '/tmp'):
+            os.mkdirs(os.getcwd() + '/tmp')
+
         dirfile = os.path.join(os.getcwd() + '/tmp', filename)
         file.save(dirfile)
 
