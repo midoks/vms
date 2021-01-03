@@ -17,6 +17,7 @@ sys.path.append(os.getcwd() + "/class/core")
 reload(sys)
 sys.setdefaultencoding('utf-8')
 import db
+import common
 
 
 def printHL():
@@ -25,7 +26,14 @@ def printHL():
 
 def videoToMp4():
     while True:
-        print('Mp4')
+        videoM = common.M('video_tmp')
+
+        data = videoM.field('id,filename').where('status=?', (0,)).select()
+
+        for x in data:
+            pathfile = os.getcwd() + '/tmp/' + x['filename']
+            print(pathfile)
+
         time.sleep(2)
 
 
