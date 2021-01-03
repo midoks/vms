@@ -91,3 +91,26 @@ class video_api:
         _ret['code'] = 0
 
         return common.getJson(_ret)
+
+    def tmpdelApi(self):
+
+        sid = request.form.get('id', '').encode('utf-8')
+        videoM = common.M('video_tmp')
+
+        data = videoM.field('id,md5,filename,size').where(
+            'id=?', (sid,)).select()
+
+        if data:
+            pathfile = os.getcwd() + '/tmp/' + data[0]['filename']
+            os.remove(pathfile)
+
+        r = videoM.where("id=?", (sid,)).delete()
+        # print(sid, r)
+        _ret = {}
+        _ret['code'] = 0
+        _ret['msg'] = '删除成功'
+        if not r:
+            _ret['code'] = 1
+            _ret['msg'] = '删除失败'
+
+        return common.getJson(_ret)

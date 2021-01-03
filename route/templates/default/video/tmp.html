@@ -24,14 +24,14 @@
   </div>
 
   <div class="weadmin-body">
-    <table class="layui-hide" id="video" lay-filter="test"></table>
+    <table class="layui-hide" id="video" lay-filter="tableFilter"></table>
   </div>
 
 
   <script src="/static/lib/layui/layui.js?v={{data.version}}"></script>
   <script src="/static/js/eleDel.js" type="text/javascript"></script>
   <script type="text/javascript">
-layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element', 'slider'], function(){
+layui.use(['jquery','laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element', 'slider'], function(){
 	var laydate = layui.laydate //日期
 	  ,laypage = layui.laypage //分页
 	  ,layer = layui.layer //弹层
@@ -40,6 +40,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 	  ,upload = layui.upload //上传
 	  ,element = layui.element //元素操作
 	  ,slider = layui.slider //滑块
+    ,$ = layui.jquery
   //执行一个 table 实例
   table.render({
     elem: '#video'
@@ -61,6 +62,35 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
       ,{fixed: 'right', width: 165, align:'center', toolbar: '#toolBar'}
     ]]
   });
+
+
+  table.on("toolbar(tableFilter)", function (obj) {
+    let data = obj.data;
+    switch (obj.event) {
+      case "add":
+        // apiAdd();
+        break;
+    }
+  });
+
+  table.on("tool(tableFilter)", function (obj) {
+    let data = obj.data;
+    switch (obj.event) {
+      case "del":
+        apiDel(data.id);
+    }
+  });
+
+  function apiDel(id){
+    $.post('/video_api/tmpdel',{id:id},function(data){
+        data = $.parseJSON(data);
+        layer.msg(data.msg);
+        setTimeout(function(){
+            location.reload();
+        },2000);
+    });
+  }
+
 ///
 });
   
