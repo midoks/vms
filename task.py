@@ -33,7 +33,7 @@ print(has_suffix)
 
 def is_video(path):
     t = os.path.splitext(path)
-    if t[1] in self.has_suffix:
+    if t[1] in has_suffix:
         return True
     return False
 #------------Private Methods--------------
