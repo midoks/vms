@@ -32,8 +32,6 @@ class user_api:
         userM = common.M('users')
         data = userM.field('id').where(
             'username=? and password=?', (username, common.md5(password),)).select()
-        # print(username, password, data)
-        # print(common.md5(password))
 
         if not data:
             _ret['code'] = 1
