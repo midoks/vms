@@ -71,3 +71,23 @@ class video_api:
         _ret['code'] = 0
 
         return common.getJson(_ret)
+
+    def tmpApi(self):
+        _ret = {}
+
+        limit = request.form.get('limit', '10').encode('utf-8')
+        p = request.form.get('p', '1').encode('utf-8')
+
+        start = (int(p) - 1) * (int(limit))
+
+        videoM = common.M('video_tmp')
+        _list = videoM.field('id,md5,filename,size,status,uptime,addtime').limit(
+            (str(start)) + ',' + limit).order('id desc').select()
+
+        count = videoM.count()
+
+        _ret['data'] = _list
+        _ret['count'] = count
+        _ret['code'] = 0
+
+        return common.getJson(_ret)

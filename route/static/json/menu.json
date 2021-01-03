@@ -11,8 +11,15 @@
 				"name": "列表",
 				"icon": "",
 				"url": "/video/index"
-			},{
+			},
+			{
 				"id": 12,
+				"name": "临时",
+				"icon": "",
+				"url": "/video/tmp"
+			},
+			{
+				"id": 13,
 				"name": "视频上传",
 				"icon": "",
 				"url": "/video/upload"

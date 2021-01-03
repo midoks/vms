@@ -54,7 +54,6 @@ layui.use(['form', 'admin', 'http','jquery'], function () {
         type: 'POST',
         data: data.field,
         success: function(res) {
-          console.log(res);
           var res = $.parseJSON(res);
           if(res.code === 0){
             localStorage.setItem('username', data.field['username'])
