@@ -56,24 +56,3 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`id`, `username`, `password`, `login_ip`, `login_time`, `phone`, `email`) VALUES
 (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '192.168.0.10', '2016-12-10 15:12:56', 0, '287962566@qq.com');
 
-
-CREATE TABLE IF NOT EXISTS `tasks` (
-  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
-  `name` 			TEXT,
-  `type`			TEXT,
-  `status` 		TEXT,
-  `addtime` 	TEXT,
-  `start` 	  INTEGER,
-  `end` 	    INTEGER,
-  `execstr` 	TEXT
-);
-
-CREATE TABLE IF NOT EXISTS `panel` (
-  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
-  `title` TEXT,
-  `url` TEXT,
-  `username` TEXT,
-  `password` TEXT,
-  `click` INTEGER,
-  `addtime` INTEGER
-);
