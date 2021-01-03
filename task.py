@@ -19,6 +19,25 @@ sys.setdefaultencoding('utf-8')
 import db
 import common
 
+_has_suffix = ['mp4', 'rmvb', 'flv', 'avi',
+               'mpg', 'mkv', 'wmv', 'avi', 'rm']
+has_suffix = []
+for x in range(len(_has_suffix)):
+    has_suffix.append('.' + _has_suffix[x])
+    has_suffix.append('.' + _has_suffix[x].upper())
+
+#------------Private Methods--------------
+
+print(has_suffix)
+
+
+def is_video(path):
+    t = os.path.splitext(path)
+    if t[1] in self.has_suffix:
+        return True
+    return False
+#------------Private Methods--------------
+
 
 def printHL():
     print('hello world')
