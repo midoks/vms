@@ -194,8 +194,8 @@ class Sql():
             opt = opt[0:len(opt) - 1]
             sql = "UPDATE " + self.__DB_TABLE + " SET " + opt + self.__OPT_WHERE
 
-            import mw
-            mw.writeFile('/tmp/test.pl', sql)
+            import common
+            common.writeFile('/tmp/test.pl', sql)
 
             # 处理拼接WHERE与UPDATE参数
             tmp = list(param)

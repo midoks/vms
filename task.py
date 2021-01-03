@@ -26,16 +26,35 @@ for x in range(len(_has_suffix)):
     has_suffix.append('.' + _has_suffix[x])
     has_suffix.append('.' + _has_suffix[x].upper())
 
+tmp_cmd = os.getcwd() + "/lib/ffmpeg/ffmpeg"
+if os.path.exists(tmp_cmd):
+    ffmpeg_cmd = tmp_cmd
+else:
+    ffmpeg_cmd = "/usr/local/bin/ffmpeg"
+
+
 #------------Private Methods--------------
 
-print(has_suffix)
-
-
+# print(has_suffix, ffmpeg_cmd)
 def is_video(path):
     t = os.path.splitext(path)
     if t[1] in has_suffix:
         return True
     return False
+
+
+def is_mp4(path):
+    t = os.path.splitext(path)
+    tlen = len(t) - 1
+    if t[tlen] == '.mp4':
+        return True
+    return False
+
+
+def fg_m3u8_cmd(ts_file, m3u8_file, to_file):
+    cmd = ffmpeg_cmd + ' -y -i ' + ts_file + ' -c copy -map 0 -f segment -segment_list ' + \
+        m3u8_file + ' -segment_time 10 ' + to_file
+    return cmd
 #------------Private Methods--------------
 
 
@@ -46,18 +65,30 @@ def printHL():
 def videoToMp4():
     while True:
         videoM = common.M('video_tmp')
-
         data = videoM.field('id,filename').where('status=?', (0,)).select()
+
+        for x in data:
+            pathfile = os.getcwd() + '/tmp/' + x['filename']
+            # print(pathfile)
+            if is_mp4(pathfile):
+                common.M('video_tmp').where(
+                    "id=?", (x['id'],)).setField('status', 1)
+            else:
+                pass
+        time.sleep(2)
+
+
+def videoToM3u8():
+    while True:
+        videoM = common.M('video_tmp')
+
+        data = videoM.field('id,filename').where('status=?', (1,)).select()
 
         for x in data:
             pathfile = os.getcwd() + '/tmp/' + x['filename']
             print(pathfile)
 
         time.sleep(2)
-
-
-def videoToM3u8():
-    print 'hello world'
 
 
 def startTask():
