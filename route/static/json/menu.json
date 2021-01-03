@@ -31,7 +31,19 @@
 			}]
 		},
 		{
-			"id": 18,
+			"id": 3,
+			"name": "日志管理",
+			"icon": "&#xe6ce;",
+			"url": "",
+			"children": [{
+				"id": 31,
+				"name": "列表",
+				"icon": "",
+				"url": "/logs/index"
+			}]
+		},
+		{
+			"id": 4,
 			"name": "其他",
 			"icon": "&#xe6ce;",
 			"url": "",

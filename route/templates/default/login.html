@@ -24,7 +24,7 @@
 <form method="post" class="layui-form">
   <input name="username" placeholder="用户名" type="text" lay-verify="required" class="layui-input">
   <hr class="hr15">
-  <input name="password" lay-verify="required" placeholder="密码" type="password" class="layui-input">
+  <input name="password" lay-verify="required" placeholder="密码" type="password" class="layui-input" autocomplete="off">
   <hr class="hr15">
   <input class="loginin" value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
 </form>
@@ -42,14 +42,30 @@ layui.config({
    	admin: 'admin'
 	,http: 'http'
 });
-layui.use(['form', 'admin', 'http'], function () {
+layui.use(['form', 'admin', 'http','jquery'], function () {
   var form = layui.form
     , admin = layui.admin
-    , http = layui.http;
+    , http = layui.http 
+    , $ = layui.jquery;
   //监听提交
   form.on('submit(login)', function (data) {
-    // alert(888)
-    http.login(data.field)
+    $.ajax({
+        url: '/user_api/login',
+        type: 'POST',
+        data: data.field,
+        success: function(res) {
+          console.log(res);
+          var res = $.parseJSON(res);
+          if(res.code === 0){
+            localStorage.setItem('username', data.field['username'])
+            layer.msg('登录成功，即将跳转~', function () {
+              location.href = '/index'
+            });
+          }else {
+            layer.msg(res.msg, function () {});
+          }
+        }
+      })
     return false;
   });
 });   

@@ -32,21 +32,20 @@
 
 <script src="/static/lib/layui/layui.js"></script>
 <script>
-layui.use('upload', function(){
-  var upload = layui.upload;
-   
+layui.use(['upload','jquery'], function(){
+  var upload = layui.upload
+  , $ = layui.jquery;
+  
   //执行实例
   var uploadInst = upload.render({
     elem: '#upload' //绑定元素
     ,url: '/video_api/upload' //上传接口
     ,accept: 'file'
     ,done: function(res){
-      	//上传完毕回调
-      	console.log(res);
+      	layer.msg(res.msg);
     }
     ,error: function(res){
-    	console.log(res);
-      //请求异常回调
+    	layer.msg(res.msg);
     }
   });
 });

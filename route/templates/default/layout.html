@@ -43,7 +43,7 @@
         <dl class="layui-nav-child">
           <!-- 二级菜单 -->
           <dd>
-            <a class="loginout" href="/loginout">退出</a>
+            <a class="loginout" onclick="loginOut();">退出</a>
           </dd>
         </dl>
       </li>
@@ -83,22 +83,14 @@
   </div>
   <!-- 底部结束 -->
   <script type="text/javascript">
-    // layui扩展模块的两种加载方式 - 示例
-    // layui.extend({
-    //   admin: '{/}../../static/js/admin' // {/}的意思即代表采用自有路径，即不跟随 base 路径
-    // });
-    //使用拓展模块
-    // layui.use('admin', function () {
-    //   var admin = layui.admin;
-    // });
     var showFooter = true; // 控制是否显示底部示例参数，相关逻辑可删除
     layui.config({
       base: '/static/js/'
       , version: '1011001'
     }).extend({ //设定模块别名
-      admin: 'admin'
-      ,menu: 'menu'
-      , http: 'http'
+      // admin: 'admin'
+      // ,menu: 'menu'
+      // , http: 'http'
     });
     layui.use(['jquery', 'admin','menu', 'http'], function () {
       var $ = layui.jquery,
@@ -111,17 +103,16 @@
         menu.getMenu('/static/json/menu.json?v='+new Date().getTime());
         admin.tab.tabInit();
         
-        
-        // var login = JSON.parse(localStorage.getItem("login"));
-        // if (login) {
-        //   if (login === 0) {
-        //     window.location.href = '/login';
-        //     return false;
-        //   }
-        // } else {
-        //   window.location.href = '/login';
-        //   return false;
-        // }
+        var login = JSON.parse(localStorage.getItem("login"));
+        if (login) {
+          if (login === 0) {
+            window.location.href = '/login';
+            return false;
+          }
+        } else {
+          window.location.href = '/login';
+          return false;
+        }
 
         if (showFooter) {
           var currentY = new Date().getFullYear();
@@ -133,6 +124,11 @@
         }
       });
     });
+
+    function loginOut(){
+      window.localStorage.removeItem('login');
+      window.location.href = '/login';
+    }
 
   </script>
 </body>

@@ -24,12 +24,28 @@ CREATE TABLE IF NOT EXISTS `video_list` (
   `addtime` TEXT
 );
 
+CREATE TABLE IF NOT EXISTS `video_tmp` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `md5` TEXT,
+  `filename` TEXT,
+  `size` INTEGER,
+  `status` INTEGER,
+  `uptime` TEXT,
+  `addtime` TEXT
+);
+
+
 CREATE TABLE IF NOT EXISTS `logs` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `type` TEXT,
   `log` TEXT,
   `addtime` TEXT
 );
+
+
+INSERT INTO `logs` (`id`, `type`, `log`, `addtime`) VALUES
+(1, '1', '测试','2016-12-10 15:12:56');
+
 
 CREATE TABLE IF NOT EXISTS `api` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -54,5 +70,5 @@ CREATE TABLE IF NOT EXISTS `users` (
 );
 
 INSERT INTO `users` (`id`, `username`, `password`, `login_ip`, `login_time`, `phone`, `email`) VALUES
-(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', '192.168.0.10', '2016-12-10 15:12:56', 0, '287962566@qq.com');
+(1, 'admin', '4297f44b13955235245b2497399d7a93', '192.168.0.10', '2016-12-10 15:12:56', 0, '287962566@qq.com');
 

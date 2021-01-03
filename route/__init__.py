@@ -25,6 +25,7 @@ from flask_caching import Cache
 from flask_session import Session
 
 sys.path.append(os.getcwd() + "/class/core")
+sys.path.append(os.getcwd() + "/class/ctr")
 sys.path.append("/usr/local/lib/python2.7/site-packages")
 
 import common
@@ -32,7 +33,7 @@ import common
 
 app = Flask(__name__, template_folder='templates/default')
 
-app.config['UPLOAD_FOLDER'] = '/Users/midoks/go/src/github.com/midoks/vms/test'
+app.config['UPLOAD_FOLDER'] = '/Users/midoks/go/src/github.com/midoks/vms/tmp'
 # app.config.version = config_api.config_api().getVersion()
 # app.config['SECRET_KEY'] = os.urandom(24)
 # app.secret_key = uuid.UUID(int=uuid.getnode()).hex[-12:]
@@ -215,7 +216,7 @@ def index(reqClass=None, reqAction=None, reqData=None):
 
     if (reqClass == None):
         reqClass = 'index'
-    classFile = ('config', 'index', 'video', 'api')
+    classFile = ('config', 'index', 'video', 'api', 'logs')
 
     if reqClass in classFile:
         import config_api
