@@ -40,54 +40,6 @@
 				"name": "拆线图",
 				"icon": "",
 				"url": "./pages/echarts/echarts1.html"
-			},
-			{
-				"id": 20,
-				"name": "柱状图",
-				"icon": "",
-				"url": "./pages/echarts/echarts2.html"
-			},
-			{
-				"id": 21,
-				"name": "地图",
-				"icon": "",
-				"url": "./pages/echarts/echarts3.html"
-			},
-			{
-				"id": 22,
-				"name": "饼图",
-				"icon": "",
-				"url": "./pages/echarts/echarts4.html"
-			},
-			{
-				"id": 23,
-				"name": "雷达图",
-				"icon": "",
-				"url": "./pages/echarts/echarts5.html"
-			},
-			{
-				"id": 24,
-				"name": "k线图",
-				"icon": "",
-				"url": "./pages/echarts/echarts6.html"
-			},
-			{
-				"id": 25,
-				"name": "热力图",
-				"icon": "",
-				"url": "./pages/echarts/echarts7.html"
-			},
-			{
-				"id": 26,
-				"name": "仪表图",
-				"icon": "",
-				"url": "./pages/echarts/echarts8.html"
-			},
-			{
-				"id": 27,
-				"name": "地图DIY实例",
-				"icon": "",
-				"url": "./pages/echarts/echarts9.html"
 			}]
 		}
 	]
