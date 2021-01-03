@@ -44,15 +44,33 @@ class api_api:
 
     def delApi(self):
 
-        sid = request.form.get('id', '1').encode('utf-8')
+        sid = request.form.get('id', '').encode('utf-8')
 
         apiM = common.M('api')
         r = apiM.where("id=?", (sid,)).delete()
+        # print(sid, r)
         _ret = {}
         _ret['code'] = 0
         _ret['msg'] = '删除成功'
         if not r:
             _ret['code'] = 1
             _ret['msg'] = '删除失败'
+
+        return common.getJson(_ret)
+
+    def addApi(self):
+        appkey = request.form.get('appkey', '').encode('utf-8')
+        appsecret = request.form.get('appsecret', '').encode('utf-8')
+
+        apiM = common.M('api')
+        r = apiM.add("appkey,appsecret,addtime",
+                     (appkey, appsecret, common.getDate()))
+
+        _ret = {}
+        _ret['code'] = 0
+        _ret['msg'] = '添加成功'
+        if not r:
+            _ret['code'] = 1
+            _ret['msg'] = '添加失败'
 
         return common.getJson(_ret)

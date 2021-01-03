@@ -79,7 +79,8 @@ layui.use(['jquery','laydate', 'laypage', 'admin','layer', 'table', 'carousel', 
   });
 
   function apiDel(id){
-    $.getJSON('/api_api/del',{id:id},function(data){
+    $.post('/api_api/del',{id:id},function(data){
+        data = $.parseJSON(data);
         layer.msg(data.msg);
         setTimeout(function(){
             location.reload();
