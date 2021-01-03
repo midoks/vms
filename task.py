@@ -62,4 +62,8 @@ if __name__ == "__main__":
     t.setDaemon(True)
     t.start()
 
+    t = threading.Thread(target=videoToM3u8)
+    t.setDaemon(True)
+    t.start()
+
     startTask()

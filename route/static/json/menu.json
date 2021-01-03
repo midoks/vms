@@ -48,18 +48,6 @@
 				"icon": "",
 				"url": "/logs/index"
 			}]
-		},
-		{
-			"id": 4,
-			"name": "其他",
-			"icon": "&#xe6ce;",
-			"url": "",
-			"children": [{
-				"id": 19,
-				"name": "拆线图",
-				"icon": "",
-				"url": "./pages/echarts/echarts1.html"
-			}]
 		}
 	]
 }
