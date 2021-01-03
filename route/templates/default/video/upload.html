@@ -1,3 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title></title>
+  <meta name="renderer" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <link href="/static/css/font.css?v={{data.version}}" rel="stylesheet">
+  <link href="/static/css/weadmin.css?v={{data.version}}" rel="stylesheet">
+  <script src="/static/lib/layui/layui.js?v={{data.version}}"></script>
+</head>
 
 
-upload
+
+<body>
+
+<div class="layui-row">
+    <div class="layui-col-xs6 layui-col-sm6 layui-col-md4">
+      移动：6/12 | 平板：6/12 | 桌面：4/12
+    </div>
+    <div class="layui-col-xs6 layui-col-sm6 layui-col-md4">
+      移动：6/12 | 平板：6/12 | 桌面：4/12
+    </div>
+    <div class="layui-col-xs4 layui-col-sm12 layui-col-md4">
+      移动：4/12 | 平板：12/12 | 桌面：4/12
+    </div>
+    <div class="layui-col-xs4 layui-col-sm7 layui-col-md8">
+      移动：4/12 | 平板：7/12 | 桌面：8/12
+    </div>
+    <div class="layui-col-xs4 layui-col-sm5 layui-col-md4">
+      移动：4/12 | 平板：5/12 | 桌面：4/12
+    </div>
+</div>
+
+<div class="layui-row layui-col-space10">
+  <div class="layui-col-md4">
+    1/3
+  </div>
+  <div class="layui-col-md4">
+    1/3
+  </div>
+  <div class="layui-col-md4">
+    1/3
+  </div>
+</div>
+
+
+<button type="button" class="layui-btn" id="test1">
+  <i class="layui-icon">&#xe67c;</i>上传图片
+</button>
+
+
+<script src="/static/lib/layui/layui.js"></script>
+<script>
+layui.use('upload', function(){
+  var upload = layui.upload;
+   
+  //执行实例
+  var uploadInst = upload.render({
+    elem: '#test1' //绑定元素
+    ,url: '/video_api/upload' //上传接口
+    ,done: function(res){
+      //上传完毕回调
+    }
+    ,error: function(){
+      //请求异常回调
+    }
+  });
+});
+</script>
+</body>
+</html>
