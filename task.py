@@ -9,6 +9,7 @@ import json
 import time
 import threading
 import subprocess
+import shutil
 # print sys.path
 
 sys.path.append("/usr/local/lib/python2.7/site-packages")
@@ -102,33 +103,12 @@ def videoToMp4():
         data = videoM.field('id,filename').where('status=?', (0,)).select()
 
         for x in data:
-            pathfile = os.getcwd() + '/tmp/' + x['filename']
+            pathfile = os.getcwd() + "/tmp/" + str(x['filename'])
             # print(pathfile)
             if is_mp4(pathfile):
-                updateStatus(x['id'], 1)
+                updateStatus(x["id"], 1)
             else:
                 pass
-        time.sleep(2)
-
-
-def videoToTs():
-    while True:
-        videoM = common.M('video_tmp')
-        data = videoM.field('id,md5,filename').where('status=?', (1,)).select()
-
-        tmp_dir = os.getcwd() + '/tmp/'
-        for x in data:
-            m3u8_file = tmp_dir + x['md5'] + '/' + 'index.m3u8'
-            tofile = tmp_dir + x['md5'] + '/' + '%010d.ts'
-            pathfile = tmp_dir + x['filename']
-
-            if not os.path.exists(tmp_dir + x['md5']):
-                os.mkdir(tmp_dir + x['md5'])
-
-            cmd = fg_m3u8_cmd(tofile, m3u8_file, pathfile)
-            print(cmd)
-            print execShell(cmd)
-
         time.sleep(2)
 
 
@@ -140,18 +120,18 @@ def videoToM3u8():
         tmp_dir = os.getcwd() + '/tmp/'
         print('videoToM3u8-----@@@start@@@-----')
         for x in data:
-            m3u8_file = tmp_dir + x['md5'] + '/' + 'index.m3u8'
-            tofile = tmp_dir + x['md5'] + '/' + '%010d.ts'
-            pathfile = tmp_dir + x['filename']
+            m3u8_file = tmp_dir + str(x["md5"]) + "/index.m3u8"
+            tofile = tmp_dir + x["md5"] + "/%010d.ts"
+            pathfile = tmp_dir + str(x["filename"])
 
-            if not os.path.exists(tmp_dir + x['md5']):
-                os.mkdir(tmp_dir + x['md5'])
+            if not os.path.exists(tmp_dir + x["md5"]):
+                os.mkdir(tmp_dir + x["md5"])
 
             if not os.path.exists(m3u8_file):
                 cmd = fg_m3u8_cmd(tofile, m3u8_file, pathfile)
                 data = execShell(cmd)
-                print(data[1])
                 updateStatus(x['id'], 2)
+                print(data[1])
         print('videoToM3u8-----@@@end@@@-----')
         time.sleep(2)
 
@@ -159,6 +139,27 @@ def videoToM3u8():
 def videoToDB():
     while True:
         print('videoToDB-----@@@start@@@-----')
+        videoM = common.M('video_tmp')
+        viM = common.M('video')
+        vilistM = common.M('video_list')
+        data = videoM.field('id,md5,filename,size,filename').where(
+            'status=?', (2,)).select()
+        tmp_dir = os.getcwd() + "/tmp/"
+        app_dir = os.getcwd() + "/app/"
+        for x in data:
+            m3u8_dir = tmp_dir + str(x["md5"])
+            if os.path.exists(m3u8_dir):
+                data = viM.field('id').where(
+                    "filename=?", (x["md5"],)).select()
+
+                if not data:
+                    viM.add("name,filename,size,status,uptime,addtime",
+                            (x['filename'], x['md5'], x['size'], 0, common.getDate(), common.getDate()))
+                    shutil.move(m3u8_dir, app_dir)
+                    os.rmdir(m3u8_dir)
+
+                    videoM.where("id=?", (x['id'],)).delete()
+
         print('videoToDB-----@@@end@@@-----')
         time.sleep(5)
 
@@ -183,10 +184,6 @@ if __name__ == "__main__":
     t = threading.Thread(target=videoToMp4)
     t.setDaemon(True)
     t.start()
-
-    # t = threading.Thread(target=videoToTs)
-    # t.setDaemon(True)
-    # t.start()
 
     t = threading.Thread(target=videoToM3u8)
     t.setDaemon(True)

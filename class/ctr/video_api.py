@@ -64,7 +64,7 @@ class video_api:
         start = (int(p) - 1) * (int(limit))
 
         videoM = common.M('video')
-        _list = videoM.field('id,name,size,status,addtime').limit(
+        _list = videoM.field('id,name,filename,size,status,uptime,addtime').limit(
             (str(start)) + ',' + limit).order('id desc').select()
 
         count = videoM.count()
@@ -72,6 +72,29 @@ class video_api:
         _ret['data'] = _list
         _ret['count'] = count
         _ret['code'] = 0
+
+        return common.getJson(_ret)
+
+    def delApi(self):
+        sid = request.form.get('id', '').encode('utf-8')
+        videoM = common.M('video')
+
+        data = videoM.field('id,filename,size').where(
+            'id=?', (sid,)).select()
+        print(data)
+        if data:
+            pathfile = os.getcwd() + "/app/" + str(data[0]['filename'])
+            if os.path.exists(pathfile):
+                os.rmdir(pathfile)
+
+        r = videoM.where("id=?", (sid,)).delete()
+        # print(sid, r)
+        _ret = {}
+        _ret['code'] = 0
+        _ret['msg'] = '删除成功'
+        if not r:
+            _ret['code'] = 1
+            _ret['msg'] = '删除失败'
 
         return common.getJson(_ret)
 
