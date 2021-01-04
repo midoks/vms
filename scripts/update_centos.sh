@@ -4,11 +4,6 @@ export PATH
 LANG=en_US.UTF-8
 
 
-if [ -f /etc/motd ];then
-    echo "Welcome to VMS panel" > /etc/motd
-fi
-
-
 wget -O /tmp/master.zip https://codeload.github.com/midoks/vms/zip/main
 cd /tmp && unzip /tmp/main.zip
 /usr/bin/cp -rf  /tmp/vms_main/* /www/wwwroot/vms
