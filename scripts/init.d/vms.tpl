@@ -18,7 +18,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 mw_path={$SERVER_PATH}
 
 mw_start(){
-	isStart=`ps -ef|grep 'gunicorn -c setting.py app:app' |grep -v grep|awk '{print $2}'`
+	isStart=`ps -ef|grep 'gunicorn -c setting.py vms:app' |grep -v grep|awk '{print $2}'`
 	if [ "$isStart" == '' ];then
             echo -e "Starting mw... \c"
             cd $mw_path && gunicorn -c setting.py app:app
@@ -53,7 +53,7 @@ mw_start(){
             echo -e "Starting mw-tasks... \c"
             cd $mw_path && nohup python task.py >> $mw_path/logs/task.log 2>&1 &
             sleep 0.3
-            isStart=$(ps aux |grep 'task.py'|grep -v grep|awk '{print $2}')
+            isStart=$(ps aux |grep 'vms_task.py'|grep -v grep|awk '{print $2}')
             if [ "$isStart" == '' ];then
                     echo -e "\033[31mfailed\033[0m"
                     echo '------------------------------------------------------'
@@ -72,7 +72,7 @@ mw_start(){
 mw_stop()
 {
 	echo -e "Stopping mw-tasks... \c";
-    pids=$(ps aux | grep 'task.py'|grep -v grep|awk '{print $2}')
+    pids=$(ps aux | grep 'vms_task.py'|grep -v grep|awk '{print $2}')
     arr=($pids)
 
     for p in ${arr[@]}
@@ -82,7 +82,7 @@ mw_stop()
     echo -e "\033[32mdone\033[0m"
 
     echo -e "Stopping mw... \c";
-    arr=`ps aux|grep 'gunicorn -c setting.py app:app'|grep -v grep|awk '{print $2}'`
+    arr=`ps aux|grep 'gunicorn -c setting.py vms:app'|grep -v grep|awk '{print $2}'`
 	for p in ${arr[@]}
     do
             kill -9 $p &>/dev/null
