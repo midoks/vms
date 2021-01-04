@@ -130,3 +130,4 @@ data/default.db
 tmp/*
 app/*
 *.pid
+*.txt

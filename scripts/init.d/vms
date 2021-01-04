@@ -15,7 +15,7 @@
 
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 
-mw_path={$SERVER_PATH}
+mw_path=/Users/midoks/go/src/github.com/midoks/vms
 
 mw_start(){
 	isStart=`ps -ef|grep 'gunicorn -c setting.py vms:app' |grep -v grep|awk '{print $2}'`

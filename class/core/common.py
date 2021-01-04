@@ -947,13 +947,14 @@ def initInitD():
     if os.path.exists(script_bin):
         return
 
+    print(script, script_bin)
     content = readFile(script)
-    content = content.replace("{$SERVER_PATH}", common.getRunDir())
+    content = content.replace("{$SERVER_PATH}", getRunDir())
 
     writeFile(script_bin, content)
     execShell('chmod +x ' + script_bin)
 
-    setHostAddr(common.getLocalIp())
+    setHostAddr(getLocalIp())
 
     if not isAppleSystem():
         initd_bin = '/etc/init.d/vms'
