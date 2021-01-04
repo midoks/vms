@@ -1,6 +1,6 @@
 #!/bin/bash
 # chkconfig: 2345 55 25
-# description: MW Cloud Service
+# description: VMS Cloud Service
 
 ### BEGIN INIT INFO
 # Provides:          bt
@@ -8,8 +8,8 @@
 # Required-Stop:     $all
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: starts mw
-# Description:       starts the mw
+# Short-Description: starts vms
+# Description:       starts the vms
 ### END INIT INFO
 
 
