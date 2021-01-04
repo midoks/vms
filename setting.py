@@ -16,6 +16,12 @@ workers = cpu_info[1]
 if not os.path.exists(os.getcwd() + '/logs'):
     os.mkdir(os.getcwd() + '/logs')
 
+app_port = mw.readFile('data/port.pl')
+bind = []
+if os.path.exists('data/ipv6.pl'):
+    bind.append('[0:0:0:0:0:0:0:0]:%s' % app_port)
+else:
+    bind.append('0.0.0.0:%s' % app_port)
 
 if workers > 2:
     workers = 2
