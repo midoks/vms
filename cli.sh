@@ -22,7 +22,7 @@ mvg_stop()
 	    kill -9 $i
 	done
 	#|xargs kill -9
-	TLIST =`ps -ef|grep vms_task.py |grep -v grep|awk '{print $2}'`
+	TLIST=`ps -ef|grep vms_task.py |grep -v grep|awk '{print $2}'`
 	for i in $TLIST
 	do
 	    kill -9 $i
