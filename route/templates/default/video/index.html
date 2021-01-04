@@ -95,6 +95,10 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     switch (obj.event) {
       case "del":
         apiDel(data.id);
+      case 'edit':
+        apiEdit(data.id);
+      case 'detail':
+        apiPlayer(data);
     }
   });
 
@@ -107,6 +111,16 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
             location.reload();
         },2000);
     });
+  }
+
+  function apiEdit(id){
+    WeAdminShow('编辑','/video/edit' ,500, 230);
+  }
+
+  function apiPlayer(data){
+    var url = '/m3u8/'+data.filename+'/index.m3u8'; 
+    console.log(url);
+    WeAdminShow('查看','/video/player?url='+url ,500, 300);
   }
 
 ///

@@ -59,6 +59,12 @@ def is_mp4(path):
     return False
 
 
+def isDEmpty(data):
+    if len(data) > 0:
+        return False
+    return True
+
+
 def fg_m3u8_cmd(ts_file, m3u8_file, to_file):
     cmd = ffmpeg_cmd + ' -y -i ' + to_file + ' -c copy -map 0 -f segment -segment_list ' + \
         m3u8_file + ' -segment_time 10 ' + ts_file
@@ -118,7 +124,8 @@ def videoToM3u8():
         data = videoM.field('id,md5,filename').where('status=?', (1,)).select()
 
         tmp_dir = os.getcwd() + '/tmp/'
-        print('videoToM3u8-----@@@start@@@-----')
+        if not isDEmpty(data):
+            print('videoToM3u8-----@@@start@@@-----')
         for x in data:
             m3u8_file = tmp_dir + str(x["md5"]) + "/index.m3u8"
             tofile = tmp_dir + x["md5"] + "/%010d.ts"
@@ -132,13 +139,14 @@ def videoToM3u8():
                 data = execShell(cmd)
                 updateStatus(x['id'], 2)
                 print(data[1])
-        print('videoToM3u8-----@@@end@@@-----')
+
+        if not isDEmpty(data):
+            print('videoToM3u8-----@@@end@@@-----')
         time.sleep(2)
 
 
 def videoToDB():
     while True:
-        print('videoToDB-----@@@start@@@-----')
         videoM = common.M('video_tmp')
         viM = common.M('video')
         vilistM = common.M('video_list')
@@ -146,6 +154,8 @@ def videoToDB():
             'status=?', (2,)).select()
         tmp_dir = os.getcwd() + "/tmp/"
         app_dir = os.getcwd() + "/app/"
+        if not isDEmpty(data):
+            print('videoToDB-----@@@start@@@-----')
         for x in data:
             m3u8_dir = tmp_dir + str(x["md5"])
             source_file = tmp_dir + str(x['filename'])
@@ -160,17 +170,20 @@ def videoToDB():
                     os.remove(source_file)
 
                 updateStatus(x['id'], 3)
-
-        print('videoToDB-----@@@end@@@-----')
+        if not isDEmpty(data):
+            print('videoToDB-----@@@end@@@-----')
         time.sleep(5)
 
 
 def videoToDel():
     while True:
-        print('videoToDel-----@@@start@@@-----')
+
         videoM = common.M('video_tmp')
         data = videoM.field('id,md5,filename,size,filename').where(
             'status=?', (3,)).select()
+
+        if not isDEmpty(data):
+            print('videoToDel-----@@@start@@@-----')
         tmp_dir = os.getcwd() + "/tmp/"
         app_dir = os.getcwd() + "/app/"
         for x in data:
@@ -183,7 +196,8 @@ def videoToDel():
             else:
                 print(x['filename'] + 'delete fail!!!')
 
-        print('videoToDel-----@@@end@@@-----')
+        if not isDEmpty(data):
+            print('videoToDel-----@@@end@@@-----')
         time.sleep(5)
 
 

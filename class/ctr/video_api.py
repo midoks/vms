@@ -84,6 +84,28 @@ class video_api:
 
         return common.getJson(_ret)
 
+    def editApi(self):
+        sid = request.form.get('id', '').encode('utf-8')
+        name = request.form.get('name', '').encode('utf-8')
+        videoM = common.M('video')
+        videoM.where('id=?', (sid)).setField('name', name)
+        _ret = {}
+        _ret['code'] = 0
+        _ret['msg'] = '修改成功'
+
+        return common.getJson(_ret)
+
+    def getApi(self):
+        sid = request.args.get('id', '1').encode('utf-8')
+        videoM = common.M('video')
+        _list = videoM.field('id,name,filename,size,status,uptime,addtime').where(
+            'id=?', (sid)).select()
+        _ret = {}
+        _ret['data'] = _list
+        _ret['code'] = 0
+
+        return common.getJson(_ret)
+
     def delApi(self):
         sid = request.form.get('id', '').encode('utf-8')
         videoM = common.M('video')

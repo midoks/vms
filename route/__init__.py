@@ -232,3 +232,10 @@ def index(reqClass=None, reqAction=None, reqData=None):
     newInstance = eval(eval_str)
     print(newInstance)
     return publicObject(newInstance, reqAction)
+
+
+@app.route('/m3u8/<path>/<filename>', methods=['GET'])
+def m3u8(path=None, filename=None):
+    p = os.getcwd() + '/app/' + path + '/' + filename
+    c = common.readFile(p)
+    return c

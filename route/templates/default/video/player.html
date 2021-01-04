@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html>
+<body>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dplayer@latest/dist/DPlayer.min.css">
+<style type="text/css">
+    body,html{width:100%;height:100%;background:#000;padding:0;margin:0;overflow-x:hidden;overflow-y:hidden}
+    *{margin:0;border:0;padding:0;text-decoration:none}
+    #stats{position:fixed;top:5px;left:10px;font-size:12px;color:#fdfdfd;z-index:2147483647;text-shadow:1px 1px 1px #000, 1px 1px 1px #000}
+    #dplayer{position:inherit}
+</style>
+<div id="dplayer"></div>
+<div id="stats"></div>
+<script src="https://cdn.jsdelivr.net/npm/cdnbye@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/dplayer@latest"></script>
+<script>
+
+  function getUrlParam(name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+      var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+      if (r != null) return unescape(r[2]); return null; //返回参数值
+  }
+
+  var url_get =  getUrlParam('url');
+
+    var _peerId = '', _peerNum = 0, _totalP2PDownloaded = 0, _totalP2PUploaded = 0;
+    const dp = new DPlayer({
+        container: document.getElementById('dplayer'),
+        autoplay: true,
+        video: {
+            url: url_get,
+            type: 'customHls',
+            customType: {
+                'customHls': function (video, player) {
+                    const hls = new Hls({
+                        debug: false,
+                        // Other hlsjsConfig options provided by hls.js
+                        p2pConfig: {
+                          // wsSignalerAddr: 'wss://p2p.bjxkhc.com:8089',
+                          // announce: "https://tracker.hdtvcdn.com:9988/v1",
+                            logLevel: false,
+                            live: false,        // 如果是直播设为true
+                            // Other p2pConfig options provided by CDNBye
+                        }
+                    });
+                    hls.loadSource(video.src);
+                    hls.attachMedia(video);
+                    hls.p2pEngine.on('stats', function (stats) {
+                        _totalP2PDownloaded = stats.totalP2PDownloaded;
+                        _totalP2PUploaded = stats.totalP2PUploaded;
+                        updateStats();
+                    }).on('peerId', function (peerId) {
+                        _peerId = peerId;
+                    }).on('peers', function (peers) {
+                        _peerNum = peers.length;
+                        updateStats();
+                    });
+
+                }
+            }
+        }
+    });
+  //alert('play');
+    function updateStats() {
+        var text = '正在为您加速' + (_totalP2PDownloaded/1024).toFixed(2)
+            + 'MB 已分享' + (_totalP2PUploaded/1024).toFixed(2) + 'MB' + ' 同时观看人数' + _peerNum + '个';
+        document.getElementById('stats').innerText = text
+    }
+</script>
+<div style="display:none;">
+<!-- <script type="text/javascript" src="https://js.users.51.la/20627995.js"></script>
+<script type="text/javascript" src="https://js.users.51.la/20632307.js"></script>
+<script type="text/javascript" src="https://s5.cnzz.com/z_stat.php?id=1277228780&web_id=1277228780"></script> -->
+</div>
+</body>
+</html>
