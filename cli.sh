@@ -4,19 +4,19 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin:/usr/loc
 
 
 mvg_start(){
-	gunicorn -c setting.py app:vms
-	python vms_task.py &
+	gunicorn -c setting.py vms:app
+	#python vms_task.py &
 }
 
 
 mvg_start_debug(){
 	# python vms_task.py &
-	gunicorn -b :7200 -k gevent -w 1 app:app
+	gunicorn -b :7200 -k gevent -w 1 vms:app
 }
 
 mvg_stop()
 {
-	PLIST=`ps -ef|grep app:vms |grep -v grep|awk '{print $2}'`
+	PLIST=`ps -ef|grep vms:app |grep -v grep|awk '{print $2}'`
 	for i in $PLIST
 	do
 	    kill -9 $i

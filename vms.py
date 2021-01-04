@@ -7,7 +7,7 @@ from route import app, socketio
 
 try:
     if __name__ == "__main__":
-        PORT = 8888
+        PORT = 8000
         HOST = '0.0.0.0'
         socketio.run(app, host=HOST, port=PORT)
 except Exception as ex:

@@ -16,24 +16,16 @@ workers = cpu_info[1]
 if not os.path.exists(os.getcwd() + '/logs'):
     os.mkdir(os.getcwd() + '/logs')
 
-# mw_port = mw.readFile('data/port.pl')
-# if mw_port:
-#     mw_port.strip()
-# bind = []
-# if os.path.exists('data/ipv6.pl'):
-#     bind.append('[0:0:0:0:0:0:0:0]:%s' % mw_port)
-# else:
-#     bind.append('0.0.0.0:%s' % mw_port)
 
 if workers > 2:
     workers = 2
 
 threads = workers * 1
 backlog = 512
-reload = False
+reload = True
 daemon = True
 worker_class = 'geventwebsocket.gunicorn.workers.GeventWebSocketWorker'
-timeout = 7200
+timeout = 8000
 keepalive = 60
 preload_app = True
 capture_output = True
