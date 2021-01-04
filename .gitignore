@@ -129,3 +129,4 @@ dmypy.json
 data/default.db
 tmp/*
 app/*
+*.pid

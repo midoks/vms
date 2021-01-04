@@ -11,7 +11,7 @@ from flask import Flask, session
 from flask import request
 
 import db
-import mw
+import common
 import requests
 import config_api
 
@@ -32,12 +32,12 @@ class system_api:
     pids = None
 
     def __init__(self):
-        self.setupPath = mw.getServerDir()
+        self.setupPath = common.getServerDir()
 
     ##### ----- start ----- ###
     def networkApi(self):
         data = self.getNetWork()
-        return mw.getJson(data)
+        return common.getJson(data)
 
     def updateServerApi(self):
         stype = request.args.get('type', 'check')
@@ -189,9 +189,6 @@ class system_api:
         data['cpuRealUsed'] = cpu[0]
         data['time'] = self.getBootTime()
         data['system'] = self.getSystemVersion()
-        data['isuser'] = mw.M('users').where(
-            'username=?', ('admin',)).count()
-        data['version'] = '0.0.1'
         return data
 
     def getLoadAverage(self):
