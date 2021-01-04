@@ -105,7 +105,8 @@ class video_api:
 
         if data:
             pathfile = os.getcwd() + '/tmp/' + data[0]['filename']
-            os.remove(pathfile)
+            if os.path.exists(pathfile):
+                os.remove(pathfile)
 
         r = videoM.where("id=?", (sid,)).delete()
         # print(sid, r)
