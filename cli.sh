@@ -5,7 +5,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin:/usr/loc
 
 mvg_start(){
 	gunicorn -c setting.py vms:app
-	#python vms_task.py &
+	python vms_task.py &
 }
 
 
