@@ -913,7 +913,7 @@ def getSSHStatus():
 def init():
 
     initDB()
-    # initInitD()
+    initInitD()
     # initUserInfo()
 
 
@@ -948,12 +948,12 @@ def initInitD():
         return
 
     content = readFile(script)
-    content = content.replace("{$SERVER_PATH}", mw.getRunDir())
+    content = content.replace("{$SERVER_PATH}", common.getRunDir())
 
     writeFile(script_bin, content)
     execShell('chmod +x ' + script_bin)
 
-    setHostAddr(mw.getLocalIp())
+    setHostAddr(common.getLocalIp())
 
     if not isAppleSystem():
         initd_bin = '/etc/init.d/vms'
