@@ -237,5 +237,9 @@ def index(reqClass=None, reqAction=None, reqData=None):
 @app.route('/m3u8/<path>/<filename>', methods=['GET'])
 def m3u8(path=None, filename=None):
     p = os.getcwd() + '/app/' + path + '/' + filename
-    c = common.readFile(p)
-    return c
+
+    if os.path.exists(p):
+        c = common.readFile(p)
+        return c
+    else:
+        return 'not fund!'

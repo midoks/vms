@@ -97,7 +97,6 @@ class video_api:
         vmM = common.M('video_tmp')
         r = vmM.add("md5,filename,size,status,uptime,addtime",
                     (file_md5, target_filename, os.path.getsize(dirfile), 0, common.getDate(), common.getDate()))
-        print(r)
         if not r:
             return 'fail'
         return 'ok'
