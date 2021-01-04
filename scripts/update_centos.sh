@@ -8,6 +8,10 @@ LANG=en_US.UTF-8
 
 wget -O /tmp/main.zip https://codeload.github.com/midoks/vms/zip/main
 cd /tmp && unzip /tmp/main.zip
+
+rm -rf /tmp/vms-main/.gitignore
+rm -rf /tmp/vms-main/README.md
+rm -rf /tmp/vms-main/LICENSE
 /usr/bin/cp -rf  /tmp/vms-main/* /www/wwwroot/vms
 rm -rf /tmp/main.zip
 rm -rf /tmp/vms-main
