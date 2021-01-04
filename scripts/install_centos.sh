@@ -9,7 +9,7 @@ mkdir -p /www/wwwroot
 
 yum install -y libevent libevent-devel mysql-devel libjpeg* libpng* gd* zip unzip
 
-if [ ! -d /www/server/mdserver-web ];then
+if [ ! -d /www/wwwroot/vms ];then
 	wget -O /tmp/master.zip https://codeload.github.com/midoks/vms/zip/master
 	cd /tmp && unzip /tmp/main.zip
 	mv /tmp/vms-main /www/wwwroot/vms
