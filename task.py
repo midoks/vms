@@ -148,6 +148,7 @@ def videoToDB():
         app_dir = os.getcwd() + "/app/"
         for x in data:
             m3u8_dir = tmp_dir + str(x["md5"])
+            source_file = tmp_dir + str(x['filename'])
             if os.path.exists(m3u8_dir):
                 data = viM.field('id').where(
                     "filename=?", (x["md5"],)).select()
@@ -156,11 +157,33 @@ def videoToDB():
                     viM.add("name,filename,size,status,uptime,addtime",
                             (x['filename'], x['md5'], x['size'], 0, common.getDate(), common.getDate()))
                     shutil.move(m3u8_dir, app_dir)
-                    os.rmdir(m3u8_dir)
+                    os.remove(source_file)
 
-                    videoM.where("id=?", (x['id'],)).delete()
+                updateStatus(x['id'], 3)
 
         print('videoToDB-----@@@end@@@-----')
+        time.sleep(5)
+
+
+def videoToDel():
+    while True:
+        print('videoToDel-----@@@start@@@-----')
+        videoM = common.M('video_tmp')
+        data = videoM.field('id,md5,filename,size,filename').where(
+            'status=?', (3,)).select()
+        tmp_dir = os.getcwd() + "/tmp/"
+        app_dir = os.getcwd() + "/app/"
+        for x in data:
+            m3u8_dir = tmp_dir + str(x["md5"])
+            source_file = tmp_dir + str(x['filename'])
+
+            r = videoM.where("id=?", (x['id'],)).delete()
+            if r:
+                print(x['filename'] + ' delete ok!!!')
+            else:
+                print(x['filename'] + 'delete fail!!!')
+
+        print('videoToDel-----@@@end@@@-----')
         time.sleep(5)
 
 
@@ -190,6 +213,10 @@ if __name__ == "__main__":
     t.start()
 
     t = threading.Thread(target=videoToDB)
+    t.setDaemon(True)
+    t.start()
+
+    t = threading.Thread(target=videoToDel)
     t.setDaemon(True)
     t.start()
 

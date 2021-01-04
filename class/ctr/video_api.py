@@ -19,6 +19,15 @@ sys.path.append(os.getcwd() + "/class/core")
 import common
 
 
+def del_file(path_data):
+    for i in os.listdir(path_data):
+        file_data = path_data + "/" + i
+        if os.path.isfile(file_data) == True:
+            os.remove(file_data)
+        else:
+            del_file(file_data)
+
+
 class video_api:
 
     def __init__(self):
@@ -81,11 +90,14 @@ class video_api:
 
         data = videoM.field('id,filename,size').where(
             'id=?', (sid,)).select()
-        print(data)
         if data:
-            pathfile = os.getcwd() + "/app/" + str(data[0]['filename'])
-            if os.path.exists(pathfile):
-                os.rmdir(pathfile)
+            try:
+                pathfile = os.getcwd() + "/app/" + str(data[0]['filename'])
+                if os.path.exists(pathfile):
+                    del_file(pathfile)
+                    os.removedirs(pathfile)
+            except Exception as e:
+                raise e
 
         r = videoM.where("id=?", (sid,)).delete()
         # print(sid, r)
