@@ -120,7 +120,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   function apiPlayer(data){
     var url = '/m3u8/'+data.filename+'/index.m3u8'; 
     console.log(url);
-    WeAdminShow('查看','/video/player?url='+url ,500, 400);
+    WeAdminShow('查看['+url+']','/video/player?url='+url ,500, 400);
   }
 
 ///
