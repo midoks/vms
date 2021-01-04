@@ -136,9 +136,10 @@ def videoToM3u8():
 
             if not os.path.exists(m3u8_file):
                 cmd = fg_m3u8_cmd(tofile, m3u8_file, pathfile)
-                data = execShell(cmd)
+                # data = execShell(cmd)
+                print(cmd)
+                os.system(cmd)
                 updateStatus(x['id'], 2)
-                print(data[1])
 
         if not isDEmpty(data):
             print('videoToM3u8-----@@@end@@@-----')
