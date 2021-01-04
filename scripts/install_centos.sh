@@ -11,7 +11,7 @@ yum install -y libevent libevent-devel mysql-devel libjpeg* libpng* gd* zip unzi
 echo 'ddddd00'
 if [ ! -d /www/wwwroot/vms ];then
 	echo 'ddddd11'
-	wget -O /tmp/master.zip https://codeload.github.com/midoks/vms/zip/master
+	wget -O /tmp/main.zip https://codeload.github.com/midoks/vms/zip/main
 	cd /tmp && unzip /tmp/main.zip
 	mv /tmp/vms-main /www/wwwroot/vms
 	rm -rf /tmp/main.zip
