@@ -100,7 +100,7 @@ def execShell(cmdstring, cwd=None, timeout=None, shell=True):
 
 
 def printHL():
-    print('hello world')
+    print('hello world,vms!!!')
 
 
 def videoToMp4():

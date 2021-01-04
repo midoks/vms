@@ -33,7 +33,47 @@ class video_api:
     def __init__(self):
         pass
 
+    def uploadmd5Api(self):
+        if request.method == 'POST':
+            upload_file = request.files['file']
+            task = request.form.get('task_id')          # 获取文件唯一标识符
+            chunk = request.form.get('chunk', 0)        # 获取该分片在所有分片中的序号
+            filename = '%s%s' % (task, chunk)           # 构成该分片唯一标识符
+            upload_file.save(os.getcwd() + '/tmp/%s' % filename)
+
+        return 'ok'
+
+    def uploadokApi(self):
+        target_filename = request.args.get('filename')  # 获取上传文件的文件名
+        task = request.args.get('task_id')              # 获取文件的唯一标识符
+        chunk = 0                                       # 分片序号
+        with open(os.getcwd() + '/tmp/%s' % target_filename, 'wb') as target_file:  # 创建新文件
+            while True:
+                try:
+                    filename = os.getcwd() + '/tmp/%s%d' % (task, chunk)
+                    # 按序打开每个分片
+                    source_file = open(filename, 'rb')
+                    # 读取分片内容写入新文件
+                    target_file.write(source_file.read())
+                    source_file.close()
+                except IOError:
+                    break
+                chunk += 1
+                os.remove(filename)                     # 删除该分片，节约空间
+        # 入库
+        dirfile = os.path.join(os.getcwd() + '/tmp', target_filename)
+        with open(dirfile, 'rb') as fp:
+            data = fp.read()
+        file_md5 = hashlib.md5(data).hexdigest()
+        vmM = common.M('video_tmp')
+        r = vmM.add("md5,filename,size,status,uptime,addtime",
+                    (file_md5, target_filename, os.path.getsize(dirfile), 0, common.getDate(), common.getDate()))
+
+        if not r:
+            return 'fail'
+        return 'ok'
     ##### ----- start ----- ###
+
     def uploadApi(self):
         file = request.files['file']
         filename = file.filename

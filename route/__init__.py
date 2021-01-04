@@ -227,10 +227,10 @@ def index(reqClass=None, reqAction=None, reqData=None):
             return render_template(reqClass + '/' + reqAction + '.html', data=data)
 
     className = reqClass
-    print(className)
+    # print(className)
     eval_str = "__import__('" + className + "')." + className + '()'
     newInstance = eval(eval_str)
-    print(newInstance)
+    # print(newInstance)
     return publicObject(newInstance, reqAction)
 
 
