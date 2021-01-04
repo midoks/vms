@@ -37,10 +37,10 @@ Install_linux_ffmpeg()
 }
 
 if [ $sysName == 'Darwin' ]; then
-		Install_mac_ffmpeg
-	else
-		Install_linux_ffmpeg
-	fi
+	Install_mac_ffmpeg
+else
+	Install_linux_ffmpeg
+fi
 
 
 yum install -y libevent libevent-devel mysql-devel libjpeg* libpng* gd* zip unzip
