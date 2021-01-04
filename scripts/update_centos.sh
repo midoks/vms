@@ -8,7 +8,7 @@ LANG=en_US.UTF-8
 
 wget -O /tmp/main.zip https://codeload.github.com/midoks/vms/zip/main
 cd /tmp && unzip /tmp/main.zip
-\cp -i -rf  /tmp/vms_main/* /www/wwwroot/vms
+/usr/bin/cp -i -rf  /tmp/vms_main/* /www/wwwroot/vms
 rm -rf /tmp/main.zip
 rm -rf /tmp/vms_main
 
