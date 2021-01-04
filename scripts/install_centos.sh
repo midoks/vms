@@ -3,8 +3,44 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 LANG=en_US.UTF-8
 
-mkdir -p /www/wwwroot
+sysName=`uname`
 
+mkdir -p /www/wwwroot
+mkdir -p /www/server/lib
+
+serverPath=/www/server
+
+Install_mac_ffmpeg()
+{
+	macVer='ffmpeg-20200721-b5f1e05-macos64-static'
+	if [ ! -f $serverPath/source/${macVer}.zip ];then
+		wget -O $serverPath/source/${macVer}.zip https://ffmpeg.zeranoe.com/builds/macos64/static/${macVer}.zip
+	fi
+
+	if [ ! -d $serverPath/lib/ffmpeg ];then
+		cd $serverPath/source && unzip $serverPath/source/${macVer}.zip
+		mv ${macVer} $serverPath/lib/ffmpeg
+	fi
+}
+
+Install_linux_ffmpeg()
+{
+	if [ ! -f $serverPath/source/ffmpeg-release-amd64-static.tar.xz ];then
+		wget -O $serverPath/source/ffmpeg-release-amd64-static.tar.xz https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
+	fi
+
+	if [ ! -d $serverPath/lib/ffmpeg ];then
+		cd $serverPath/source && tar -xvf $serverPath/source/ffmpeg-release-amd64-static.tar.xz
+		#mkdir -p $serverPath/lib/ffmpeg
+		mv ffmpeg-4.3-amd64-static $serverPath/lib/ffmpeg
+	fi
+}
+
+if [ $sysName == 'Darwin' ]; then
+		Install_mac_ffmpeg
+	else
+		Install_linux_ffmpeg
+	fi
 
 
 yum install -y libevent libevent-devel mysql-devel libjpeg* libpng* gd* zip unzip
