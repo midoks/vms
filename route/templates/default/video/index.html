@@ -76,7 +76,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
       ,{field: 'size', title: '文件大小', width: 120, sort: true, totalRow: true}
       ,{field: 'uptime', title: '更新时间', width: 165, sort: true, totalRow: true}
       ,{field: 'addtime', title: '添加时间', width: 165, sort: true, totalRow: true}
-      ,{fixed: 'right', width: 165, align:'center', toolbar: '#toolBar'}
+      ,{fixed: 'right', width: 220, align:'center', toolbar: '#toolBar'}
     ]]
   });
 
@@ -99,6 +99,8 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
         apiEdit(data.id);break;
       case 'detail':
         apiPlayer(data);break;
+      case 'addr':
+        apiAddr(data);break;
     }
   });
 
@@ -123,6 +125,15 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     WeAdminShow('查看['+url+']','/video/player?url='+url ,500, 400);
   }
 
+  function apiAddr(data){
+    var url = '/m3u8/'+data.filename+'/index.m3u8'; 
+    layer.open({
+        title: '播放地址'
+        ,content: url
+    });     
+  
+  }
+
 ///
 });
   
@@ -131,6 +142,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 
 <script type="text/html" id="toolBar">
   <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="addr">地址</a>
   <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
