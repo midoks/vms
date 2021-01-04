@@ -1,20 +1,16 @@
-# coding:utf-8
+# -- coding:utf-8 --
 
 
-# import time
-# import sys
-# import os
-# chdir = os.getcwd()
-# sys.path.append(chdir + '/class/core')
-# sys.path.append("/usr/local/lib/python2.7/site-packages")
-# import mw
-# import system_api
-# cpu_info = system_api.system_api().getCpuInfo()
-# workers = cpu_info[1]
+import time
+import sys
+import os
+chdir = os.getcwd()
+sys.path.append(chdir + '/class/core')
+sys.path.append("/usr/local/lib/python2.7/site-packages")
 
 
-# if not os.path.exists(os.getcwd() + '/logs'):
-#     os.mkdir(os.getcwd() + '/logs')
+if not os.path.exists(os.getcwd() + '/logs'):
+    os.mkdir(os.getcwd() + '/logs')
 
 # mw_port = mw.readFile('data/port.pl')
 # if mw_port:
@@ -25,15 +21,15 @@
 # else:
 #     bind.append('0.0.0.0:%s' % mw_port)
 
-# if workers > 2:
-#     workers = 2
+if workers > 2:
+    workers = 2
 
-# threads = workers * 1
-# backlog = 512
-# reload = False
-# daemon = True
-# worker_class = 'geventwebsocket.gunicorn.workers.GeventWebSocketWorker'
-# timeout = 7200
+threads = workers * 1
+backlog = 512
+reload = False
+daemon = True
+worker_class = 'geventwebsocket.gunicorn.workers.GeventWebSocketWorker'
+timeout = 7200
 # keepalive = 60
 # preload_app = True
 # capture_output = True

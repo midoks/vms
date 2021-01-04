@@ -8,9 +8,7 @@ mkdir -p /www/wwwroot
 
 
 yum install -y libevent libevent-devel mysql-devel libjpeg* libpng* gd* zip unzip
-echo 'ddddd00'
 if [ ! -d /www/wwwroot/vms ];then
-	echo 'ddddd1!1'
 	wget -O /tmp/main.zip https://codeload.github.com/midoks/vms/zip/main
 	cd /tmp && unzip /tmp/main.zip
 	mv /tmp/vms-main /www/wwwroot/vms
