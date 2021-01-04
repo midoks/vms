@@ -5,3 +5,10 @@
 ```
 curl -fsSL  https://raw.githubusercontent.com/midoks/vms/master/scripts/install.sh | sh
 ```
+
+### 更新
+```
+curl -fsSL  https://raw.githubusercontent.com/midoks/vms/master/scripts/update.sh | sh
+```
+
+
