@@ -156,6 +156,13 @@ def videoToM3u8():
         time.sleep(2)
 
 
+def videoToDB():
+    while True:
+        print('videoToDB-----@@@start@@@-----')
+        print('videoToDB-----@@@end@@@-----')
+        time.sleep(5)
+
+
 def startTask():
     import time
     # 任务队列
@@ -182,6 +189,10 @@ if __name__ == "__main__":
     # t.start()
 
     t = threading.Thread(target=videoToM3u8)
+    t.setDaemon(True)
+    t.start()
+
+    t = threading.Thread(target=videoToDB)
     t.setDaemon(True)
     t.start()
 
