@@ -5,9 +5,12 @@ LANG=en_US.UTF-8
 
 # unalias cp
 # alias cp='cp -i'
+rm -rf /tmp/vms-main
 
 wget -O /tmp/main.zip https://codeload.github.com/midoks/vms/zip/main
 cd /tmp && unzip /tmp/main.zip
+
+
 
 # rm -rf /tmp/vms-main/.gitignore
 # rm -rf /tmp/vms-main/README.md
