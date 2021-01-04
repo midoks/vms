@@ -34,7 +34,7 @@ if os.path.exists(tmp_cmd):
 else:
     ffmpeg_cmd = "/usr/local/bin/ffmpeg"
 
-tmp_cmd = '/www/server/lib/ffmpeg'
+tmp_cmd = '/www/server/lib/ffmpeg/ffmpeg'
 if os.path.exists(tmp_cmd):
     ffmpeg_cmd = tmp_cmd
 
