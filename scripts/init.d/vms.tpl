@@ -17,7 +17,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 app_path={$SERVER_PATH}
 
 mw_start(){
-	isStart=`ps -ef|grep 'gunicorn -c setting.py vms:app' |grep -v grep|awk '{print $2}'`
+	isStart=`ps -ef|grep 'vms:app' |grep -v grep|awk '{print $2}'`
 	if [ "$isStart" == '' ];then
             echo -e "Starting vms... \c"
             cd $app_path && gunicorn -c setting.py vms:app
@@ -43,20 +43,21 @@ mw_start(){
             fi
             echo -e "\033[32mdone\033[0m"
     else
-            echo "Starting vms... mw(pid $(echo $isStart)) already running"
+            echo "Starting vms... vms(pid $(echo $isStart)) already running"
     fi
 
 
     isStart=$(ps aux |grep 'vms_task.py'|grep -v grep|awk '{print $2}')
     if [ "$isStart" == '' ];then
             echo -e "Starting vms-tasks... \c"
-            cd $app_path && nohup python vms_task.py >> $app_path/logs/task.log 2>&1 &
+            cd $app_path && nohup python vms_task.py >> $app_path/logs/vms_task.log 2>&1 1>&1 &
+            #echo "cd $app_path && nohup python vms_task.py >> $app_path/logs/vms_task.log 2>&1 1>&1 &"
             sleep 0.3
             isStart=$(ps aux |grep 'vms_task.py'|grep -v grep|awk '{print $2}')
             if [ "$isStart" == '' ];then
                     echo -e "\033[31mfailed\033[0m"
                     echo '------------------------------------------------------'
-                    tail -n 20 $app_path/logs/task.log
+                    tail -n 20 $app_path/logs/vms_task.log
                     echo '------------------------------------------------------'
                     echo -e "\033[31mError: vms-tasks service startup failed.\033[0m"
                     return;
@@ -70,13 +71,14 @@ mw_start(){
     isStart=$(ps aux |grep 'vms_async.py'|grep -v grep|awk '{print $2}')
     if [ "$isStart" == '' ];then
             echo -e "Starting vms-async... \c"
-            cd $app_path && nohup python vms_async.py >> $app_path/logs/vms_async.log 2>&1 &
+            cd $app_path && nohup python vms_async.py >> $app_path/logs/vms_async.log 2>&1 1>&1 &
+            #echo "cd $app_path && nohup python vms_async.py >> $app_path/logs/vms_async.log 2>&1 1>&1 &"
             sleep 0.3
             isStart=$(ps aux |grep 'vms_async.py'|grep -v grep|awk '{print $2}')
             if [ "$isStart" == '' ];then
                     echo -e "\033[31mfailed\033[0m"
                     echo '------------------------------------------------------'
-                    tail -n 20 $app_path/logs/task.log
+                    tail -n 20 $app_path/logs/vms_async.log
                     echo '------------------------------------------------------'
                     echo -e "\033[31mError: vms-async service startup failed.\033[0m"
                     return;
@@ -91,10 +93,11 @@ mw_start(){
 mw_stop()
 {
     echo -e "Stopping vms-async... \c";
-    pids=$(ps aux | grep 'vms_async.py'|grep -v grep|awk '{print $2}')
+    arr=$(ps aux | grep 'vms_async'|grep -v grep|awk '{print $2}')
+    echo -e $arr
     for p in ${arr[@]}
     do
-            kill -9 $p &>/dev/null
+        kill -9 $p &>/dev/null
     done
     
     if [ -f $pidfile ];then
@@ -104,20 +107,19 @@ mw_stop()
 
 
 	echo -e "Stopping vms-tasks... \c";
-    pids=$(ps aux | grep 'vms_task.py'|grep -v grep|awk '{print $2}')
-    arr=($pids)
-
+    arr=$(ps aux | grep 'vms_task'|grep -v grep|awk '{print $2}')
+    echo -e $arr
     for p in ${arr[@]}
     do
-            kill -9 $p
+        kill -9 $p &>/dev/null
     done
     echo -e "\033[32mdone\033[0m"
 
     echo -e "Stopping vms... \c";
-    arr=`ps aux|grep 'gunicorn -c setting.py vms:app'|grep -v grep|awk '{print $2}'`
+    arr=`ps aux|grep 'vms:app'|grep -v grep|awk '{print $2}'`
 	for p in ${arr[@]}
     do
-            kill -9 $p &>/dev/null
+            kill -9 $p
     done
     
     if [ -f $pidfile ];then
@@ -147,17 +149,17 @@ mw_status()
 
 mw_reload()
 {
-	isStart=$(ps aux|grep 'gunicorn -c setting.py vms:app'|grep -v grep|awk '{print $2}')
+	isStart=$(ps aux|grep 'vms:app'|grep -v grep|awk '{print $2}')
     
     if [ "$isStart" != '' ];then
-    	echo -e "Reload mw... \c";
-	    arr=`ps aux|grep 'gunicorn -c setting.py vms:app'|grep -v grep|awk '{print $2}'`
+    	echo -e "Reload vms... \c";
+	    arr=`ps aux|grep 'vms:app'|grep -v grep|awk '{print $2}'`
 		for p in ${arr[@]}
         do
                 kill -9 $p
         done
         cd $app_path && gunicorn -c setting.py vms:app
-        isStart=`ps aux|grep 'gunicorn -c setting.py vms:app'|grep -v grep|awk '{print $2}'`
+        isStart=`ps aux|grep 'vms:app'|grep -v grep|awk '{print $2}'`
         if [ "$isStart" == '' ];then
                 echo -e "\033[31mfailed\033[0m"
                 echo '------------------------------------------------------'
@@ -185,6 +187,7 @@ case "$1" in
     'reload') mw_reload;;
     'restart') 
         mw_stop
+        sleep 2
         mw_start;;
     'status') mw_status;;
     'logs') error_logs;;

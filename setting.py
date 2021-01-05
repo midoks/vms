@@ -9,9 +9,9 @@ sys.path.append(chdir + '/class/core')
 sys.path.append(chdir + '/class/ctr')
 sys.path.append("/usr/local/lib/python2.7/site-packages")
 import common
-import system_api
-cpu_info = system_api.system_api().getCpuInfo()
-workers = cpu_info[1]
+# import system_api
+# cpu_info = system_api.system_api().getCpuInfo()
+# workers = cpu_info[1]
 
 if not os.path.exists(os.getcwd() + '/logs'):
     os.mkdir(os.getcwd() + '/logs')
@@ -23,10 +23,10 @@ if os.path.exists('data/ipv6.pl'):
 else:
     bind.append('0.0.0.0:%s' % app_port)
 
-if workers > 2:
-    workers = 2
+# if workers > 2:
+#     workers = 2
 
-threads = workers * 1
+threads = 1
 backlog = 512
 reload = True
 daemon = True

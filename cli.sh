@@ -6,6 +6,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin:/usr/loc
 mvg_start(){
 	gunicorn -c setting.py vms:app
 	python vms_task.py &
+	python vms_async.py &
 }
 
 
@@ -24,6 +25,12 @@ mvg_stop()
 	#|xargs kill -9
 	TLIST=`ps -ef|grep vms_task.py |grep -v grep|awk '{print $2}'`
 	for i in $TLIST
+	do
+	    kill -9 $i
+	done
+
+	ALIST=`ps -ef|grep vms_async.py |grep -v grep|awk '{print $2}'`
+	for i in $ALIST
 	do
 	    kill -9 $i
 	done
