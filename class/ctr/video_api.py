@@ -10,6 +10,9 @@ import pwd
 import hashlib
 from hashlib import md5
 
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 from flask import session
 from flask import request
 
