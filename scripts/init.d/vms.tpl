@@ -65,11 +65,44 @@ mw_start(){
     else
             echo "Starting vms-tasks... vms-tasks (pid $isStart) already running"
     fi
+
+
+    isStart=$(ps aux |grep 'vms_async.py'|grep -v grep|awk '{print $2}')
+    if [ "$isStart" == '' ];then
+            echo -e "Starting vms-async... \c"
+            cd $app_path && nohup python vms_async.py >> $app_path/logs/vms_async.log 2>&1 &
+            sleep 0.3
+            isStart=$(ps aux |grep 'vms_async.py'|grep -v grep|awk '{print $2}')
+            if [ "$isStart" == '' ];then
+                    echo -e "\033[31mfailed\033[0m"
+                    echo '------------------------------------------------------'
+                    tail -n 20 $app_path/logs/task.log
+                    echo '------------------------------------------------------'
+                    echo -e "\033[31mError: vms-async service startup failed.\033[0m"
+                    return;
+            fi
+            echo -e "\033[32mdone\033[0m"
+    else
+            echo "Starting vms-async... vms-async (pid $isStart) already running"
+    fi
 }
 
 
 mw_stop()
 {
+    echo -e "Stopping vms-async... \c";
+    pids=$(ps aux | grep 'vms_async.py'|grep -v grep|awk '{print $2}')
+    for p in ${arr[@]}
+    do
+            kill -9 $p &>/dev/null
+    done
+    
+    if [ -f $pidfile ];then
+        rm -f $pidfile
+    fi
+    echo -e "\033[32mdone\033[0m"
+
+
 	echo -e "Stopping vms-tasks... \c";
     pids=$(ps aux | grep 'vms_task.py'|grep -v grep|awk '{print $2}')
     arr=($pids)
@@ -91,6 +124,7 @@ mw_stop()
     	rm -f $pidfile
     fi
     echo -e "\033[32mdone\033[0m"
+
 }
 
 mw_status()
