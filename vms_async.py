@@ -106,7 +106,7 @@ def execShell(cmdstring, cwd=None, timeout=None, shell=True):
 def printHL():
     while True:
         print('hello world,vms async!!!')
-        time.sleep(5)
+        time.sleep(60)
 
 
 def startTask():
