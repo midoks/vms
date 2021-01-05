@@ -236,6 +236,7 @@ def index(reqClass=None, reqAction=None, reqData=None):
 
 @app.route('/m3u8/<path>/<filename>', methods=['GET'])
 def m3u8(path=None, filename=None):
+    request.headers["Access-Control-Allow-Origin"] = "*"
     p = os.getcwd() + '/app/' + path + '/' + filename
 
     if os.path.exists(p):
