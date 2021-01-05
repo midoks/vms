@@ -32,7 +32,7 @@ Install_linux_ffmpeg()
 	if [ ! -d $serverPath/lib/ffmpeg ];then
 		cd $serverPath/source && tar -xvf $serverPath/source/ffmpeg-release-amd64-static.tar.xz
 		#mkdir -p $serverPath/lib/ffmpeg
-		mv ffmpeg-4.3-amd64-static $serverPath/lib/ffmpeg
+		mv ffmpeg-4.3.1-amd64-static $serverPath/lib/ffmpeg
 	fi
 }
 
