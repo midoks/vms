@@ -133,3 +133,4 @@ app/*
 tmp/wu_*
 *.mp4
 *.ts
+scripts/init.d/vms
