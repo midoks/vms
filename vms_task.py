@@ -208,7 +208,6 @@ def videoToDel():
 
 def startTask():
     import time
-    # 任务队列
     try:
         while True:
             time.sleep(2)
