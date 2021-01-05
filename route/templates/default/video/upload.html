@@ -69,6 +69,11 @@ var uploader = WebUploader.create({
     formData: {                               //每次上传分片，一起携带的数据
         task_id: task_id,
     },
+    accept: {
+        title: 'mp4',
+        extensions: 'mp4',
+        mimeTypes: 'mp4/*'
+    }
 });
 
 uploader.on('startUpload', function() {       //开始上传时，调用该方法
