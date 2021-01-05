@@ -81,6 +81,7 @@ function getUrlParam(name) {
             layer.msg(data.msg);
             setTimeout(function(){
                 location.reload();
+                layer.close();
             },2000);
         });
         return false;

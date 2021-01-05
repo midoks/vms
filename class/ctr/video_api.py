@@ -179,7 +179,7 @@ class video_api:
         sid = request.form.get('id', '').encode('utf-8')
         name = request.form.get('name', '').encode('utf-8')
         videoM = common.M('video')
-        videoM.where('id=?', (sid)).setField('name', name)
+        videoM.where('id=?', (sid,)).setField('name', name)
         _ret = {}
         _ret['code'] = 0
         _ret['msg'] = '修改成功'
@@ -187,10 +187,10 @@ class video_api:
         return common.getJson(_ret)
 
     def getApi(self):
-        sid = request.args.get('id', '1').encode('utf-8')
+        sid = request.args.get('id', '').encode('utf-8')
         videoM = common.M('video')
         _list = videoM.field('id,name,filename,size,status,uptime,addtime').where(
-            'id=?', (sid)).select()
+            'id=?', (sid,)).select()
         _ret = {}
         _ret['data'] = _list
         _ret['code'] = 0
