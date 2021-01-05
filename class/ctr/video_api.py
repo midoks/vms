@@ -20,6 +20,16 @@ sys.path.append(os.getcwd() + "/class/core")
 import common
 
 
+from threading import Thread
+
+
+def async(f):
+    def wrapper(*args, **kwargs):
+        thr = Thread(target=f, args=args, kwargs=kwargs)
+        thr.start()
+    return wrapper
+
+
 def del_file(path_data):
     for i in os.listdir(path_data):
         file_data = path_data + "/" + i
@@ -74,6 +84,7 @@ class video_api:
 
         return 'ok'
 
+    @async
     def uploadokApi(self):
         target_filename = request.args.get('filename')  # 获取上传文件的文件名
         task = request.args.get('task_id')              # 获取文件的唯一标识符
