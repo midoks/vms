@@ -130,3 +130,5 @@ data/default.db
 app/*
 *.pid
 *.txt
+tmp/wu_*
+*.mp4
