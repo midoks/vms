@@ -85,7 +85,7 @@ class video_api:
         return 'ok'
 
     @async
-    def uploadokApi(self):
+    def uploadAsync(self):
         target_filename = request.args.get('filename')  # 获取上传文件的文件名
         task = request.args.get('task_id')              # 获取文件的唯一标识符
         chunk = 0                                       # 分片序号
@@ -106,10 +106,11 @@ class video_api:
         dirfile = os.path.join(os.getcwd() + '/tmp', target_filename)
         file_md5 = calMD5ForFile(dirfile)
         vmM = common.M('video_tmp')
-        r = vmM.add("md5,filename,size,status,uptime,addtime",
-                    (file_md5, target_filename, os.path.getsize(dirfile), 0, common.getDate(), common.getDate()))
-        if not r:
-            return 'fail'
+        vmM.add("md5,filename,size,status,uptime,addtime",
+                (file_md5, target_filename, os.path.getsize(dirfile), 0, common.getDate(), common.getDate()))
+
+    def uploadokApi(self):
+        self.uploadAsync()
         return 'ok'
 
     def uploadtestApi(self):
