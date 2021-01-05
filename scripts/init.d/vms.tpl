@@ -50,6 +50,7 @@ mw_start(){
     isStart=$(ps aux |grep 'vms_task.py'|grep -v grep|awk '{print $2}')
     if [ "$isStart" == '' ];then
             echo -e "Starting vms-tasks... \c"
+            echo "" > $app_path/logs/vms_task.log
             cd $app_path && nohup python vms_task.py >> $app_path/logs/vms_task.log 2>&1 1>&1 &
             #echo "cd $app_path && nohup python vms_task.py >> $app_path/logs/vms_task.log 2>&1 1>&1 &"
             sleep 0.3
@@ -71,6 +72,7 @@ mw_start(){
     isStart=$(ps aux |grep 'vms_async.py'|grep -v grep|awk '{print $2}')
     if [ "$isStart" == '' ];then
             echo -e "Starting vms-async... \c"
+            echo "" > $app_path/logs/vms_async.log
             cd $app_path && nohup python vms_async.py >> $app_path/logs/vms_async.log 2>&1 1>&1 &
             #echo "cd $app_path && nohup python vms_async.py >> $app_path/logs/vms_async.log 2>&1 1>&1 &"
             sleep 0.3
