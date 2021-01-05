@@ -944,8 +944,8 @@ def initDB():
 def initInitD():
     script = getRunDir() + '/scripts/init.d/vms.tpl'
     script_bin = getRunDir() + '/scripts/init.d/vms'
-    if os.path.exists(script_bin):
-        return
+    # if os.path.exists(script_bin):
+    #     return
 
     print(script, script_bin)
     content = readFile(script)

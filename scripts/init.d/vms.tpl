@@ -14,15 +14,14 @@
 
 
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
-
-mw_path={$SERVER_PATH}
+app_path={$SERVER_PATH}
 
 mw_start(){
 	isStart=`ps -ef|grep 'gunicorn -c setting.py vms:app' |grep -v grep|awk '{print $2}'`
 	if [ "$isStart" == '' ];then
-            echo -e "Starting mw... \c"
-            cd $mw_path && gunicorn -c setting.py app:app
-            port=$(cat ${mw_path}/data/port.pl)
+            echo -e "Starting vms... \c"
+            cd $app_path && gunicorn -c setting.py vms:app
+            port=$(cat ${app_path}/data/port.pl)
             isStart=""
             while [[ "$isStart" == "" ]];
             do
@@ -37,41 +36,41 @@ mw_start(){
             if [ "$isStart" == '' ];then
                     echo -e "\033[31mfailed\033[0m"
                     echo '------------------------------------------------------'
-                    tail -n 20 ${mw_path}/logs/error.log
+                    tail -n 20 ${app_path}/logs/error.log
                     echo '------------------------------------------------------'
-                    echo -e "\033[31mError: mw service startup failed.\033[0m"
+                    echo -e "\033[31mError: vms service startup failed.\033[0m"
                     return;
             fi
             echo -e "\033[32mdone\033[0m"
     else
-            echo "Starting mw... mw(pid $(echo $isStart)) already running"
+            echo "Starting vms... mw(pid $(echo $isStart)) already running"
     fi
 
 
-    isStart=$(ps aux |grep 'task.py'|grep -v grep|awk '{print $2}')
+    isStart=$(ps aux |grep 'vms_task.py'|grep -v grep|awk '{print $2}')
     if [ "$isStart" == '' ];then
-            echo -e "Starting mw-tasks... \c"
-            cd $mw_path && nohup python task.py >> $mw_path/logs/task.log 2>&1 &
+            echo -e "Starting vms-tasks... \c"
+            cd $app_path && nohup python vms_task.py >> $app_path/logs/task.log 2>&1 &
             sleep 0.3
             isStart=$(ps aux |grep 'vms_task.py'|grep -v grep|awk '{print $2}')
             if [ "$isStart" == '' ];then
                     echo -e "\033[31mfailed\033[0m"
                     echo '------------------------------------------------------'
-                    tail -n 20 $mw_path/logs/task.log
+                    tail -n 20 $app_path/logs/task.log
                     echo '------------------------------------------------------'
-                    echo -e "\033[31mError: mw-tasks service startup failed.\033[0m"
+                    echo -e "\033[31mError: vms-tasks service startup failed.\033[0m"
                     return;
             fi
             echo -e "\033[32mdone\033[0m"
     else
-            echo "Starting mw-tasks... mw-tasks (pid $isStart) already running"
+            echo "Starting vms-tasks... vms-tasks (pid $isStart) already running"
     fi
 }
 
 
 mw_stop()
 {
-	echo -e "Stopping mw-tasks... \c";
+	echo -e "Stopping vms-tasks... \c";
     pids=$(ps aux | grep 'vms_task.py'|grep -v grep|awk '{print $2}')
     arr=($pids)
 
@@ -81,7 +80,7 @@ mw_stop()
     done
     echo -e "\033[32mdone\033[0m"
 
-    echo -e "Stopping mw... \c";
+    echo -e "Stopping vms... \c";
     arr=`ps aux|grep 'gunicorn -c setting.py vms:app'|grep -v grep|awk '{print $2}'`
 	for p in ${arr[@]}
     do
@@ -98,44 +97,44 @@ mw_status()
 {
         isStart=$(ps aux|grep 'gunicorn -c setting.py app:app'|grep -v grep|awk '{print $2}')
         if [ "$isStart" != '' ];then
-                echo -e "\033[32mmw (pid $(echo $isStart)) already running\033[0m"
+                echo -e "\033[32mvms (pid $(echo $isStart)) already running\033[0m"
         else
-                echo -e "\033[31mmw not running\033[0m"
+                echo -e "\033[31mvms not running\033[0m"
         fi
         
         isStart=$(ps aux |grep 'task.py'|grep -v grep|awk '{print $2}')
         if [ "$isStart" != '' ];then
-                echo -e "\033[32mmw-task (pid $isStart) already running\033[0m"
+                echo -e "\033[32mvms-task (pid $isStart) already running\033[0m"
         else
-                echo -e "\033[31mmw-task not running\033[0m"
+                echo -e "\033[31mvms-task not running\033[0m"
         fi
 }
 
 
 mw_reload()
 {
-	isStart=$(ps aux|grep 'gunicorn -c setting.py app:app'|grep -v grep|awk '{print $2}')
+	isStart=$(ps aux|grep 'gunicorn -c setting.py vms:app'|grep -v grep|awk '{print $2}')
     
     if [ "$isStart" != '' ];then
     	echo -e "Reload mw... \c";
-	    arr=`ps aux|grep 'gunicorn -c setting.py app:app'|grep -v grep|awk '{print $2}'`
+	    arr=`ps aux|grep 'gunicorn -c setting.py vms:app'|grep -v grep|awk '{print $2}'`
 		for p in ${arr[@]}
         do
                 kill -9 $p
         done
-        cd $mw_path && gunicorn -c setting.py app:app
-        isStart=`ps aux|grep 'gunicorn -c setting.py app:app'|grep -v grep|awk '{print $2}'`
+        cd $app_path && gunicorn -c setting.py vms:app
+        isStart=`ps aux|grep 'gunicorn -c setting.py vms:app'|grep -v grep|awk '{print $2}'`
         if [ "$isStart" == '' ];then
                 echo -e "\033[31mfailed\033[0m"
                 echo '------------------------------------------------------'
-                tail -n 20 $mw_path/logs/error.log
+                tail -n 20 $app_path/logs/error.log
                 echo '------------------------------------------------------'
-                echo -e "\033[31mError: mw service startup failed.\033[0m"
+                echo -e "\033[31mError: vms service startup failed.\033[0m"
                 return;
         fi
         echo -e "\033[32mdone\033[0m"
     else
-        echo -e "\033[31mmw not running\033[0m"
+        echo -e "\033[31mvms not running\033[0m"
         mw_start
     fi
 }
@@ -143,7 +142,7 @@ mw_reload()
 
 error_logs()
 {
-	tail -n 100 $mw_path/logs/error.log
+	tail -n 100 $app_path/logs/error.log
 }
 
 case "$1" in
@@ -156,24 +155,26 @@ case "$1" in
     'status') mw_status;;
     'logs') error_logs;;
     'default')
-        cd $mw_path
-        port=$(cat $mw_path/data/port.pl)
-        password=$(cat $mw_path/data/default.pl)
-        if [ -f $mw_path/data/domain.conf ];then
-            address=$(cat $mw_path/data/domain.conf)
+        cd $app_path
+        port=$(cat $app_path/data/port.pl)
+        password=$(cat $app_path/data/default.pl)
+        if [ -f $app_path/data/domain.conf ];then
+            address=$(cat $app_path/data/domain.conf)
         fi
-        if [ -f $mw_path/data/admin_path.pl ];then
-            auth_path=$(cat $mw_path/data/admin_path.pl)
+        if [ -f $app_path/data/admin_path.pl ];then
+            auth_path=$(cat $app_path/data/admin_path.pl)
         fi
+
+        if [ "$address" = "" ];then
+            address=$(curl -sS --connect-timeout 10 -m 60 https://www.bt.cn/Api/getIpAddress)
+        fi
+
         echo -e "=================================================================="
         echo -e "\033[32mVMS default info!\033[0m"
         echo -e "=================================================================="
-        echo  "MW-Panel-URL: http://$address:$port$auth_path"
-        echo -e `python $mw_path/tools.py username`
-        echo -e "password: $password"
-        echo -e "\033[33mWarning:\033[0m"
-        echo -e "\033[33mIf you cannot access the panel, \033[0m"
-        echo -e "\033[33mrelease the following port (7200|888|80|443|20|21) in the security group\033[0m"
+        echo  "VMS-URL: http://$address:$port$auth_path"
         echo -e "=================================================================="
+        echo -e "username: admin"
+        echo -e "password: $password"
         ;;
 esac
