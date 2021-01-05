@@ -24,5 +24,5 @@ pip install -r /www/wwwroot/vms/requirements.txt
 
 /usr/bin/cp -rf  /tmp/vms-main/* /www/wwwroot/vms
 
-cd /www/wwwroot/vms && ./cli.sh restart
+cd /www/wwwroot/vms && service vms restart
 cd /www/wwwroot/vms && ./scripts/init.d/vms default
