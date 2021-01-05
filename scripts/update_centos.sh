@@ -17,6 +17,8 @@ fi
 wget -O /tmp/main.zip https://codeload.github.com/midoks/vms/zip/main
 cd /tmp && unzip /tmp/main.zip
 
+rm -rf /www/wwwroot/vms/*.pyc
+
 pip install -r /www/wwwroot/vms/requirements.txt
 
 
