@@ -19,6 +19,9 @@ import config_api
 from threading import Thread
 from time import sleep
 
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 
 def async(f):
     def wrapper(*args, **kwargs):

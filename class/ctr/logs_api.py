@@ -14,6 +14,9 @@ from flask import request
 sys.path.append(os.getcwd() + "/class/core")
 import common
 
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 
 class logs_api:
 
