@@ -1,2 +1,0 @@
-# vms
-Video management system
