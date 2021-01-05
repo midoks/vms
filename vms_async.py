@@ -111,9 +111,9 @@ def printHL():
 
 def startTask():
     import time
-    # 任务队列
     try:
-        time.sleep(60)
+        while True:
+            time.sleep(2)
     except:
         time.sleep(60)
     startTask()
