@@ -17,14 +17,14 @@
 
       <div class="layui-form-item">
         <label for="L_username" class="layui-form-label">
-          <span class="we-red">*</span>APPKEY
+          <span class="we-red">*</span>名称
         </label>
         <div class="layui-input-inline">
-          <input type="text" name="appkey" lay-verify="required|nikename" autocomplete="off" class="layui-input">
+          <input type="text" name="name" lay-verify="required|nikename" autocomplete="off" class="layui-input">
         </div>
 
          <div style="line-height: 38px;">
-          <a class="layui-btn layui-btn-sm" id="randAppkey" title="刷新">
+          <a class="layui-btn layui-btn-sm" id="randName" title="刷新">
           <i class="layui-icon layui-icon-refresh"></i>
           </a>
         </div>
@@ -32,17 +32,12 @@
 
       <div class="layui-form-item">
         <label for="L_email" class="layui-form-label">
-          <span class="we-red">*</span>APPSECRET
+          <span class="we-red">*</span>IP
         </label>
         <div class="layui-input-inline">
-          <input type="text" name="appsecret" lay-verify="required" autocomplete="" class="layui-input">
+          <input type="text" name="ip" value="127.0.0.1" lay-verify="required" autocomplete="" class="layui-input">
         </div>
 
-        <div style="line-height: 38px;">
-          <a class="layui-btn layui-btn-sm" id="randAppsecret" title="刷新">
-          <i class="layui-icon layui-icon-refresh"></i>
-          </a>
-        </div>
       </div>
       <div class="layui-form-item">
         <label for="L_repass" class="layui-form-label">
@@ -80,23 +75,16 @@
         layer = layui.layer;
 
       var v = randStr(4);
-      $("input[name='appkey']").val(v);
-      $("input[name='appsecret']").val(md5(v));
-      $('#randAppkey').click(function(){
-          var v = randStr(4);
-          $("input[name='appkey']").val(v);
-      });
-
-      $('#randAppsecret').click(function(){
-          var v = randStr(4);
-          $("input[name='appsecret']").val(md5(v));
+      $("input[name='name']").val(v);
+      $('#randName').click(function(){
+          $("input[name='name']").val(v);
       });
 
 
       //监听提交
       form.on('submit(add)', function (data) {
         var f = data.field;
-        $.post('/api_api/add',f,function(data){
+        $.post('/node_api/add',f,function(data){
             console.log(data);
             data = $.parseJSON(data);
             layer.msg(data.msg);
