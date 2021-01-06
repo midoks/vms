@@ -39,7 +39,7 @@
     </ul>
     <ul class="layui-nav right" lay-filter="">
       <li class="layui-nav-item">
-        <a href="javascript:;">Admin</a>
+        <a href="javascript:;">{{data.username}}</a>
         <dl class="layui-nav-child">
           <dd>
             <a class="eidt" onclick="userEdit();">修改</a>
@@ -133,7 +133,7 @@
     }
 
     function userEdit(){
-      
+      WeAdminShow('用户修改','/user/edit' ,480, 300);
     }
 
   </script>

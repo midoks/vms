@@ -69,5 +69,5 @@ CREATE TABLE IF NOT EXISTS `users` (
 );
 
 INSERT INTO `users` (`id`, `username`, `password`, `login_ip`, `login_time`, `phone`, `email`) VALUES
-(1, 'admin', '4297f44b13955235245b2497399d7a93', '192.168.0.10', '2016-12-10 15:12:56', 0, '287962566@qq.com');
+(1, 'admin', '4297f44b13955235245b2497399d7a93', '192.168.0.10', '2016-12-10 15:12:56', 0, '627293072@qq.com');
 

@@ -216,7 +216,7 @@ def index(reqClass=None, reqAction=None, reqData=None):
 
     if (reqClass == None):
         reqClass = 'index'
-    classFile = ('config', 'index', 'video', 'api', 'logs')
+    classFile = ('config', 'index', 'user', 'video', 'api', 'logs')
 
     if reqClass in classFile:
         import config_api

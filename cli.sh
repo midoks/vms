@@ -12,7 +12,7 @@ mvg_start(){
 
 mvg_start_debug(){
 	# python vms_task.py &
-	gunicorn -b :7200 -k gevent -w 1 vms:app
+	gunicorn -b :8000 -k gevent -w 1 vms:app
 }
 
 mvg_stop()

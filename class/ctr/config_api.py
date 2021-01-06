@@ -34,4 +34,8 @@ class config_api:
         data = {}
         data['ip'] = common.getHostAddr()
         data['version'] = self.__version
+
+        tmp = common.M('users').field('id,username,password,email').where(
+            'id=?', (1,)).select()
+        data['username'] = tmp[0]['username']
         return data
