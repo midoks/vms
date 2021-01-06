@@ -26,7 +26,7 @@ mw_start(){
             while [[ "$isStart" == "" ]];
             do
                 echo -e ".\c"
-                sleep 0.5
+                sleep 0.2
                 isStart=$(lsof -n -P -i:$port|grep LISTEN|grep -v grep|awk '{print $2}'|xargs)
                 let n+=1
                 if [ $n -gt 15 ];then
@@ -53,7 +53,7 @@ mw_start(){
             echo "" > $app_path/logs/vms_task.log
             cd $app_path && nohup python vms_task.py >> $app_path/logs/vms_task.log 2>&1 1>&1 &
             #echo "cd $app_path && nohup python vms_task.py >> $app_path/logs/vms_task.log 2>&1 1>&1 &"
-            sleep 0.3
+            sleep 0.1
             isStart=$(ps aux |grep 'vms_task.py'|grep -v grep|awk '{print $2}')
             if [ "$isStart" == '' ];then
                     echo -e "\033[31mfailed\033[0m"
@@ -75,7 +75,7 @@ mw_start(){
             echo "" > $app_path/logs/vms_async.log
             cd $app_path && nohup python vms_async.py >> $app_path/logs/vms_async.log 2>&1 1>&1 &
             #echo "cd $app_path && nohup python vms_async.py >> $app_path/logs/vms_async.log 2>&1 1>&1 &"
-            sleep 0.3
+            sleep 0.1
             isStart=$(ps aux |grep 'vms_async.py'|grep -v grep|awk '{print $2}')
             if [ "$isStart" == '' ];then
                     echo -e "\033[31mfailed\033[0m"

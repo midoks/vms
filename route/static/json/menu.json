@@ -12,6 +12,11 @@
 				"name": "基本",
 				"icon": "",
 				"url": "/system/index"
+			},{
+				"id": 42,
+				"name": "节点管理",
+				"icon": "",
+				"url": "/node/index"
 			}]
 		},
 		{

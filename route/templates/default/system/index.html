@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title></title>
+  <meta name="renderer" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <link href="/static/css/font.css?v={{data.version}}" rel="stylesheet">
+  <link href="/static/css/weadmin.css?v={{data.version}}" rel="stylesheet">
+</head>
+
+<body>
+  <div class="weadmin-nav">
+    <span class="layui-breadcrumb">
+      <a href="javascript:;">首页</a> <a href="javascript:;">系统</a>
+      <a href="javascript:;"> <cite>列表</cite></a>
+    </span>
+    <a class="layui-btn layui-btn-sm" style="margin-top:3px;float:right"
+      href="javascript:location.replace(location.href);" title="刷新">
+      <i class="layui-icon layui-icon-refresh"></i>
+    </a>
+  </div>
+
+  <div class="weadmin-body">
+    <form class="layui-form">
+
+      <div class="layui-form-item">
+        <label for="L_username" class="layui-form-label">
+          <span class="we-red">*</span>运行模式
+        </label>
+        <div class="layui-input-inline">
+          <select id="run_model" name="run_model" lay-filter="run_model">
+            <option value="1">单机</option>
+            <option value="2">分布式</option>
+          </select>
+        </div>
+
+        <div style="line-height: 38px;">单机 or 分布式</div>
+      </div>
+
+      <div class="layui-form-item">
+        <label for="L_email" class="layui-form-label">
+          <span class="we-red">*</span>存储限制
+        </label>
+        <div class="layui-input-inline">
+          <input type="text" name="video_size" lay-verify="required|number" autocomplete="" class="layui-input">
+        </div>
+
+        <div style="line-height: 38px;">(单位G)</div>
+      </div>
+      <div class="layui-form-item">
+        <label for="L_repass" class="layui-form-label">
+        </label>
+        <button class="layui-btn" lay-filter="add" lay-submit="">确定</button>
+      </div>
+    </form>
+  </div>
+  <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+  <script src="/static/js/md5.js" charset="utf-8"></script>
+  
+
+  <script>
+
+    function randStr(len=4){
+      var str = '';
+      var chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789';
+      var chrlen = chars.length - 1;
+      for (var i =  0; i <= len; i++) {
+        var random = Math.ceil(Math.random()*chrlen);
+        str += chars[random];
+      }
+      return str
+    }
+
+    layui.extend({
+      base: '/static/js/'
+      , version: '1011001'
+    });
+    layui.use(['form', 'jquery', 'util', 'layer'], function () {
+      var form = layui.form,
+        $ = layui.jquery,
+        util = layui.util,
+        admin = layui.admin,
+        layer = layui.layer;
+
+      $.getJSON('/system_api/get',{}, function(data){
+        // console.log(data);
+        if (data['code'] == 0){
+            var list = {};
+            for (var v in data['data']) {
+              var key = data['data'][v]['name'];
+              var value = data['data'][v]['value'];
+              list[key] = value;
+            }
+            $("input[name='video_size']").val(list['video_size']);
+            $("#run_model").val(list['run_model']);
+            form.render('select');
+        } else {
+            layer.msg(data.msg);
+        }
+        
+      });
+
+      //监听提交
+      form.on('submit(add)', function (data) {
+        var f = data.field;
+        console.log(f);
+        $.post('/system_api/edit',f,function(data){
+            console.log(data,f);
+            data = $.parseJSON(data);
+            layer.msg(data.msg);
+            setTimeout(function(){
+                location.reload();
+            },2000);
+        });
+        return false;
+      });
+
+    });
+  </script>
+</body>
+
+</html>

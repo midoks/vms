@@ -39,22 +39,35 @@ class system_api:
         self.setupPath = common.getServerDir()
 
     ##### ----- start ----- ###
-    def networkApi(self):
-        data = self.getNetWork()
-        return common.getJson(data)
 
-    def updateServerApi(self):
-        stype = request.args.get('type', 'check')
-        version = request.args.get('version', '')
-        return self.updateServer(stype, version)
+    def updateKV(self, name, value):
+        return common.M('kv').where('name=?', (name,)).setField('value', value)
+
+    def editApi(self):
+        run_model = request.form.get('run_model', '').encode('utf-8')
+        video_size = request.form.get('video_size', '').encode('utf-8')
+
+        self.updateKV('run_model', run_model)
+        self.updateKV('video_size', video_size)
+
+        _ret = {}
+        _ret['code'] = 0
+        _ret['msg'] = '修改成功'
+
+        return common.getJson(_ret)
+
+    def getApi(self):
+        sid = request.args.get('id', '').encode('utf-8')
+        kvM = common.M('kv')
+        _list = kvM.field('id,name,value').select()
+        _ret = {}
+        _ret['data'] = _list
+        _ret['code'] = 0
+        return common.getJson(_ret)
 
     def systemTotalApi(self):
         data = self.getSystemTotal()
         return mw.getJson(data)
-
-    def diskInfoApi(self):
-        diskInfo = self.getDiskInfo()
-        return mw.getJson(diskInfo)
 
     def setControlApi(self):
         stype = request.form.get('type', '')
@@ -86,31 +99,17 @@ class system_api:
         data = self.getNetWorkIoData(start, end)
         return mw.getJson(data)
 
-    def rememoryApi(self):
-        os.system('sync')
-        scriptFile = mw.getRunDir() + '/script/rememory.sh'
-        mw.execShell("/bin/bash " + scriptFile)
-        data = self.getMemInfo()
-        return mw.getJson(data)
-
     # 重启面板
     def restartApi(self):
         self.restartMw()
-        return mw.returnJson(True, '面板已重启!')
-
-    def restartServerApi(self):
-        if mw.isAppleSystem():
-            return mw.returnJson(False, "开发环境不可重起")
-        self.restartServer()
-        return mw.returnJson(True, '正在重启服务器!')
+        return mw.returnJson(True, '已重启!')
     ##### ----- end ----- ###
 
     @async
     def restartMw(self):
         sleep(0.3)
-        # cmd = mw.getRunDir() + '/scripts/init.d/mw restart'
-        # print cmd
-        mw.execShell('service mw restart')
+        cmd = mw.getRunDir() + '/scripts/init.d/vms restart'
+        common.execShell(cmd)
 
     @async
     def restartServer(self):
@@ -152,38 +151,6 @@ class system_api:
             return False
         except:
             return False
-
-    def getPanelInfo(self, get=None):
-        # 取面板配置
-        address = mw.GetLocalIp()
-        try:
-            try:
-                port = web.ctx.host.split(':')[1]
-            except:
-                port = mw.readFile('data/port.pl')
-        except:
-            port = '8888'
-        domain = ''
-        if os.path.exists('data/domain.conf'):
-            domain = mw.readFile('data/domain.conf')
-
-        autoUpdate = ''
-        if os.path.exists('data/autoUpdate.pl'):
-            autoUpdate = 'checked'
-        limitip = ''
-        if os.path.exists('data/limitip.conf'):
-            limitip = mw.readFile('data/limitip.conf')
-
-        templates = []
-        for template in os.listdir('templates/'):
-            if os.path.isdir('templates/' + template):
-                templates.append(template)
-        template = mw.readFile('data/templates.pl')
-
-        check502 = ''
-        if os.path.exists('data/502Task.pl'):
-            check502 = 'checked'
-        return {'port': port, 'address': address, 'domain': domain, 'auto': autoUpdate, '502': check502, 'limitip': limitip, 'templates': templates, 'template': template}
 
     def getSystemTotal(self, interval=1):
         # 取系统统计信息
@@ -352,58 +319,6 @@ class system_api:
         count += tmp_count
         total += tmp_total
         return count, total
-
-    # 清理邮件日志
-    def clearMail(self):
-        rpath = '/var/spool'
-        total = count = 0
-        import shutil
-        con = ['cron', 'anacron', 'mail']
-        for d in os.listdir(rpath):
-            if d in con:
-                continue
-            dpath = rpath + '/' + d
-            time.sleep(0.2)
-            num = size = 0
-            for n in os.listdir(dpath):
-                filename = dpath + '/' + n
-                fsize = os.path.getsize(filename)
-                size += fsize
-                if os.path.isdir(filename):
-                    shutil.rmtree(filename)
-                else:
-                    os.remove(filename)
-                print '\t\033[1;32m[OK]\033[0m'
-                num += 1
-            total += size
-            count += num
-        return total, count
-
-    # 清理其它
-    def clearOther(self):
-        clearPath = [
-            {'path': '/www/server/mdserver-web', 'find': 'testDisk_'},
-            {'path': '/www/wwwlogs', 'find': 'log'},
-            {'path': '/tmp', 'find': 'panelBoot.pl'},
-            {'path': '/www/server/mdserver-web/install', 'find': '.rpm'}
-        ]
-
-        total = count = 0
-        for c in clearPath:
-            for d in os.listdir(c['path']):
-                if d.find(c['find']) == -1:
-                    continue
-                filename = c['path'] + '/' + d
-                fsize = os.path.getsize(filename)
-                total += fsize
-                if os.path.isdir(filename):
-                    shutil.rmtree(filename)
-                else:
-                    os.remove(filename)
-                count += 1
-        mw.serviceReload()
-        os.system('echo > /tmp/panelBoot.pl')
-        return total, count
 
     def getNetWork(self):
         # return self.GetNetWorkApi(get);

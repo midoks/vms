@@ -46,11 +46,15 @@ INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
 CREATE TABLE IF NOT EXISTS `node` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` TEXT,
-  `type` TEXT
+  `type` TEXT,
   `ip` TEXT,
   `uptime` TEXT,
   `addtime` TEXT
 );
+
+INSERT INTO `node` (`id`, `name`, `type`,`ip`, `uptime`,`addtime`) VALUES
+(1, '测试', 'type','127.0.0.1', '2016-12-10 15:12:56', '2016-12-10 15:12:56');
+
 
 CREATE TABLE IF NOT EXISTS `logs` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
