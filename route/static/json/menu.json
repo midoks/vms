@@ -1,7 +1,20 @@
 {
 	"status": 0,
 	"msg": "ok",
-	"data": [{
+	"data": [
+		{
+			"id": 4,
+			"name": "系统管理",
+			"icon": "&#xe6b8;",
+			"url": "",
+			"children": [{
+				"id": 41,
+				"name": "基本",
+				"icon": "",
+				"url": "/video/index"
+			}]
+		},
+		{
 			"id": 1,
 			"name": "视频管理",
 			"icon": "&#xe6b8;",
