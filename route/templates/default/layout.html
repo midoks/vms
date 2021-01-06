@@ -41,7 +41,9 @@
       <li class="layui-nav-item">
         <a href="javascript:;">Admin</a>
         <dl class="layui-nav-child">
-          <!-- 二级菜单 -->
+          <dd>
+            <a class="eidt" onclick="userEdit();">修改</a>
+          </dd>
           <dd>
             <a class="loginout" onclick="loginOut();">退出</a>
           </dd>
@@ -128,6 +130,10 @@
     function loginOut(){
       window.localStorage.removeItem('login');
       window.location.href = '/login';
+    }
+
+    function userEdit(){
+      
     }
 
   </script>
