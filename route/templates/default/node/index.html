@@ -66,6 +66,9 @@ layui.use(['jquery','laydate', 'laypage', 'admin','layer', 'table', 'carousel', 
       case "add":
         apiAdd();
         break;
+      case "clear":
+        apiClear();
+        break;
     }
   });
 
@@ -74,7 +77,9 @@ layui.use(['jquery','laydate', 'laypage', 'admin','layer', 'table', 'carousel', 
     console.log(obj.event);
     switch (obj.event) {
       case "del":
-        apiDel(data.id);
+        apiDel(data.id);break;
+      case "edit":
+        apiEdit(data.id);break;
     }
   });
 
@@ -83,13 +88,31 @@ layui.use(['jquery','laydate', 'laypage', 'admin','layer', 'table', 'carousel', 
         data = $.parseJSON(data);
         layer.msg(data.msg);
         setTimeout(function(){
-            location.reload();
+            var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.window.location.reload();
+        },2000);
+    });
+  }
+
+  function apiClear(){
+    $.post('/node_api/clear',function(data){
+        data = $.parseJSON(data);
+        layer.msg(data.msg);
+        setTimeout(function(){
+            var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.window.location.reload();
         },2000);
     });
   }
 
   function apiAdd(){
     WeAdminShow('添加节点','/node/add' ,500, 230);
+  }
+
+  function apiEdit(id){
+    WeAdminShow('添加节点','/node/edit?id='+id ,500, 230);
   }
 
 ///
@@ -101,12 +124,14 @@ layui.use(['jquery','laydate', 'laypage', 'admin','layer', 'table', 'carousel', 
 <script type="text/html" id="toolbarTpl">
   <div class="layui-btn-container">
     <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+    <button class="layui-btn layui-btn-sm" lay-event="clear">清空</button>
   </div>
 
 </script>
 
 <script type="text/html" id="toolBar">
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 </script>
 </body>
 

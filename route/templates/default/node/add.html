@@ -90,7 +90,9 @@
             data = $.parseJSON(data);
             layer.msg(data.msg);
             setTimeout(function(){
-                location.reload();
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.window.location.reload();
             },2000);
         });
         return false;

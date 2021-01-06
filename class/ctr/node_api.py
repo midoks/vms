@@ -45,12 +45,52 @@ class node_api:
 
         return common.getJson(_ret)
 
+    def getApi(self):
+        sid = request.args.get('id', '').encode('utf-8')
+        videoM = common.M('node')
+        _list = videoM.field('id,name,ip,type,uptime,addtime').where(
+            'id=?', (sid,)).select()
+        _ret = {}
+        _ret['data'] = _list
+        _ret['code'] = 0
+
+        return common.getJson(_ret)
+
+    def editApi(self):
+        sid = request.form.get('id', '').encode('utf-8')
+        name = request.form.get('name', '').encode('utf-8')
+        ip = request.form.get('ip', '').encode('utf-8')
+        nodeM = common.M('node')
+        nodeM.where('id=?', (sid,)).save('name,ip', (name, ip))
+        _ret = {}
+        _ret['code'] = 0
+        _ret['msg'] = '修改成功'
+
+        return common.getJson(_ret)
+
+    def addApi(self):
+        name = request.form.get('name', '').encode('utf-8')
+        ip = request.form.get('ip', '').encode('utf-8')
+
+        nodeM = common.M('node')
+        r = nodeM.add("name,type,ip,uptime,addtime",
+                      (name, 0, ip, common.getDate(), common.getDate()))
+
+        _ret = {}
+        _ret['code'] = 0
+        _ret['msg'] = '添加成功'
+        if not r:
+            _ret['code'] = 1
+            _ret['msg'] = '添加失败'
+
+        return common.getJson(_ret)
+
     def delApi(self):
 
-        sid = request.get('id', '').encode('utf-8')
+        sid = request.form.get('id', '').encode('utf-8')
 
-        makeM = common.M('logs')
-        r = makeM.where("id=?", (sid,)).delete()
+        nodeM = common.M('node')
+        r = nodeM.where("id=?", (sid,)).delete()
         _ret = {}
         _ret['code'] = 0
         _ret['msg'] = '删除成功'
@@ -62,7 +102,7 @@ class node_api:
 
     def clearApi(self):
 
-        common.M('logs').delete()
+        common.M('node').delete()
         _ret = {}
         _ret['code'] = 0
         _ret['msg'] = '清空成功'

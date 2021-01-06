@@ -17,14 +17,14 @@
 
       <div class="layui-form-item">
         <label for="L_username" class="layui-form-label">
-          <span class="we-red">*</span>APPKEY
+          <span class="we-red">*</span>名称
         </label>
         <div class="layui-input-inline">
-          <input type="text" name="appkey" lay-verify="required|nikename" autocomplete="off" class="layui-input">
+          <input type="text" name="name" lay-verify="required|nikename" autocomplete="off" class="layui-input">
         </div>
 
          <div style="line-height: 38px;">
-          <a class="layui-btn layui-btn-sm" id="randAppkey" title="刷新">
+          <a class="layui-btn layui-btn-sm" id="randName" title="刷新">
           <i class="layui-icon layui-icon-refresh"></i>
           </a>
         </div>
@@ -32,18 +32,13 @@
 
       <div class="layui-form-item">
         <label for="L_email" class="layui-form-label">
-          <span class="we-red">*</span>APPSECRET
+          <span class="we-red">*</span>IP
         </label>
         <div class="layui-input-inline">
-          <input type="text" name="appsecret" lay-verify="required" autocomplete="" class="layui-input">
-        </div>
-
-        <div style="line-height: 38px;">
-          <a class="layui-btn layui-btn-sm" id="randAppsecret" title="刷新">
-          <i class="layui-icon layui-icon-refresh"></i>
-          </a>
+          <input type="text" name="ip" value="127.0.0.1" lay-verify="required" autocomplete="" class="layui-input">
         </div>
       </div>
+      <input type="hidden" name="id" value="">
       <div class="layui-form-item">
         <label for="L_repass" class="layui-form-label">
         </label>
@@ -56,6 +51,12 @@
   
 
   <script>
+
+    function getUrlParam(name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+      var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+      if (r != null) return unescape(r[2]); return null; //返回参数值
+    }
 
     function randStr(len=4){
       var str = '';
@@ -79,24 +80,24 @@
         admin = layui.admin,
         layer = layui.layer;
 
-      var v = randStr(4);
-      $("input[name='appkey']").val(v);
-      $("input[name='appsecret']").val(md5(v));
-      $('#randAppkey').click(function(){
-          var v = randStr(4);
-          $("input[name='appkey']").val(v);
-      });
+        $('#randName').click(function(){
+            var v = randStr(4);
+            $("input[name='name']").val(v);
+        });
 
-      $('#randAppsecret').click(function(){
-          var v = randStr(4);
-          $("input[name='appsecret']").val(md5(v));
-      });
+        var id = getUrlParam('id');
+        $.getJSON('/node_api/get',{id:id}, function(data){
+          // console.log(data);
+          $("input[name='name']").val(data['data'][0]['name']);
+          $("input[name='ip']").val(data['data'][0]['ip']);
+          $("input[name='id']").val(data['data'][0]['id']);
+        });
 
 
       //监听提交
       form.on('submit(add)', function (data) {
         var f = data.field;
-        $.post('/api_api/add',f,function(data){
+        $.post('/node_api/edit',f,function(data){
             console.log(data);
             data = $.parseJSON(data);
             layer.msg(data.msg);
