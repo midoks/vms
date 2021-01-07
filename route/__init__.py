@@ -30,10 +30,8 @@ sys.path.append("/usr/local/lib/python2.7/site-packages")
 
 import common
 
-
 app = Flask(__name__, template_folder='templates/default')
-
-app.config['UPLOAD_FOLDER'] = '/Users/midoks/go/src/github.com/midoks/vms/tmp'
+# app.config['UPLOAD_FOLDER'] = '/Users/midoks/go/src/github.com/midoks/vms/tmp'
 # app.config.version = config_api.config_api().getVersion()
 # app.config['SECRET_KEY'] = os.urandom(24)
 # app.secret_key = uuid.UUID(int=uuid.getnode()).hex[-12:]
@@ -109,6 +107,17 @@ def publicObject(toObject, func, action=None, get=None):
         return common.getJson(data)
 
 
+@app.before_request
+def before_request():
+    pass
+
+
+@app.after_request
+def apply_caching(response):
+    response.headers["project_url"] = "https://github.com/midoks/vms"
+    return response
+
+
 @app.route("/test")
 def test():
     print sys.version_info
@@ -143,22 +152,6 @@ def checkLogin():
     return "false"
 
 
-@app.route("/login")
-def login():
-    # print session
-    dologin = request.args.get('dologin', '')
-    if dologin == 'True':
-        session.clear()
-        return redirect('/login')
-
-    import config_api
-    data = config_api.config_api().get()
-
-    if isLogined():
-        return redirect('/')
-    return render_template('login.html', data=data)
-
-
 @app.route('/<reqClass>/<reqAction>', methods=['POST', 'GET'])
 @app.route('/<reqClass>/', methods=['POST', 'GET'])
 @app.route('/<reqClass>', methods=['POST', 'GET'])
@@ -169,11 +162,10 @@ def index(reqClass=None, reqAction=None, reqData=None):
         return ''
 
     # print(reqClass, reqAction, reqData)
-
     if (reqClass == None):
         reqClass = 'index'
     classFile = ('config', 'index', 'user', 'system',
-                 'node', 'video', 'api', 'logs')
+                 'node', 'video', 'api', 'logs', 'login')
 
     if reqClass in classFile:
         import config_api
@@ -193,8 +185,6 @@ def index(reqClass=None, reqAction=None, reqData=None):
 
 #from flask_cors import CORS
 #CORS(app, resources=r'/m3u8/*')
-
-
 @app.route('/m3u8/<path>/<filename>', methods=['GET'])
 def m3u8(path=None, filename=None):
     p = os.getcwd() + '/app/' + path + '/' + filename
