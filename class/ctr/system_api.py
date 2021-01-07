@@ -46,9 +46,11 @@ class system_api:
     def editApi(self):
         run_model = request.form.get('run_model', '').encode('utf-8')
         video_size = request.form.get('video_size', '').encode('utf-8')
+        video_num = request.form.get('video_num', '').encode('utf-8')
 
         self.updateKV('run_model', run_model)
         self.updateKV('video_size', video_size)
+        self.updateKV('video_num', video_num)
 
         _ret = {}
         _ret['code'] = 0

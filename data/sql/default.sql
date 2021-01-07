@@ -39,8 +39,11 @@ CREATE TABLE IF NOT EXISTS `kv` (
 );
 
 INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
-(1, 'run_model', '1','2016-12-10 15:12:56'),
+(1, 'run_model', '1','2016-12-10 15:12:56');
+INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
 (2, 'video_size', '10','2016-12-10 15:12:56');
+INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
+(3, 'video_num', '1','2016-12-10 15:12:56');
 
 
 CREATE TABLE IF NOT EXISTS `node` (
