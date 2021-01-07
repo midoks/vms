@@ -191,7 +191,7 @@ def videoToDB():
                 updateStatus(x['id'], 3)
         if not isDEmpty(data):
             print('videoToDB-----@@@end@@@-----')
-        time.sleep(5)
+        time.sleep(2)
 
 
 def videoToDel():
