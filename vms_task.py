@@ -63,10 +63,24 @@ def is_mp4(path):
     return False
 
 
+def is_video_format(path, format='avi'):
+    t = os.path.splitext(path)
+    tlen = len(t) - 1
+    if t[tlen] == '.' + format:
+        return True
+    return False
+
+
 def isDEmpty(data):
     if len(data) > 0:
         return False
     return True
+
+
+def fg_mp4_cmd(source_file, to_mp4_file):
+    cmd = ffmpeg_cmd + ' -y -i "' + source_file + \
+        '" -c copy -map 0 ' + to_mp4_file
+    return cmd
 
 
 def fg_m3u8_cmd(ts_file, m3u8_file, to_file):
@@ -112,13 +126,22 @@ def videoToMp4():
         videoM = common.M('video_tmp')
         data = videoM.field('id,filename').where('status=?', (0,)).select()
 
+        if not isDEmpty(data):
+            print('videoToMp4-----@@@start@@@-----')
         for x in data:
             pathfile = os.getcwd() + "/tmp/" + str(x['filename'])
             # print(pathfile)
             if is_mp4(pathfile):
                 updateStatus(x["id"], 1)
             else:
-                pass
+                mp4_file = pathfile + ".mp4"
+                cmd = fg_mp4_cmd(pathfile, mp4_file)
+                print(cmd)
+                os.system(cmd)
+                updateStatus(x["id"], 1)
+
+        if not isDEmpty(data):
+            print('videoToMp4-----@@@start@@@-----')
         time.sleep(2)
 
 
@@ -138,6 +161,10 @@ def videoToM3u8():
             m3u8_file = tmp_dir + str(x["md5"]) + "/index.m3u8"
             tofile = tmp_dir + x["md5"] + "/%010d.ts"
             pathfile = tmp_dir + str(x["filename"])
+
+            pathfile__tmp = tmp_dir + str(x["filename"]) + ".mp4"
+            if os.path.exists(pathfile__tmp):
+                pathfile = pathfile__tmp
 
             if not os.path.exists(pathfile):
                 updateStatus(x['id'], 3)
@@ -178,6 +205,7 @@ def videoToDB():
         for x in data:
             m3u8_dir = tmp_dir + str(x["md5"])
             source_file = tmp_dir + str(x['filename'])
+            source_file_tmp = tmp_dir + str(x['filename']) + ".mp4"
             if os.path.exists(m3u8_dir):
                 data = viM.field('id').where(
                     "filename=?", (x["md5"],)).select()
@@ -187,6 +215,8 @@ def videoToDB():
                             (x['filename'], x['md5'], x['size'], 0, common.getDate(), common.getDate()))
                     shutil.move(m3u8_dir, app_dir)
                     os.remove(source_file)
+                    if os.path.exists(source_file_tmp):
+                        os.remove(source_file_tmp)
 
                 updateStatus(x['id'], 3)
         if not isDEmpty(data):
