@@ -159,50 +159,6 @@ def login():
     return render_template('login.html', data=data)
 
 
-@app.route("/do_login", methods=['POST'])
-def doLogin():
-    username = request.form.get('username', '').strip()
-    password = request.form.get('password', '').strip()
-    code = request.form.get('code', '').strip()
-
-    if session.has_key('code'):
-        if session['code'] != mw.md5(code):
-            return mw.returnJson(False, '验证码错误,请重新输入!')
-
-    userInfo = mw.M('users').where(
-        "id=?", (1,)).field('id,username,password').find()
-
-    password = mw.md5(password)
-    login_cache_count = 5
-    login_cache_limit = cache.get('login_cache_limit')
-    filename = 'data/close.pl'
-    if os.path.exists(filename):
-        return mw.returnJson(False, '面板已经关闭!')
-
-    if userInfo['username'] != username or userInfo['password'] != password:
-        msg = "<a style='color: red'>密码错误</a>,帐号:{1},密码:{2},登录IP:{3}", ((
-            '****', '******', request.remote_addr))
-
-        if login_cache_limit == None:
-            login_cache_limit = 1
-        else:
-            login_cache_limit = int(login_cache_limit) + 1
-
-        if login_cache_limit >= login_cache_count:
-            mw.writeFile(filename, 'True')
-            return mw.returnJson(False, '面板已经关闭!')
-
-        cache.set('login_cache_limit', login_cache_limit, timeout=10000)
-        login_cache_limit = cache.get('login_cache_limit')
-        mw.writeLog('用户登录', mw.getInfo(msg))
-        return mw.returnJson(False, mw.getInfo("用户名或密码错误,您还可以尝试[{1}]次!", (str(login_cache_count - login_cache_limit))))
-
-    cache.delete('login_cache_limit')
-    session['login'] = True
-    session['username'] = userInfo['username']
-    return mw.returnJson(True, '登录成功,正在跳转...')
-
-
 @app.route('/<reqClass>/<reqAction>', methods=['POST', 'GET'])
 @app.route('/<reqClass>/', methods=['POST', 'GET'])
 @app.route('/<reqClass>', methods=['POST', 'GET'])
