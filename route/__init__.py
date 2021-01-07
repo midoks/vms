@@ -235,8 +235,8 @@ def index(reqClass=None, reqAction=None, reqData=None):
     return publicObject(newInstance, reqAction)
 
 
-from flask_cors import CORS
-CORS(app, resources=r'/m3u8/*')
+#from flask_cors import CORS
+#CORS(app, resources=r'/m3u8/*')
 
 
 @app.route('/m3u8/<path>/<filename>', methods=['GET'])
