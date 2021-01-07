@@ -109,6 +109,12 @@ def printHL():
         time.sleep(3)
 
 
+def asyncNodeInfo():
+    while True:
+        print("async node info !!!")
+        time.sleep(20)
+
+
 def startTask():
     import time
     try:
