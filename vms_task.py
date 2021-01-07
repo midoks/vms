@@ -138,6 +138,11 @@ def videoToM3u8():
             m3u8_file = tmp_dir + str(x["md5"]) + "/index.m3u8"
             tofile = tmp_dir + x["md5"] + "/%010d.ts"
             pathfile = tmp_dir + str(x["filename"])
+
+            if not os.path.exists(pathfile):
+                updateStatus(x['id'], 3)
+                continue
+
             if os.path.exists(app_file):
                 os.remove(pathfile)
                 print('videoToM3u8----- The file already exists delete ok -----')
