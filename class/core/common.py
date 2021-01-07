@@ -947,7 +947,7 @@ def initInitD():
     # if os.path.exists(script_bin):
     #     return
 
-    print(script, script_bin)
+    # print(script, script_bin)
     content = readFile(script)
     content = content.replace("{$SERVER_PATH}", getRunDir())
 

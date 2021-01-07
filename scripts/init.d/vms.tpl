@@ -18,6 +18,7 @@ app_path={$SERVER_PATH}
 
 mw_start(){
 	isStart=`ps -ef|grep 'vms:app' |grep -v grep|awk '{print $2}'`
+    echo "" > $app_path/logs/error.log
 	if [ "$isStart" == '' ];then
             echo -e "Starting vms... \c"
             cd $app_path && gunicorn -c setting.py vms:app
