@@ -683,7 +683,7 @@ def setHostAddr(addr):
 def getHostPort():
     if os.path.exists('data/port.pl'):
         return readFile('data/port.pl').strip()
-    return '7200'
+    return '8000'
 
 
 def setHostPort(port):

@@ -169,6 +169,9 @@ class video_api:
 
         count = videoM.count()
 
+        for index in range(len(_list)):
+            _list[index]['size'] = common.toSize(_list[index]['size'])
+
         _ret['data'] = _list
         _ret['count'] = count
         _ret['code'] = 0
@@ -236,6 +239,9 @@ class video_api:
             (str(start)) + ',' + limit).order('id desc').select()
 
         count = videoM.count()
+
+        for index in range(len(_list)):
+            _list[index]['size'] = common.toSize(_list[index]['size'])
 
         _ret['data'] = _list
         _ret['count'] = count
