@@ -126,7 +126,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   }
 
   function apiAddr(data){
-    var url = location.host+'/m3u8/'+data.filename+'/index.m3u8'; 
+    var url = location.protocol+"//"+location.host+'/m3u8/'+data.filename+'/index.m3u8'; 
     layer.open({
         title: '播放地址'
         ,content: url
