@@ -128,12 +128,20 @@ def videoToM3u8():
         data = videoM.field('id,md5,filename').where('status=?', (1,)).select()
 
         tmp_dir = os.getcwd() + '/tmp/'
+        app_dir = os.getcwd() + '/app/'
+
         if not isDEmpty(data):
             print('videoToM3u8-----@@@start@@@-----')
         for x in data:
+
+            app_file = app_dir + str(x["md5"])
             m3u8_file = tmp_dir + str(x["md5"]) + "/index.m3u8"
             tofile = tmp_dir + x["md5"] + "/%010d.ts"
             pathfile = tmp_dir + str(x["filename"])
+            if os.path.exists(app_file):
+                os.remove(pathfile)
+                print('videoToM3u8----- The file already exists delete ok -----')
+                continue
 
             if not os.path.exists(tmp_dir + x["md5"]):
                 os.mkdir(tmp_dir + x["md5"])
@@ -219,9 +227,9 @@ def startTask():
 
 if __name__ == "__main__":
 
-    t = threading.Thread(target=printHL)
-    t.setDaemon(True)
-    t.start()
+    # t = threading.Thread(target=printHL)
+    # t.setDaemon(True)
+    # t.start()
 
     t = threading.Thread(target=videoToMp4)
     t.setDaemon(True)
