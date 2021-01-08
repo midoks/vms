@@ -67,18 +67,6 @@ def isDEmpty(data):
     if len(data) > 0:
         return False
     return True
-
-
-def fg_m3u8_cmd(ts_file, m3u8_file, to_file):
-    cmd = ffmpeg_cmd + ' -y -i "' + to_file + '" -c copy -map 0 -f segment -segment_list ' + \
-        m3u8_file + ' -segment_time 10 ' + ts_file
-    return cmd
-
-
-def fg_ts_cmd(ts_file, m3u8_file, to_file):
-    cmd = ffmpeg_cmd + ' -y -i "' + ts_file + '" -c copy -map 0 -f segment -segment_list ' + \
-        m3u8_file + ' -segment_time 10 ' + to_file
-    return cmd
 #------------Private Methods--------------
 
 
