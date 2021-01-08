@@ -58,7 +58,7 @@ layui.use(['form', 'admin', 'http','jquery'], function () {
           if(res.code === 0){
             localStorage.setItem('username', data.field['username'])
             layer.msg('登录成功，即将跳转~', function () {
-              location.href = '/index'
+              location.href = '/admin'
             });
           }else {
             layer.msg(res.msg, function () {});
