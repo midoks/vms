@@ -194,8 +194,7 @@ def videoToM3u8():
 def videoToDB():
     while True:
         videoM = common.M('video_tmp')
-        viM = common.M('video')
-        vilistM = common.M('video_list')
+        viM = common.M('video', 'video')
         data = videoM.field('id,md5,filename,size,filename').where(
             'status=?', (2,)).select()
         tmp_dir = os.getcwd() + "/tmp/"

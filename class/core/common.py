@@ -125,8 +125,8 @@ def checkWebConfig():
     return True
 
 
-def M(table):
-    sql = db.Sql()
+def M(table, dbname="default"):
+    sql = db.Sql().dbfile(dbname)
     return sql.table(table)
 
 
@@ -937,6 +937,11 @@ def initDB():
         for index in range(len(csql_list)):
             sql.execute(csql_list[index], ())
 
+        video_sql = db.Sql().dbfile('video')
+        video_csql = readFile('data/sql/video.sql')
+        video_csql_list = video_csql.split(';')
+        for index in range(len(video_csql_list)):
+            video_sql.execute(video_csql_list[index], ())
     except Exception, ex:
         print str(ex)
 

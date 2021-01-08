@@ -163,7 +163,7 @@ class video_api:
 
         start = (int(p) - 1) * (int(limit))
 
-        videoM = common.M('video')
+        videoM = common.M('video', 'video')
         _list = videoM.field('id,name,filename,size,status,uptime,addtime').limit(
             (str(start)) + ',' + limit).order('id desc').select()
 
@@ -181,7 +181,7 @@ class video_api:
     def editApi(self):
         sid = request.form.get('id', '').encode('utf-8')
         name = request.form.get('name', '').encode('utf-8')
-        videoM = common.M('video')
+        videoM = common.M('video', 'video')
         videoM.where('id=?', (sid,)).setField('name', name)
         _ret = {}
         _ret['code'] = 0
@@ -191,7 +191,7 @@ class video_api:
 
     def getApi(self):
         sid = request.args.get('id', '').encode('utf-8')
-        videoM = common.M('video')
+        videoM = common.M('video', 'video')
         _list = videoM.field('id,name,filename,size,status,uptime,addtime').where(
             'id=?', (sid,)).select()
         _ret = {}
@@ -202,7 +202,7 @@ class video_api:
 
     def delApi(self):
         sid = request.form.get('id', '').encode('utf-8')
-        videoM = common.M('video')
+        videoM = common.M('video', 'video')
 
         data = videoM.field('id,filename,size').where(
             'id=?', (sid,)).select()
