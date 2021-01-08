@@ -9,6 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0" />
   <link href="/static/css/font.css?v={{data.version}}" rel="stylesheet">
   <link href="/static/css/weadmin.css?v={{data.version}}" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js?v={{data.version}}"></script>
 </head>
 
 <body>
@@ -45,6 +46,7 @@
   	<table class="layui-hide" id="video" lay-filter="tableFilter"></table>
   </div>
 
+  <button style="display: none;" id="video_copys" class="bt_copy" data-clipboard-text=""></button>
 
   <script src="/static/lib/layui/layui.js?v={{data.version}}"></script>
   <script src="/static/js/eleDel.js" type="text/javascript"></script>
@@ -121,16 +123,37 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 
   function apiPlayer(data){
     var url = '/m3u8/'+data.filename+'/index.m3u8'; 
-    console.log(url);
+    // console.log(url);
     WeAdminShow('查看['+url+']','/video/player?url='+url ,500, 400);
   }
 
+
+  function copyText(content){
+    var clipboard = new ClipboardJS('#video_copys');
+    clipboard.on('success', function (e) {
+        layer.msg('复制成功',{icon:1,time:2000});
+    });
+
+    clipboard.on('error', function (e) {
+        layer.msg('复制失败，浏览器不兼容!',{icon:2,time:2000});
+    });
+    $("#video_copys").attr('data-clipboard-text',content);
+    $("#video_copys").click();
+}
+
   function apiAddr(data){
-    var url = location.protocol+"//"+location.host+'/m3u8/'+data.filename+'/index.m3u8'; 
+    var url = location.protocol+"//"+location.host+'/m3u8/'+data.filename+'/index.m3u8';
+
+  
     layer.open({
         title: '播放地址'
         ,content: url
-    });     
+        ,id:'addr_cp_id'
+        ,btn:['OK','复制']
+        ,btn2:function(index,layero){
+          copyText(url);
+        }
+    });
   
   }
 
