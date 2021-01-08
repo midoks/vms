@@ -97,7 +97,7 @@ mw_stop()
 {
     echo -e "Stopping vms-async... \c";
     arr=$(ps aux | grep 'vms_async'|grep -v grep|awk '{print $2}')
-    echo -e $arr
+    echo -e "${arr} \c"
     for p in ${arr[@]}
     do
         kill -9 $p &>/dev/null
@@ -111,7 +111,7 @@ mw_stop()
 
 	echo -e "Stopping vms-tasks... \c";
     arr=$(ps aux | grep 'vms_task'|grep -v grep|awk '{print $2}')
-    echo -e $arr
+    echo -e "${arr} \c"
     for p in ${arr[@]}
     do
         kill -9 $p &>/dev/null
