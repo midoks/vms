@@ -136,3 +136,4 @@ tmp/wu_*
 scripts/init.d/vms
 *.m3u8
 data/port.pl
+*.db
