@@ -43,7 +43,3 @@ loglevel = 'info'
 errorlog = chdir + '/logs/error.log'
 accesslog = chdir + '/logs/access.log'
 pidfile = chdir + '/logs/vms.pid'
-
-# if os.path.exists(os.getcwd() + '/data/ssl.pl'):
-#     certfile = 'ssl/certificate.pem'
-#     keyfile = 'ssl/privateKey.pem'
