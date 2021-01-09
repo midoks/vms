@@ -83,6 +83,12 @@ def fg_mp4_cmd(source_file, to_mp4_file):
     return cmd
 
 
+def fg_mkv_mp4_cmd(source_file, to_mp4_file):
+    cmd = ffmpeg_cmd + ' -y -i "' + source_file + \
+        '" -acodec libfaac -vcodec libx264 "' + to_mp4_file + '"'
+    return cmd
+
+
 def fg_m3u8_cmd(ts_file, m3u8_file, to_file):
     cmd = ffmpeg_cmd + ' -y -i "' + to_file + '" -c copy -map 0 -f segment -segment_list ' + \
         m3u8_file + ' -segment_time 3 ' + ts_file
@@ -132,6 +138,12 @@ def videoToMp4():
             pathfile = os.getcwd() + "/tmp/" + str(x['filename'])
             # print(pathfile)
             if is_mp4(pathfile):
+                updateStatus(x["id"], 1)
+
+            elif is_video_format(pathfile, 'mkv'):
+                cmd = fg_mkv_mp4_cmd(pathfile, mp4_file)
+                print(cmd)
+                os.system(cmd)
                 updateStatus(x["id"], 1)
             else:
                 mp4_file = pathfile + ".mp4"
