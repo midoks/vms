@@ -214,8 +214,8 @@ def videoToDB():
                             (x['filename'], x['md5'], x['size'], 0, common.getDate(), common.getDate()))
                     shutil.move(m3u8_dir, app_dir)
                     os.remove(source_file)
-                    # if os.path.exists(source_file_tmp):
-                    #     os.remove(source_file_tmp)
+                    if os.path.exists(source_file_tmp):
+                        os.remove(source_file_tmp)
 
                 updateStatus(x['id'], 3)
         if not isDEmpty(data):
