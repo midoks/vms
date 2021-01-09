@@ -8,12 +8,14 @@ CREATE TABLE IF NOT EXISTS `video_tmp` (
   `addtime` TEXT
 );
 
+
 CREATE TABLE IF NOT EXISTS `kv` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` TEXT,
   `value` TEXT,
   `addtime` TEXT
 );
+
 
 INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
 (1, 'run_model', '1','2016-12-10 15:12:56');
@@ -31,6 +33,7 @@ CREATE TABLE IF NOT EXISTS `node` (
   `uptime` TEXT,
   `addtime` TEXT
 );
+
 
 INSERT INTO `node` (`id`, `name`, `type`,`ip`, `uptime`,`addtime`) VALUES
 (1, '测试', 'type','127.0.0.1', '2016-12-10 15:12:56', '2016-12-10 15:12:56');
@@ -59,7 +62,6 @@ INSERT INTO `api` (`id`, `appkey`, `appsecret`, `addtime`) VALUES
 (1, 'demo','e10adc3949ba59abbe56e057f20f883e','2016-12-10 15:12:56');
 
 
-
 CREATE TABLE IF NOT EXISTS `users` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `username` TEXT,
@@ -72,4 +74,3 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `login_ip`, `login_time`, `phone`, `email`) VALUES
 (1, 'admin', '4297f44b13955235245b2497399d7a93', '192.168.0.10', '2016-12-10 15:12:56', 0, '627293072@qq.com');
-
