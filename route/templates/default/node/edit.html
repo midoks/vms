@@ -38,6 +38,15 @@
           <input type="text" name="ip" value="127.0.0.1" lay-verify="required" autocomplete="" class="layui-input">
         </div>
       </div>
+
+      <div class="layui-form-item">
+        <label for="L_email" class="layui-form-label">
+          <span class="we-red">*</span>端口
+        </label>
+        <div class="layui-input-inline">
+          <input type="text" name="port" value="8000" lay-verify="required" autocomplete="" class="layui-input">
+        </div>
+      </div>
       <input type="hidden" name="id" value="">
       <div class="layui-form-item">
         <label for="L_repass" class="layui-form-label">
@@ -86,13 +95,19 @@
         });
 
         var id = getUrlParam('id');
-        $.getJSON('/node_api/get',{id:id}, function(data){
-          // console.log(data);
-          $("input[name='name']").val(data['data'][0]['name']);
-          $("input[name='ip']").val(data['data'][0]['ip']);
-          $("input[name='id']").val(data['data'][0]['id']);
-        });
-
+        if (!id){
+          var v = randStr(4);
+          $("input[name='name']").val(v);
+        } else {
+          // console.log(id);
+          $.getJSON('/node_api/get',{id:id}, function(data){
+            // console.log(data);
+            $("input[name='name']").val(data['data'][0]['name']);
+            $("input[name='ip']").val(data['data'][0]['ip']);
+            $("input[name='id']").val(data['data'][0]['id']);
+            $("input[name='port']").val(data['data'][0]['port']);
+          });
+        }
 
       //监听提交
       form.on('submit(add)', function (data) {

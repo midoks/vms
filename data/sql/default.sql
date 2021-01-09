@@ -30,13 +30,14 @@ CREATE TABLE IF NOT EXISTS `node` (
   `name` TEXT,
   `type` TEXT,
   `ip` TEXT,
+  `port` TEXT,
   `uptime` TEXT,
   `addtime` TEXT
 );
 
 
-INSERT INTO `node` (`id`, `name`, `type`,`ip`, `uptime`,`addtime`) VALUES
-(1, '测试', 'type','127.0.0.1', '2016-12-10 15:12:56', '2016-12-10 15:12:56');
+INSERT INTO `node` (`id`, `name`, `type`,`ip`, `port`,`uptime`,`addtime`) VALUES
+(1, '测试', 'type','127.0.0.1', '8000','2016-12-10 15:12:56', '2016-12-10 15:12:56');
 
 
 CREATE TABLE IF NOT EXISTS `logs` (
