@@ -79,7 +79,7 @@ def isDEmpty(data):
 
 def fg_mp4_cmd(source_file, to_mp4_file):
     cmd = ffmpeg_cmd + ' -y -i "' + source_file + \
-        '" -c copy -map 0 ' + to_mp4_file
+        '" -c copy -map 0 "' + to_mp4_file + '"'
     return cmd
 
 
@@ -214,8 +214,8 @@ def videoToDB():
                             (x['filename'], x['md5'], x['size'], 0, common.getDate(), common.getDate()))
                     shutil.move(m3u8_dir, app_dir)
                     os.remove(source_file)
-                    if os.path.exists(source_file_tmp):
-                        os.remove(source_file_tmp)
+                    # if os.path.exists(source_file_tmp):
+                    #     os.remove(source_file_tmp)
 
                 updateStatus(x['id'], 3)
         if not isDEmpty(data):
