@@ -85,7 +85,7 @@ def fg_mp4_cmd(source_file, to_mp4_file):
 
 def fg_m3u8_cmd(ts_file, m3u8_file, to_file):
     cmd = ffmpeg_cmd + ' -y -i "' + to_file + '" -c copy -map 0 -f segment -segment_list ' + \
-        m3u8_file + ' -segment_time 10 ' + ts_file
+        m3u8_file + ' -segment_time 3 ' + ts_file
     return cmd
 
 
