@@ -136,17 +136,16 @@ def videoToMp4():
             print('videoToMp4-----@@@start@@@-----')
         for x in data:
             pathfile = os.getcwd() + "/tmp/" + str(x['filename'])
+            mp4_file = pathfile + ".mp4"
             # print(pathfile)
             if is_mp4(pathfile):
                 updateStatus(x["id"], 1)
-
             elif is_video_format(pathfile, 'mkv'):
                 cmd = fg_mkv_mp4_cmd(pathfile, mp4_file)
                 print(cmd)
                 os.system(cmd)
                 updateStatus(x["id"], 1)
             else:
-                mp4_file = pathfile + ".mp4"
                 cmd = fg_mp4_cmd(pathfile, mp4_file)
                 print(cmd)
                 os.system(cmd)
