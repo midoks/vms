@@ -54,6 +54,17 @@
 
       <div class="layui-form-item">
         <label for="L_email" class="layui-form-label">
+          <span class="we-red">*</span>节点标示
+        </label>
+        <div class="layui-input-inline">
+          <input type="text" name="run_mark" readonly="readonly" class="layui-input">
+        </div>
+
+        <div style="line-height: 38px;">(不能手动修改)</div>
+      </div>
+
+      <div class="layui-form-item">
+        <label for="L_email" class="layui-form-label">
           <span class="we-red">*</span>存储限制
         </label>
         <div class="layui-input-inline">
@@ -121,6 +132,7 @@
             $("input[name='video_num']").val(list['video_num']);
             $("#run_model").val(list['run_model']);
             $("#run_is_master").val(list['run_is_master']);
+            $("input[name='run_mark']").val(list['run_mark']);
             form.render('select');
         } else {
             layer.msg(data.msg);

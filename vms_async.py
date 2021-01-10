@@ -69,6 +69,8 @@ def isDEmpty(data):
     return True
 #------------Private Methods--------------
 
+#------------Public Methods--------------
+
 
 def execShell(cmdstring, cwd=None, timeout=None, shell=True):
 
@@ -91,6 +93,17 @@ def execShell(cmdstring, cwd=None, timeout=None, shell=True):
     return sub.communicate()
 
 
+def isNeedAsync():
+    _list = common.M('node').where('ismaster=?', (1,)).select()
+    run_model = common.M('kv').field('id,name,value').where(
+        'name=?', ('run_model',)).select()
+
+    if run_model == '2' and len(_list) >= 1:
+        return True
+    return False
+#------------Public Methods--------------
+
+
 def printHL():
     while True:
         print("hello world,vms async!!!")
@@ -100,7 +113,8 @@ def printHL():
 def asyncNodeInfo():
     while True:
         print("async node info !!!")
-        _list = common.M('node').where('').select()
+        if isNeedAsync():
+            print("run....")
 
         # print common.httpGet('https://www.qq.com')
         time.sleep(20)

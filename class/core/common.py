@@ -914,7 +914,7 @@ def init():
 
     initDB()
     initInitD()
-    # initUserInfo()
+    initAppData()
 
 
 def local():
@@ -971,11 +971,12 @@ def initInitD():
         execShell('chkconfig --add vms')
 
 
-def initUserInfo():
-    data = M('users').where('id=?', (1,)).getField('password')
-    if data == '21232f297a57a5a743894a0e4a801fc3':
-        pwd = common.getRandomString(8).lower()
-        file_pw = common.getRunDir() + '/data/default.pl'
-        common.writeFile(file_pw, pwd)
-        common.M('users').where('id=?', (1,)).setField(
-            'password', common.md5(pwd))
+def initAppData():
+    run_mark = M('kv').field('id,name,value').where(
+        'name=?', ('run_mark',)).select()
+    if run_mark[0]['value'] == '4297f44b13955235245b2497399d7a93':
+        print("init run mark!!")
+        sign = getRandomString(8).lower()
+        sign += '|' + getLocalIp()
+        M('kv').where('name=?', ('run_mark',)
+                      ).setField('value', md5(sign))

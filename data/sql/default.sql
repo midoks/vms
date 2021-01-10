@@ -25,6 +25,10 @@ INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
 (3, 'video_num', '1','2016-12-10 15:12:56');
 INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
 (4, 'run_is_master', '0','2016-12-10 15:12:56');
+INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
+(5, 'run_mark', '4297f44b13955235245b2497399d7a93','2016-12-10 15:12:56');
+
+
 
 
 CREATE TABLE IF NOT EXISTS `node` (
@@ -36,11 +40,6 @@ CREATE TABLE IF NOT EXISTS `node` (
   `uptime` TEXT,
   `addtime` TEXT
 );
-
-
-INSERT INTO `node` (`id`, `name`,`ip`, `port`,`ismaster`,`uptime`,`addtime`) VALUES
-(1, '测试','127.0.0.1', '8000','0','2016-12-10 15:12:56', '2016-12-10 15:12:56');
-
 
 CREATE TABLE IF NOT EXISTS `logs` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
