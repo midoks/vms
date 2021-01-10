@@ -121,8 +121,14 @@ def asyncNodeInfo():
                 ":" + str(_list[0]['port'])
 
             api_url = _url + "/async_api/node"
-            print(api_url)
-            print common.httpPost(api_url, {})
+            ret = common.httpPost(api_url, {
+                'source': {
+
+                },
+                'sign': _list[0]['name']
+
+            })
+            print(ret)
         time.sleep(20)
 
 
