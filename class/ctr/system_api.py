@@ -49,6 +49,10 @@ class system_api:
         video_num = request.form.get('video_num', '').encode('utf-8')
         run_is_master = request.form.get('run_is_master', '').encode('utf-8')
 
+        ip = request.form.get('ip', '').encode('utf-8')
+        if ip != '':
+            common.writeFile('data/iplist.txt', ip)
+
         self.updateKV('run_model', run_model)
         self.updateKV('run_is_master', run_is_master)
         self.updateKV('video_size', video_size)
@@ -63,10 +67,11 @@ class system_api:
     def getApi(self):
         sid = request.args.get('id', '').encode('utf-8')
         kvM = common.M('kv')
-        _list = kvM.field('id,name,value').select()
+        _list = kvM.field('name,value').select()
         _ret = {}
 
-        _list['ip'] = common.readFile('data/port.pl')
+        _list.append(
+            {'name': 'ip', 'value': common.readFile('data/iplist.txt')})
         _ret['data'] = _list
         _ret['code'] = 0
         return common.getJson(_ret)
