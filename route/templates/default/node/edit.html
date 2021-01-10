@@ -47,6 +47,19 @@
           <input type="text" name="port" value="8000" lay-verify="required" autocomplete="" class="layui-input">
         </div>
       </div>
+
+      <div class="layui-form-item">
+        <label for="L_username" class="layui-form-label">
+          <span class="we-red">*</span>节点
+        </label>
+        <div class="layui-input-inline">
+          <select id="ismaster" name="ismaster">
+            <option value="0">主节点</option>
+            <option value="1">分节点</option>
+          </select>
+        </div>
+      </div>
+
       <input type="hidden" name="id" value="">
       <div class="layui-form-item">
         <label for="L_repass" class="layui-form-label">
@@ -106,6 +119,7 @@
             $("input[name='ip']").val(data['data'][0]['ip']);
             $("input[name='id']").val(data['data'][0]['id']);
             $("input[name='port']").val(data['data'][0]['port']);
+            $("input[name='ismaster']").val(data['data'][0]['ismaster']);
           });
         }
 
