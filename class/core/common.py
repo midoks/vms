@@ -205,8 +205,8 @@ def getJson(data):
 
 def returnData(msg='ok', code=0, data=None):
     if data == None:
-        return {'code': status, 'msg': msg}
-    return {'code': status, 'msg': msg, 'data': data}
+        return {'code': code, 'msg': msg}
+    return {'code': code, 'msg': msg, 'data': data}
 
 
 def retOk(msg='ok', data=None):
@@ -215,15 +215,6 @@ def retOk(msg='ok', data=None):
 
 def retFail(msg='fail', data=None):
     return returnData(msg, 1, data)
-
-
-def returnJson(status, msg, data=None):
-    # if data == None:
-    #     return {'status': status, 'msg': msg}
-    # return {'status': status, 'msg': msg, 'data': data}
-    if data == None:
-        return getJson({'status': status, 'msg': msg})
-    return getJson({'status': status, 'msg': msg, 'data': data})
 
 
 def returnMsg(status, msg, args=()):

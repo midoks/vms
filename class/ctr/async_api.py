@@ -31,7 +31,7 @@ class async_api:
     def __init__(self):
         pass
 
-    def isNameRight():
+    def isNameRight(self):
         name = request.form.get('name', '').encode('utf-8')
         mark = common.getSysKV('run_mark')
         if name != mark:
