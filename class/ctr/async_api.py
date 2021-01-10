@@ -39,13 +39,24 @@ class async_api:
         return ''
 
     def nodeApi(self):
+        import json
         r = self.isNameRight()
         if r != '':
             return r
 
-        source = request.form.get('source', '').encode('utf-8')
-        print source
-        # print(source['name'])
-        # print(common.jsonDecode(source))
+        source = request.form.get('source').encode('utf-8')
+        source = source.replace("'", '"').replace("u", '')
 
-        return common.retOk()
+        rr = json.loads(source)
+        nodeM = common.M('node')
+        dataList = nodeM.where('name=?', (rr['name'])).select()
+        if len(dataList) > 0:
+
+            rAdd = nodeM.add("name,ip,port,ismaster,uptime,addtime", (rr['name'], rr[
+                'ip'], rr['port'], rr['ismaster'], common.getDate(), common.getDate()))
+
+            if rAdd:
+                return common.retOk()
+            return common.retFail()
+        else:
+            return common.retOk('already exists!')
