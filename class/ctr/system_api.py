@@ -66,7 +66,7 @@ class system_api:
         _list = kvM.field('id,name,value').select()
         _ret = {}
 
-        _list['ip'] = common.readFile('data/port.pl')
+        # _list['ip'] = common.readFile('data/port.pl')
         _ret['data'] = _list
         _ret['code'] = 0
         return common.getJson(_ret)
