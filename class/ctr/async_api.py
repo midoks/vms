@@ -34,9 +34,11 @@ class async_api:
     def nodeApi(self):
 
         sign = request.form.get('sign', '').encode('utf-8')
+        source = request.form.get('source', '').encode('utf-8')
 
         _ret = {}
         _ret['code'] = 0
         _ret['sign'] = sign
+        _ret['source'] = source
         _ret['msg'] = '成功'
         return common.getJson(_ret)

@@ -93,6 +93,12 @@ def execShell(cmdstring, cwd=None, timeout=None, shell=True):
     return sub.communicate()
 
 
+def getSysKV(name):
+    value = common.M('kv').field('id,name,value').where(
+        'name=?', (name,)).select()
+    return value[0]['value']
+
+
 def isNeedAsync():
     _list = common.M('node').where(
         'ismaster=?', (1,)).select()
@@ -123,9 +129,9 @@ def asyncNodeInfo():
             api_url = _url + "/async_api/node"
             ret = common.httpPost(api_url, {
                 'source': {
-
+                    'name': getSysKV('run_mark'),
                 },
-                'sign': _list[0]['name']
+                'name': _list[0]['name']
 
             })
             print(ret)
