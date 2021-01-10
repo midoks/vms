@@ -203,6 +203,11 @@ def getJson(data):
     return json.dumps(data)
 
 
+def jsonDecode(data):
+    import json
+    return json.loads(data)
+
+
 def returnData(msg='ok', code=0, data=None):
     if data == None:
         return {'code': code, 'msg': msg}

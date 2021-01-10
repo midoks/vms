@@ -45,5 +45,6 @@ class async_api:
 
         source = request.form.get('source', '').encode('utf-8')
         print source
+        print(common.jsonDecode(source))
 
         return common.retOk()
