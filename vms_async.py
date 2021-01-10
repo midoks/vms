@@ -124,6 +124,8 @@ def asyncNodeInfo():
             ret = common.httpPost(api_url, {
                 'source': {
                     'name': common.getSysKV('run_mark'),
+                    'ip': common.getLocalIp(),
+                    'port': common.readFile('data/port.pl')
                 },
                 'name': _list[0]['name']
 

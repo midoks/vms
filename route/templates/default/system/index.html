@@ -84,6 +84,15 @@
 
         <div style="line-height: 38px;">(至少1个)</div>
       </div>
+
+      <div class="layui-form-item">
+        <label for="L_email" class="layui-form-label">
+          <span class="we-red">*</span>IP
+        </label>
+        <div class="layui-input-inline">
+          <input type="text" name="ip" autocomplete="" class="layui-input">
+        </div>
+      </div>
       <div class="layui-form-item">
         <label for="L_repass" class="layui-form-label">
         </label>
@@ -133,6 +142,7 @@
             $("#run_model").val(list['run_model']);
             $("#run_is_master").val(list['run_is_master']);
             $("input[name='run_mark']").val(list['run_mark']);
+            $("input[name='ip']").val(list['ip']);
             form.render('select');
         } else {
             layer.msg(data.msg);
