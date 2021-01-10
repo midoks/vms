@@ -126,7 +126,7 @@ def asyncNodeInfo():
                     'name': common.getSysKV('run_mark'),
                     'ip': common.getLocalIp(),
                     'port': common.readFile('data/port.pl'),
-                    'ismaster': ~common.getSysKV('run_mark')
+                    'ismaster': common.getSysKV('run_is_master')
                 },
                 'name': _list[0]['name']
 
