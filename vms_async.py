@@ -119,8 +119,10 @@ def asyncNodeInfo():
                 'ismaster=?', (1,)).select()
             _url = "http://" + str(_list[0]['ip']) + \
                 ":" + str(_list[0]['port'])
-            print(_url)
-            print common.httpPost(_url, {})
+
+            api_url = _url + "/async/node"
+            print(api_url)
+            print common.httpPost(api_url, {})
         time.sleep(20)
 
 
