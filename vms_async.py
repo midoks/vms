@@ -114,9 +114,9 @@ def asyncNodeInfo():
     while True:
         print("async node info !!!")
         if isNeedAsync():
-            print("run....")
-
-        # print common.httpGet('https://www.qq.com')
+            _list = common.M('node').where('ismaster=?', (1,)).select()
+            _url = 'http://' + _list[0]['ip'] + ':' + _list[0]['port']
+            print _url
         time.sleep(20)
 
 
