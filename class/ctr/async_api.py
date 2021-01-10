@@ -39,8 +39,8 @@ class async_api:
         return ''
 
     def nodeApi(self):
-
-        if r = self.isNameRight() != '':
+        r = self.isNameRight()
+        if r != '':
             return r
 
         source = request.form.get('source', '').encode('utf-8')
