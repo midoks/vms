@@ -100,6 +100,9 @@ def printHL():
 def asyncNodeInfo():
     while True:
         print("async node info !!!")
+        _list = common.M('node').where('').select()
+
+        # print common.httpGet('https://www.qq.com')
         time.sleep(20)
 
 
@@ -112,11 +115,9 @@ def startTask():
         time.sleep(60)
     startTask()
 
-# --------------------------------------PHP监控 end--------------------------------------------- #
-
 if __name__ == "__main__":
 
-    t = threading.Thread(target=printHL)
+    t = threading.Thread(target=asyncNodeInfo)
     t.setDaemon(True)
     t.start()
 

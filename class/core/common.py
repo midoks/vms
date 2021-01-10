@@ -410,7 +410,7 @@ def HttpPost(url, data, timeout=10):
             return str(ex)
 
 
-def httpPost(url, data, timeout=10):
+def httpPost(url, data={}, timeout=10):
     return HttpPost(url, data, timeout)
 
 

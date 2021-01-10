@@ -39,6 +39,19 @@
         <div style="line-height: 38px;">单机 or 分布式</div>
       </div>
 
+
+      <div class="layui-form-item">
+        <label for="L_username" class="layui-form-label">
+          <span class="we-red">*</span>节点
+        </label>
+        <div class="layui-input-inline">
+          <select id="run_is_master" name="run_is_master" lay-filter="run_is_master">
+            <option value="0">主节点</option>
+            <option value="1">分节点</option>
+          </select>
+        </div>
+      </div>
+
       <div class="layui-form-item">
         <label for="L_email" class="layui-form-label">
           <span class="we-red">*</span>存储限制
@@ -107,6 +120,7 @@
             $("input[name='video_size']").val(list['video_size']);
             $("input[name='video_num']").val(list['video_num']);
             $("#run_model").val(list['run_model']);
+            $("#run_is_master").val(list['run_is_master']);
             form.render('select');
         } else {
             layer.msg(data.msg);

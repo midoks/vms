@@ -47,8 +47,10 @@ class system_api:
         run_model = request.form.get('run_model', '').encode('utf-8')
         video_size = request.form.get('video_size', '').encode('utf-8')
         video_num = request.form.get('video_num', '').encode('utf-8')
+        run_is_master = request.form.get('run_is_master', '').encode('utf-8')
 
         self.updateKV('run_model', run_model)
+        self.updateKV('run_is_master', run_is_master)
         self.updateKV('video_size', video_size)
         self.updateKV('video_num', video_num)
 

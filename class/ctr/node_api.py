@@ -34,7 +34,7 @@ class node_api:
         start = (int(p) - 1) * (int(limit))
 
         nodeM = common.M('node')
-        _list = nodeM.field('id,name,ip,port,uptime,addtime').limit(
+        _list = nodeM.field('id,name,ip,port,ismaster,uptime,addtime').limit(
             (str(start)) + ',' + limit).order('id desc').select()
 
         count = nodeM.count()

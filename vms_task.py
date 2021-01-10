@@ -269,8 +269,6 @@ def startTask():
         time.sleep(60)
     startTask()
 
-# --------------------------------------PHP监控 end--------------------------------------------- #
-
 if __name__ == "__main__":
 
     # t = threading.Thread(target=printHL)
