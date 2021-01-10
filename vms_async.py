@@ -117,10 +117,10 @@ def asyncNodeInfo():
         if isNeedAsync():
             _list = common.M('node').field('id,port,ip').where(
                 'ismaster=?', (1,)).select()
-            print(_list[0])
             _url = "http://" + str(_list[0]['ip']) + \
                 ":" + str(_list[0]['port'])
             print(_url)
+            print common.httpPost(_url, {})
         time.sleep(20)
 
 

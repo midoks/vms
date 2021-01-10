@@ -119,7 +119,8 @@
             $("input[name='ip']").val(data['data'][0]['ip']);
             $("input[name='id']").val(data['data'][0]['id']);
             $("input[name='port']").val(data['data'][0]['port']);
-            $("input[name='ismaster']").val(data['data'][0]['ismaster']);
+            $("select[name='ismaster']").val(data['data'][0]['ismaster']);
+            form.render('select');
           });
         }
 
