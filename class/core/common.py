@@ -210,11 +210,11 @@ def returnData(msg='ok', code=0, data=None):
 
 
 def retOk(msg='ok', data=None):
-    return returnData(msg, 0, data)
+    return getJson(returnData(msg, 0, data))
 
 
 def retFail(msg='fail', data=None):
-    return returnData(msg, 1, data)
+    return getJson(returnData(msg, 1, data))
 
 
 def returnMsg(status, msg, args=()):

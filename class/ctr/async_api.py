@@ -44,8 +44,6 @@ class async_api:
             return r
 
         source = request.form.get('source', '').encode('utf-8')
+        print source
 
-        _ret['sign'] = sign
-        _ret['source'] = source
-
-        return common.retOk(_ret)
+        return common.retOk()
