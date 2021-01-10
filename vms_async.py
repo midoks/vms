@@ -123,16 +123,16 @@ def asyncNodeInfo():
             api_url = _url + "/async_api/node"
             ret = common.httpPost(api_url, {
                 'source': {
-                    'name': common.getSysKV('run_mark'),
-                    'ip': common.getLocalIp(),
-                    'port': common.readFile('data/port.pl'),
-                    'ismaster': common.getSysKV('run_is_master')
+                    "name": common.getSysKV('run_mark'),
+                    "ip": common.getLocalIp(),
+                    "port": common.readFile('data/port.pl'),
+                    "ismaster": common.getSysKV('run_is_master')
                 },
                 'name': _list[0]['name']
 
             })
             print(ret)
-        time.sleep(20)
+        time.sleep(3)
 
 
 def startTask():

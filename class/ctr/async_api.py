@@ -32,7 +32,7 @@ class async_api:
         pass
 
     def isNameRight(self):
-        name = request.form.get('name', '').encode('utf-8')
+        name = request.form.get('name', '0').encode('utf-8')
         mark = common.getSysKV('run_mark')
         if name != mark:
             return common.retFail('name is error!')
@@ -45,6 +45,7 @@ class async_api:
 
         source = request.form.get('source', '').encode('utf-8')
         print source
-        print(common.jsonDecode(source))
+        # print(source['name'])
+        # print(common.jsonDecode(source))
 
         return common.retOk()
