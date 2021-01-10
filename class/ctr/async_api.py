@@ -49,9 +49,12 @@ class async_api:
 
         rr = json.loads(source)
         nodeM = common.M('node')
-        dataList = nodeM.where('name=?', (rr['name'],)).select()
+        dataList = nodeM.field('name,ip,port,ismaster').where(
+            'name=?', (rr['name'],)).select()
 
-        if len(dataList) > 100:
+        retList = nodeM.field('name,ip,port,ismaster').where(
+            'name<>?', (rr['name'],)).select()
+        if len(retList) > 100:
             return common.retFail('too many nodes!')
 
         if len(dataList) < 1:
@@ -59,8 +62,8 @@ class async_api:
             rAdd = nodeM.add("name,ip,port,ismaster,uptime,addtime", (rr['name'], rr[
                 'ip'], rr['port'], rr['ismaster'], common.getDate(), common.getDate()))
 
-            if rAdd:
-                return common.retOk()
-            return common.retFail()
+            if not rAdd:
+                return common.retFail()
+            return common.retOk('ok', retList)
         else:
-            return common.retOk('already exists!')
+            return common.retOk('already exists!', retList)
