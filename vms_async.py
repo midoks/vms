@@ -139,8 +139,10 @@ def asyncNodeInfo():
                     dataList = nodeM.field('name,ip,port,ismaster').where(
                         'name=?', (i['name'],)).select()
                     if len(dataList) < 1:
-                        nodeM.add("name,ip,port,ismaster,uptime,addtime",
-                                  (i['name'], i['ip'], i['port'], ['ismaster'], common.getDate(), common.getDate()))
+                        r = nodeM.add("name,ip,port,ismaster,uptime,addtime",
+                                      (i['name'], i['ip'], i['port'], i['ismaster'], common.getDate(), common.getDate()))
+                    if r > 0:
+                        print("node add ok!")
         time.sleep(20)
 
 
