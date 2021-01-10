@@ -31,14 +31,21 @@ class async_api:
     def __init__(self):
         pass
 
+    def isNameRight():
+        name = request.form.get('name', '').encode('utf-8')
+        mark = common.getSysKV('run_mark')
+        if name != mark:
+            return common.retFail('name is error!')
+        return ''
+
     def nodeApi(self):
 
-        sign = request.form.get('sign', '').encode('utf-8')
+        if r = self.isNameRight() != '':
+            return r
+
         source = request.form.get('source', '').encode('utf-8')
 
-        _ret = {}
-        _ret['code'] = 0
         _ret['sign'] = sign
         _ret['source'] = source
-        _ret['msg'] = '成功'
-        return common.getJson(_ret)
+
+        return common.retOk(_ret)

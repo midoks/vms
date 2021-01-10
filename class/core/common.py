@@ -203,8 +203,18 @@ def getJson(data):
     return json.dumps(data)
 
 
-def returnData(status, msg, data=None):
-    return {'status': status, 'msg': msg, 'data': data}
+def returnData(msg='ok', code=0, data=None):
+    if data == None:
+        return {'code': status, 'msg': msg}
+    return {'code': status, 'msg': msg, 'data': data}
+
+
+def retOk(msg='ok', data=None):
+    return returnData(msg, 0, data)
+
+
+def retFail(msg='fail', data=None):
+    return returnData(msg, 1, data)
 
 
 def returnJson(status, msg, data=None):
@@ -908,6 +918,16 @@ def getSSHStatus():
     else:
         status = True
     return status
+
+
+#---DB-----#
+
+def getSysKV(name):
+    value = M('kv').field('id,name,value').where(
+        'name=?', (name,)).select()
+    return value[0]['value']
+
+#----DB----#
 
 
 def init():
