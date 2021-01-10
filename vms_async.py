@@ -141,8 +141,8 @@ def asyncNodeInfo():
                     if len(dataList) < 1:
                         r = nodeM.add("name,ip,port,ismaster,uptime,addtime",
                                       (i['name'], i['ip'], i['port'], i['ismaster'], common.getDate(), common.getDate()))
-                    if r > 0:
-                        print("node add ok!")
+                        if r > 0:
+                            print("node add ok!")
         time.sleep(20)
 
 
