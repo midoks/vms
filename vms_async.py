@@ -131,8 +131,17 @@ def asyncNodeInfo():
                 'name': _list[0]['name']
 
             })
-            print(ret)
-        time.sleep(3)
+
+            retDic = json.loads(ret)
+
+            nodeM = common.M('node')
+            for i in retDic['data']:
+                dataList = nodeM.field('name,ip,port,ismaster').where(
+                    'name=?', (i['name'],)).select()
+                if len(dataList) < 1:
+                    nodeM.add("name,ip,port,ismaster,uptime,addtime",
+                              (i['name'], i['ip'], i['port'], ['ismaster'], common.getDate(), common.getDate()))
+        time.sleep(20)
 
 
 def startTask():
