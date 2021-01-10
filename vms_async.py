@@ -94,7 +94,8 @@ def execShell(cmdstring, cwd=None, timeout=None, shell=True):
 
 
 def isNeedAsync():
-    _list = common.M('node').where('ismaster=?', (1,)).select()
+    _list = common.M('node').where(
+        'ismaster=?', (1,)).select()
     run_model = common.M('kv').field('id,name,value').where(
         'name=?', ('run_model',)).select()
     # print(run_model[0]['value'], len(_list))
@@ -114,9 +115,12 @@ def asyncNodeInfo():
     while True:
         print("async node info !!!")
         if isNeedAsync():
-            _list = common.M('node').where('ismaster=?', (1,)).select()
-            _url = 'http://' + _list[0]['ip'] + ':' + _list[0]['port']
-            print _url
+            _list = common.M('node').field('id,port,ip').where(
+                'ismaster=?', (1,)).select()
+            print(_list[0])
+            _url = "http://" + str(_list[0]['ip']) + \
+                ":" + str(_list[0]['port'])
+            print(_url)
         time.sleep(20)
 
 
