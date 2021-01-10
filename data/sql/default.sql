@@ -29,8 +29,6 @@ INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
 (5, 'run_mark', '4297f44b13955235245b2497399d7a93','2016-12-10 15:12:56');
 
 
-
-
 CREATE TABLE IF NOT EXISTS `node` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` TEXT,
