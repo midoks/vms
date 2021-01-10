@@ -61,17 +61,19 @@ class node_api:
         name = request.form.get('name', '').encode('utf-8')
         ip = request.form.get('ip', '').encode('utf-8')
         port = request.form.get('port', '').encode('utf-8')
+        ismaster = request.form.get('ismaster', '0').encode('utf-8')
 
         nodeM = common.M('node')
 
         _ret = {}
         if sid:
-            nodeM.where('id=?', (sid,)).save('name,ip,port', (name, ip, port))
+            nodeM.where('id=?', (sid,)).save(
+                'name,ip,port,ismaster', (name, ip, port, ismaster))
             _ret['code'] = 0
             _ret['msg'] = '修改成功'
         else:
-            r = nodeM.add("name,type,ip,port,uptime,addtime",
-                          (name, 0, ip, port, common.getDate(), common.getDate()))
+            r = nodeM.add("name,ip,port,ismaster,uptime,addtime",
+                          (name, ip, port, ismaster, common.getDate(), common.getDate()))
 
             _ret['code'] = 0
             _ret['msg'] = '添加成功'
