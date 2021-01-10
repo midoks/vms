@@ -72,6 +72,7 @@ class system_api:
 
         _list.append(
             {'name': 'ip', 'value': common.readFile('data/iplist.txt')})
+
         _ret['data'] = _list
         _ret['code'] = 0
         return common.getJson(_ret)
