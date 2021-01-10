@@ -48,7 +48,7 @@ class node_api:
     def getApi(self):
         sid = request.args.get('id', '').encode('utf-8')
         videoM = common.M('node')
-        _list = videoM.field('id,name,ip,port,type,uptime,addtime').where(
+        _list = videoM.field('id,name,ip,port,ismaster,uptime,addtime').where(
             'id=?', (sid,)).select()
         _ret = {}
         _ret['data'] = _list

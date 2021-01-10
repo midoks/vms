@@ -30,9 +30,9 @@ INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
 CREATE TABLE IF NOT EXISTS `node` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` TEXT,
-  `type` TEXT,
   `ip` TEXT,
   `port` TEXT,
+  `ismaster` INTEGER,
   `uptime` TEXT,
   `addtime` TEXT
 );
