@@ -115,12 +115,12 @@ def asyncNodeInfo():
     while True:
         print("async node info !!!")
         if isNeedAsync():
-            _list = common.M('node').field('id,port,ip').where(
+            _list = common.M('node').field('id,port,name,ip').where(
                 'ismaster=?', (1,)).select()
             _url = "http://" + str(_list[0]['ip']) + \
                 ":" + str(_list[0]['port'])
 
-            api_url = _url + "/async/node"
+            api_url = _url + "/async_api/node"
             print(api_url)
             print common.httpPost(api_url, {})
         time.sleep(20)
