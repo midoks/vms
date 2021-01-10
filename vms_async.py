@@ -97,8 +97,8 @@ def isNeedAsync():
     _list = common.M('node').where('ismaster=?', (1,)).select()
     run_model = common.M('kv').field('id,name,value').where(
         'name=?', ('run_model',)).select()
-
-    if run_model == '2' and len(_list) >= 1:
+    # print(run_model[0]['value'], len(_list))
+    if run_model[0]['value'] == '2' and len(_list) >= 1:
         return True
     return False
 #------------Public Methods--------------
