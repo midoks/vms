@@ -21,7 +21,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
-from flask import request
+import requests
 
 
 import db
