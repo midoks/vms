@@ -67,3 +67,9 @@ class async_api:
             return common.retOk('ok', retList)
         else:
             return common.retOk('already exists!', retList)
+
+    def videoInfo(self):
+        pass
+
+    def videoRange(self):
+        pass
