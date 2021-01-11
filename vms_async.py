@@ -231,6 +231,8 @@ def asyncVideoData():
                 os.rename('data/tmp.db', 'data/video.db')
                 os.remove('data/tmp.db')
 
+            print('async ok!!!')
+
         time.sleep(20)
 
 
