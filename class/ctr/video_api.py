@@ -42,36 +42,6 @@ def del_file(path_data):
             del_file(file_data)
 
 
-def calMD5ForBigFile(file):
-    m = md5()
-    f = open(file, 'rb')
-    buffer = 8192 * 2    # why is 8192 | 8192 is fast than 2048
-
-    while 1:
-        chunk = f.read(buffer)
-        if not chunk:
-            break
-        m.update(chunk)
-
-    f.close()
-    return m.hexdigest()
-
-
-def calMD5ForFile(file):
-    statinfo = os.stat(file)
-
-    if int(statinfo.st_size) / (1024 * 1024) >= 1000:
-        print "File size > 1000, move to big file..."
-        return calMD5ForBigFile(file)
-
-    m = md5()
-    f = open(file, 'rb')
-    m.update(f.read())
-    f.close()
-
-    return m.hexdigest()
-
-
 class video_api:
 
     def __init__(self):
@@ -105,7 +75,7 @@ class video_api:
                 os.remove(filename)                     # 删除该分片，节约空间
         # 入库
         dirfile = os.path.join(os.getcwd() + '/tmp', target_filename)
-        file_md5 = calMD5ForFile(dirfile)
+        file_md5 = common.calMD5ForFile(dirfile)
         vmM = common.M('video_tmp')
         vmM.add("md5,filename,size,status,uptime,addtime",
                 (file_md5, target_filename, os.path.getsize(dirfile), 0, common.getDate(), common.getDate()))
@@ -120,7 +90,7 @@ class video_api:
         # 入库
         target_filename = '阴风阵阵.Suspiria.2018.中英字幕.WEBrip.720P-人人影视.mp4'
         dirfile = os.path.join(os.getcwd() + '/tmp', target_filename)
-        file_md5 = calMD5ForFile(dirfile)
+        file_md5 = common.calMD5ForFile(dirfile)
 
         return 'ok'
     ##### ----- start ----- ###
