@@ -11,8 +11,6 @@ import threading
 import subprocess
 import shutil
 
-from flask import request
-
 
 sys.path.append("/usr/local/lib/python2.7/site-packages")
 import psutil
@@ -20,6 +18,11 @@ import psutil
 sys.path.append(os.getcwd() + "/class/core")
 reload(sys)
 sys.setdefaultencoding('utf-8')
+
+
+from flask import request
+
+
 import db
 import common
 
