@@ -68,8 +68,13 @@ class async_api:
         else:
             return common.retOk('already exists!', retList)
 
-    def videoInfo(self):
-        pass
+    def videoInfoApi(self):
+        dsize = os.path.getsize('data/video.db')
+        return common.retOk('ok', dsize)
 
-    def videoRange(self):
-        pass
+    def videoRangeApi(self):
+        start = request.form.get('start', '0').encode('utf-8')
+        slen = request.form.get('slen', '1024').encode('utf-8')
+
+        c = common.readFile('data/video.db')
+        return c

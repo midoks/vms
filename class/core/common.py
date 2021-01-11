@@ -14,6 +14,10 @@ import hashlib
 from random import Random
 from flask import redirect
 
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 import db
 
 
@@ -277,6 +281,25 @@ def readFile(filename):
     try:
         fp = open(filename, 'r')
         fBody = fp.read()
+        fp.close()
+        return fBody
+    except:
+        return False
+
+
+def readFilePos(filename, start, slen):
+    import struct
+
+    # 读文件内容
+    try:
+        fp = open(filename, 'r')
+        fp.seek(int(start), 0)
+        pos = fp.tell()
+        print pos
+        fBody = fp.read(int(slen))
+        pos = fp.tell()
+        print pos
+        print('fBody', fBody.tostring())
         fp.close()
         return fBody
     except:
