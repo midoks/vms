@@ -194,7 +194,7 @@ def asyncNodeInfo():
 def asyncVideoData():
 
     while True:
-        print('asyncVideoData')
+        print('async VideoDB!!!')
         if isNeedAsync():
             _list = common.M('node').field('id,port,name,ip').where(
                 'ismaster=?', (1,)).select()
@@ -231,7 +231,7 @@ def asyncVideoData():
                 os.rename('data/tmp.db', 'data/video.db')
                 os.remove('data/tmp.db')
 
-            print('async ok!!!')
+            print('async VideoDB ok!!!')
 
         time.sleep(20)
 
