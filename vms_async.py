@@ -155,8 +155,8 @@ def printHL():
 
 def asyncNodeInfo():
     while True:
-        print("async node info !!!")
         if isNeedAsync():
+            print("async node info !!!")
             _list = common.M('node').field('id,port,name,ip').where(
                 'ismaster=?', (1,)).select()
             _url = "http://" + str(_list[0]['ip']) + \
@@ -194,8 +194,9 @@ def asyncNodeInfo():
 def asyncVideoDBData():
 
     while True:
-        print('async VideoDB!!!')
+
         if isNeedAsync():
+            print('async VideoDB!!!')
             _list = common.M('node').field('id,port,name,ip').where(
                 'ismaster=?', (1,)).select()
             _url = "http://" + str(_list[0]['ip']) + \
