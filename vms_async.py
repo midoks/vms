@@ -16,6 +16,7 @@ sys.path.append("/usr/local/lib/python2.7/site-packages")
 import psutil
 
 sys.path.append(os.getcwd() + "/class/core")
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -100,7 +101,7 @@ def execShell(cmdstring, cwd=None, timeout=None, shell=True):
 
 def download(url, file_path):
     # 第一次请求是为了得到文件总大小
-    r1 = requests.get(url, stream=True, verify=False)
+    r1 = request.get(url, stream=True, verify=False)
     total_size = int(r1.headers['Content-Length'])
 
     # 这重要了，先看看本地文件下载了多少
