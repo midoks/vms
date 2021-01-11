@@ -179,13 +179,13 @@ def asyncNodeInfo():
             if retDic['code'] == 0:
                 nodeM = common.M('node')
                 for i in retDic['data']:
-                    dataList = nodeM.field('name,ip,port,ismaster').where(
-                        'name=?', (i['name'],)).select()
+                    dataList = nodeM.field('id,name,ip,port,ismaster').where(
+                        'id=?', (i['id'],)).select()
                     # print dataList
                     # print i
                     if len(dataList) < 1:
-                        r = nodeM.add("name,ip,port,ismaster,uptime,addtime",
-                                      (i['name'], i['ip'], i['port'], i['ismaster'], common.getDate(), common.getDate()))
+                        r = nodeM.add("id,name,ip,port,ismaster,uptime,addtime",
+                                      (i['id'], i['name'], i['ip'], i['port'], i['ismaster'], common.getDate(), common.getDate()))
                         if r > 0:
                             print("node add ok")
         time.sleep(20)
