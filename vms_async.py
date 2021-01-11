@@ -10,6 +10,7 @@ import time
 import threading
 import subprocess
 import shutil
+import base64
 
 
 sys.path.append("/usr/local/lib/python2.7/site-packages")
@@ -191,6 +192,7 @@ def asyncNodeInfo():
 
 
 def asyncVideoData():
+
     while True:
         print('asyncVideoData')
         if isNeedAsync():
@@ -200,8 +202,34 @@ def asyncVideoData():
                 ":" + str(_list[0]['port'])
 
             api_url = _url + "/async_api/videoInfo"
-            ret = common.httpPost(api_url)
-            print ret
+            pageInfo = common.httpPost(api_url)
+            pageInfo = json.loads(pageInfo)
+
+            pageSize = 1024
+            pageNum = int(pageInfo['data']) / pageSize
+            # print(pageNum, pageInfo['data'])
+
+            api_range_url = _url + "/async_api/videoRange"
+
+            common.writeFileClear('data/tmp.db')
+            for x in xrange(0, pageNum):
+                start = x * pageSize
+
+                data = common.httpPost(api_range_url, {
+                    'start': start,
+                    'slen': pageSize,
+                })
+                data = json.loads(data)
+                fdata = base64.b64decode(data['data'])
+                common.writeFileAppend('data/tmp.db', fdata)
+
+            tmpMd5 = common.calMD5ForFile('data/tmp.db')
+            videoMd5 = common.calMD5ForFile('data/video.db')
+
+            if tmpMd5 != videoMd5:
+                os.remove('data/video.db')
+                os.rename('data/tmp.db', 'data/video.db')
+
         time.sleep(20)
 
 
