@@ -8,7 +8,7 @@ import re
 import json
 import pwd
 import hashlib
-from hashlib import md5
+
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

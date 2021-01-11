@@ -958,7 +958,8 @@ def getSSHStatus():
 
 
 def calMD5ForBigFile(file):
-    m = md5()
+    from hashlib import md5s
+    m = md5s()
     f = open(file, 'rb')
     buffer = 8192 * 2    # why is 8192 | 8192 is fast than 2048
 
@@ -973,13 +974,14 @@ def calMD5ForBigFile(file):
 
 
 def calMD5ForFile(file):
+    from hashlib import md5s
     statinfo = os.stat(file)
 
     if int(statinfo.st_size) / (1024 * 1024) >= 1000:
         print "File size > 1000, move to big file..."
         return calMD5ForBigFile(file)
 
-    m = md5()
+    m = md5s()
     f = open(file, 'rb')
     m.update(f.read())
     f.close()
