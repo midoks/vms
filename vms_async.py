@@ -229,7 +229,6 @@ def asyncVideoData():
             if tmpMd5 != videoMd5:
                 os.remove('data/video.db')
                 os.rename('data/tmp.db', 'data/video.db')
-                os.remove('data/tmp.db')
 
             print('async VideoDB ok!!!')
 
