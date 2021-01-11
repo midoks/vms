@@ -191,7 +191,7 @@ def asyncNodeInfo():
         time.sleep(20)
 
 
-def asyncVideoData():
+def asyncVideoDBData():
 
     while True:
         print('async VideoDB!!!')
@@ -252,7 +252,7 @@ if __name__ == "__main__":
     t.start()
 
     # 全量同步
-    t = threading.Thread(target=asyncVideoData)
+    t = threading.Thread(target=asyncVideoDBData)
     t.setDaemon(True)
     t.start()
 
