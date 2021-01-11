@@ -294,12 +294,7 @@ def readFilePos(filename, start, slen):
     try:
         fp = open(filename, 'r')
         fp.seek(int(start), 0)
-        pos = fp.tell()
-        print pos
         fBody = fp.read(int(slen))
-        pos = fp.tell()
-        print pos
-        print('fBody', fBody.tostring())
         fp.close()
         return fBody
     except:

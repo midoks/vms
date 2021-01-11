@@ -199,8 +199,9 @@ def asyncVideoData():
             _url = "http://" + str(_list[0]['ip']) + \
                 ":" + str(_list[0]['port'])
 
-            api_url = _url + "/async_api/videoRange"
-            download(api_url, 'data/test.db')
+            api_url = _url + "/async_api/videoInfo"
+            ret = common.httpPost(api_url)
+            print ret
         time.sleep(20)
 
 

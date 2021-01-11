@@ -22,6 +22,8 @@ from flask import send_from_directory
 sys.path.append(os.getcwd() + "/class/core")
 import common
 
+import base64
+
 
 from threading import Thread
 
@@ -73,8 +75,8 @@ class async_api:
         return common.retOk('ok', dsize)
 
     def videoRangeApi(self):
+
         start = request.form.get('start', '0').encode('utf-8')
         slen = request.form.get('slen', '1024').encode('utf-8')
-
-        c = common.readFile('data/video.db')
-        return c
+        c = common.readFilePos('data/video.db', start, slen)
+        return common.retOk('ok', base64.b64encode(c))
