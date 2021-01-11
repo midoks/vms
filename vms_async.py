@@ -133,17 +133,25 @@ def asyncNodeInfo():
             })
 
             retDic = json.loads(ret)
+
             if retDic['code'] == 0:
                 nodeM = common.M('node')
                 for i in retDic['data']:
                     dataList = nodeM.field('name,ip,port,ismaster').where(
                         'name=?', (i['name'],)).select()
+                    # print dataList
+                    # print i
                     if len(dataList) < 1:
                         r = nodeM.add("name,ip,port,ismaster,uptime,addtime",
                                       (i['name'], i['ip'], i['port'], i['ismaster'], common.getDate(), common.getDate()))
                         if r > 0:
-                            print("node add ok!")
+                            print("node add ok")
         time.sleep(20)
+
+
+def asyncVideoData():
+    while True:
+        print('asyncVideoData')
 
 
 def startTask():
@@ -157,7 +165,13 @@ def startTask():
 
 if __name__ == "__main__":
 
+    # 同步节点数据
     t = threading.Thread(target=asyncNodeInfo)
+    t.setDaemon(True)
+    t.start()
+
+    # 全量同步
+    t = threading.Thread(target=asyncVideoData)
     t.setDaemon(True)
     t.start()
 
