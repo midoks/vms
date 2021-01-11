@@ -339,6 +339,29 @@ def writeFile(filename, str):
         return False
 
 
+def writeFileClear(filename):
+    # 写文件内容
+    try:
+        fp = open(filename, 'a')
+        fp.seek(0)
+        fp.truncate()
+        fp.close()
+        return True
+    except:
+        return False
+
+
+def writeFileAppend(filename, scontent):
+    # 写文件内容
+    try:
+        fp = open(filename, 'a+')
+        fp.write(scontent)
+        fp.close()
+        return True
+    except:
+        return False
+
+
 def HttpGet(url, timeout=10):
     """
     发送GET请求
