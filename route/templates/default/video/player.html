@@ -66,6 +66,11 @@
                 ,'customDash': function (video, player) {
                     dashjs.MediaPlayer().create().initialize(video, video.src, false);
                 }
+                , shakaDash: function (video, player) {
+                    var src = video.src;
+                    var playerShaka = new shaka.Player(video); // 将会修改 video.src
+                    playerShaka.load(src);
+                },
             }
         }
     });
