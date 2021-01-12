@@ -14,30 +14,7 @@
 
 <body>
 
-<div class="weadmin-nav">
-  <span class="layui-breadcrumb">
-    <a href="javascript:;">首页</a> <a href="javascript:;">视频管理</a>
-    <a href="javascript:;"> <cite>列表</cite></a>
-  </span>
-  <a class="layui-btn layui-btn-sm" style="margin-top:3px;float:right"
-    href="javascript:location.replace(location.href);" title="刷新">
-    <i class="layui-icon layui-icon-refresh"></i>
-  </a>
-</div>
-
-<div class="weadmin-body">
-	<div class="layui-row">
-    <form class="layui-form layui-col-md12 we-search">
-      视频搜索:
-      <div class="layui-inline">
-        <input type="text" name="username" placeholder="请输入名称" autocomplete="off" class="layui-input" />
-      </div>
-      <button class="layui-btn" lay-submit="" lay-filter="sreach">
-        <i class="layui-icon layui-icon-search"></i>
-      </button>
-    </form>
-  </div>
-
+<div class="weadmin-body" style="padding: 10px;">
 	<table class="layui-hide" id="video" lay-filter="tableFilter"></table>
 </div>
 
@@ -46,6 +23,12 @@
 <script src="/static/lib/layui/layui.js?v={{data.version}}"></script>
 <script src="/static/js/eleDel.js" type="text/javascript"></script>
 <script type="text/javascript">
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+    if (r != null) return unescape(r[2]); return null; //返回参数值
+}
+pid=getUrlParam('id');
 layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element', 'slider'], function(){
 	var laydate = layui.laydate //日期
 	  ,laypage = layui.laypage //分页
@@ -59,22 +42,19 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   //执行一个 table 实例
   table.render({
     elem: '#video'
-    ,height: 420
-    ,url: '/video_api/index' //数据接口
+    ,height: 220
+    ,url: '/video_node_api/index?id='+pid //数据接口
     ,title: '列表'
-    ,page: true //开启分页
-    ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
-    ,totalRow: true //开启合计行
+    ,page: false //开启分页
+    ,toolbar: 'toolbarTpl' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+    ,totalRow: false //开启合计行
     ,cols: [[ //表头
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
-      ,{field: 'name', title: '名称', width:200}
-      ,{field: 'filename', title: 'md5', width:300}
-      ,{field: 'size', title: '文件大小', width: 120, sort: true, totalRow: true}
-      ,{field: 'node_num', title: '节点数', width: 100, sort: true, totalRow: true}
-      ,{field: 'uptime', title: '更新时间', width: 165, sort: true, totalRow: true}
-      ,{field: 'addtime', title: '添加时间', width: 165, sort: true, totalRow: true}
-      ,{fixed: 'right', width: 310, align:'center', toolbar: '#toolBar'}
+      ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+      ,{field: 'pid', title: 'PID', width:100}
+      ,{field: 'node_id', title: '节点', width: 300, sort: true}
+      ,{field: 'addtime', title: '添加时间', width: 165, sort: true}
+      ,{fixed: 'right', width: 240, align:'center', toolbar: '#toolBar'}
     ]]
   });
 
@@ -101,8 +81,6 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
         apiPlayerOpen(data);break;
       case 'addr':
         apiAddr(data);break;
-      case 'node_num':
-        apiNodeNum(data.id);break;
     }
   });
 
@@ -115,10 +93,6 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
             location.reload();
         },2000);
     });
-  }
-
-  function apiEdit(id){
-    WeAdminShow('编辑','/video/edit?id='+id ,500, 230);
   }
 
   function apiPlayer(data){
@@ -148,8 +122,6 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 
   function apiAddr(data){
     var url = location.protocol+"//"+location.host+'/m3u8/'+data.filename+'/index.m3u8';
-
-  
     layer.open({
         title: '播放地址'
         ,content: url
@@ -161,22 +133,19 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
     });
   }
 
-  function apiNodeNum(id){
-      WeAdminShow('节点','/video_node/index?id='+id ,800, 300);
-  }
-
 ///
 });
 
 </script>
 
 
+<script type="text/html" id="toolbarTpl">
+</script>
+
 <script type="text/html" id="toolBar">
-  <a class="layui-btn layui-btn-xs" lay-event="node_num">节点</a>
   <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
   <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail_open">打开</a>
   <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="addr">地址</a>
-  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 </body>

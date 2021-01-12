@@ -4,9 +4,15 @@ CREATE TABLE IF NOT EXISTS `video` (
   `filename` TEXT, 
   `size` INTEGER,
   `status` INTEGER,
+  `node_num` INTEGER,
   `uptime` TEXT,
   `addtime` TEXT
 );
 
-INSERT INTO `video` (`id`, `name`, `filename`, `size`, `status`, `addtime`) VALUES
-(1, '21232f297a57a5a743894a0e4a801fc3', '12', '12', 0, '2016-12-10 15:12:56','2016-12-10 15:12:56');
+CREATE TABLE IF NOT EXISTS `video_node` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `pid` INTEGER,
+  `node_id` TEXT,
+  `addtime` TEXT
+);
+

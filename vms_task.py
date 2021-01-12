@@ -205,7 +205,9 @@ def videoToM3u8():
 def videoToDB():
     while True:
         videoM = common.M('video_tmp')
+        run_mark = common.getSysKV('run_mark')
         viM = common.M('video', 'video')
+        vinodeM = common.M('video_node', 'video')
         data = videoM.field('id,md5,filename,size,filename').where(
             'status=?', (2,)).select()
         tmp_dir = os.getcwd() + "/tmp/"
@@ -221,8 +223,10 @@ def videoToDB():
                     "filename=?", (x["md5"],)).select()
 
                 if not data:
-                    viM.add("name,filename,size,status,uptime,addtime",
-                            (x['filename'], x['md5'], x['size'], 0, common.getDate(), common.getDate()))
+                    pid = viM.add("name,filename,size,status,node_num,uptime,addtime",
+                                  (x['filename'], x['md5'], x['size'], 0, 1, common.getDate(), common.getDate()))
+                    vinodeM.add("pid,node_id,addtime", (pid,
+                                                        run_mark, common.getDate()))
                     shutil.move(m3u8_dir, app_dir)
                     os.remove(source_file)
                     if os.path.exists(source_file_tmp):

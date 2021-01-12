@@ -134,7 +134,7 @@ class video_api:
         start = (int(p) - 1) * (int(limit))
 
         videoM = common.M('video', 'video')
-        _list = videoM.field('id,name,filename,size,status,uptime,addtime').limit(
+        _list = videoM.field('id,name,filename,size,status,node_num,uptime,addtime').limit(
             (str(start)) + ',' + limit).order('id desc').select()
 
         count = videoM.count()
