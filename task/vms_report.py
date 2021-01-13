@@ -29,6 +29,17 @@ def updateStatus(sid, status):
     common.M('video_tmp').where(
         "id=?", (sid,)).setField('status', status)
 
+
+def isNeedAsync():
+    _list = common.M('node').where(
+        'ismaster=?', (1,)).select()
+    run_model = common.M('kv').field('id,name,value').where(
+        'name=?', ('run_model',)).select()
+    # print(run_model[0]['value'], len(_list))
+    if run_model[0]['value'] == '2' and len(_list) >= 1:
+        return True
+    return False
+
 #------------Private Methods--------------
 
 
@@ -67,23 +78,28 @@ def reportData(data):
             "data": data,
             'name': _list[0]['name']
         })
-        print(ret)
+
+        rr = json.loads(ret)
+        return rr
 
 
 def serverReport():
     while True:
-        c = os.getloadavg()
-        data = {}
-        data['one'] = float(c[0])
-        data['five'] = float(c[1])
-        data['fifteen'] = float(c[2])
-        data['max'] = psutil.cpu_count() * 2
-        data['limit'] = data['max']
-        data['safe'] = data['max'] * 0.75
-        data['report_time'] = common.getDate()
+        if isNeedAsync():
+            c = os.getloadavg()
+            data = {}
+            data['one'] = float(c[0])
+            data['five'] = float(c[1])
+            data['fifteen'] = float(c[2])
+            data['max'] = psutil.cpu_count() * 2
+            data['limit'] = data['max']
+            data['safe'] = data['max'] * 0.75
+            data['report_time'] = common.getDate()
 
-        print(data)
-        reportData(data)
+            r = reportData(data)
+            if r['code'] != 0:
+                print('同步失败![%s]', common.getDate())
+
         time.sleep(3)
 
 
