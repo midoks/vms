@@ -63,10 +63,8 @@ def reportData(data):
 
         api_url = _url + "/async_api/reportData"
         ret = common.httpPost(api_url, {
-            'source': {
-                "name": common.getSysKV('run_mark'),
-                "data": data
-            },
+            "mark": common.getSysKV('run_mark'),
+            "data": data,
             'name': _list[0]['name']
         })
         print(ret)

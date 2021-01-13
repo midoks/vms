@@ -40,11 +40,14 @@ class async_api:
             return common.retFail('name is error!')
         return ''
 
+    def pingApi(self):
+        return common.retOk('ok')
+
     def nodeApi(self):
-    '''
-    由从服务器发送请求,同步节点信息
-    '''
-        import json
+        '''
+        由从服务器发送请求,同步节点信息
+        '''
+
         r = self.isNameRight()
         if r != '':
             return r
@@ -74,23 +77,31 @@ class async_api:
             return common.retOk('already exists!', retList)
 
     def videoInfoApi(self):
-    '''
-    由从服务器发送请求,同步video db 数据
-    '''
+        '''
+        由从服务器发送请求,同步video db 数据
+        '''
         dsize = os.path.getsize('data/video.db')
         return common.retOk('ok', dsize)
 
     def videoRangeApi(self):
-    '''
-    由从服务器发送请求,同步video db 数据
-    '''
+        '''
+        由从服务器发送请求,同步video db 数据
+        '''
         start = request.form.get('start', '0').encode('utf-8')
         slen = request.form.get('slen', '1024').encode('utf-8')
         c = common.readFilePos('data/video.db', start, slen)
         return common.retOk('ok', base64.b64encode(c))
 
     def reportDataApi(self):
-    '''
-    由从服务器发送请求,同步服务器负载信息
-    '''
-        print request.form
+        '''
+        由从服务器发送请求,同步服务器负载信息
+        '''
+
+        r = self.isNameRight()
+        if r != '':
+            return r
+
+        data = request.form.get('data', '').encode('utf-8')
+        mark = request.form.get('mark', '').encode('utf-8')
+        print data
+        return common.retOk('ok')
