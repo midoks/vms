@@ -125,10 +125,6 @@ def execShell(cmdstring, cwd=None, timeout=None, shell=True):
     return sub.communicate()
 
 
-def printHL():
-    print('hello world,vms-task!!!')
-
-
 def videoToMp4():
     while True:
         videoM = common.M('video_tmp')
@@ -276,10 +272,6 @@ def startTask():
     startTask()
 
 if __name__ == "__main__":
-
-    # t = threading.Thread(target=printHL)
-    # t.setDaemon(True)
-    # t.start()
 
     t = threading.Thread(target=videoToMp4)
     t.setDaemon(True)
