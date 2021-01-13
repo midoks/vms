@@ -15,7 +15,9 @@ import shutil
 sys.path.append("/usr/local/lib/python2.7/site-packages")
 import psutil
 
-sys.path.append(os.getcwd() + "/class/core")
+root_dir = os.getcwd()
+sys.path.append(root_dir + "/class/core")
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 import db
@@ -135,7 +137,7 @@ def videoToMp4():
         if not isDEmpty(data):
             print('videoToMp4-----@@@start@@@-----')
         for x in data:
-            pathfile = os.getcwd() + "/tmp/" + str(x['filename'])
+            pathfile = root_dir + "/tmp/" + str(x['filename'])
             mp4_file = pathfile + ".mp4"
             # print(pathfile)
             if is_mp4(pathfile):
@@ -161,8 +163,8 @@ def videoToM3u8():
         videoM = common.M('video_tmp')
         data = videoM.field('id,md5,filename').where('status=?', (1,)).select()
 
-        tmp_dir = os.getcwd() + '/tmp/'
-        app_dir = os.getcwd() + '/app/'
+        tmp_dir = root_dir + '/tmp/'
+        app_dir = root_dir + '/app/'
 
         if not isDEmpty(data):
             print('videoToM3u8-----@@@start@@@-----')
@@ -210,8 +212,8 @@ def videoToDB():
         vinodeM = common.M('video_node', 'video')
         data = videoM.field('id,md5,filename,size,filename').where(
             'status=?', (2,)).select()
-        tmp_dir = os.getcwd() + "/tmp/"
-        app_dir = os.getcwd() + "/app/"
+        tmp_dir = root_dir + "/tmp/"
+        app_dir = root_dir + "/app/"
         if not isDEmpty(data):
             print('videoToDB-----@@@start@@@-----')
         for x in data:
@@ -247,8 +249,8 @@ def videoToDel():
 
         if not isDEmpty(data):
             print('videoToDel-----@@@start@@@-----')
-        tmp_dir = os.getcwd() + "/tmp/"
-        app_dir = os.getcwd() + "/app/"
+        tmp_dir = root_dir + "/tmp/"
+        app_dir = root_dir + "/app/"
         for x in data:
             m3u8_dir = tmp_dir + str(x["md5"])
             source_file = tmp_dir + str(x['filename'])

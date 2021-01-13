@@ -16,7 +16,63 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 app_path={$SERVER_PATH}
 
-mw_start(){
+
+vms_task_start(){
+    NAME="$1"
+    FILE_NAME="$1.py"
+    isStart=$(ps aux |grep "${FILE_NAME}" |grep -v grep|awk '{print $2}')
+    if [ "$isStart" == '' ];then
+            echo -e "Starting ${NAME}... \c"
+            echo "" > $app_path/logs/${NAME}.log
+            cd $app_path
+            nohup python -u task/${NAME}.py >> $app_path/logs/${NAME}.log 2>&1 & 
+            sleep 0.1
+            isStart=$(ps aux |grep "${FILE_NAME}"|grep -v grep|awk '{print $2}')
+            if [ "$isStart" == '' ];then
+                    echo -e "\033[31mfailed\033[0m"
+                    echo '------------------------------------------------------'
+                    tail -n 20 $app_path/logs/${NAME}.log
+                    echo '------------------------------------------------------'
+                    echo -e "\033[31mError: ${NAME} service startup failed.\033[0m"
+                    return;
+            fi
+            echo -e "\033[32mdone\033[0m"
+    else
+            echo "Starting ${NAME}... ${NAME} (pid $isStart) already running"
+    fi
+}
+
+
+vms_task_stop()
+{
+    NAME="$1"
+    FILE_NAME="$1.py"
+
+    echo -e "Stopping ${NAME}... \c";
+    arr=$(ps aux | grep "${NAME}" |grep -v grep|awk '{print $2}')
+    for p in ${arr[@]}
+    do
+        kill -9 $p &>/dev/null
+    done
+
+    echo -e "\033[32mdone\033[0m"
+}
+
+vms_task_status()
+{
+    NAME="$1"
+    FILE_NAME="$1.py"
+
+    isStart=$(ps aux |grep "${FILE_NAME}" |grep -v grep|awk '{print $2}')
+    if [ "$isStart" != '' ];then
+            echo "\033[32m${NAME}(pid $isStart) already running\033[0m"
+    else
+            echo "\033[31m${NAME} not running\033[0m"
+    fi
+}
+
+
+vms_start(){
 	isStart=`ps -ef|grep 'vms:app' |grep -v grep|awk '{print $2}'`
     echo "" > $app_path/logs/error.log
 	if [ "$isStart" == '' ];then
@@ -48,75 +104,15 @@ mw_start(){
     fi
 
 
-    isStart=$(ps aux |grep 'vms_task.py'|grep -v grep|awk '{print $2}')
-    if [ "$isStart" == '' ];then
-            echo -e "Starting vms-tasks... \c"
-            echo "" > $app_path/logs/vms_task.log
-            cd $app_path && nohup python -u vms_task.py >> $app_path/logs/vms_task.log &
-            #echo "cd $app_path && nohup python vms_task.py >> $app_path/logs/vms_task.log 2>&1 1>&1 &"
-            sleep 0.1
-            isStart=$(ps aux |grep 'vms_task.py'|grep -v grep|awk '{print $2}')
-            if [ "$isStart" == '' ];then
-                    echo -e "\033[31mfailed\033[0m"
-                    echo '------------------------------------------------------'
-                    tail -n 20 $app_path/logs/vms_task.log
-                    echo '------------------------------------------------------'
-                    echo -e "\033[31mError: vms-tasks service startup failed.\033[0m"
-                    return;
-            fi
-            echo -e "\033[32mdone\033[0m"
-    else
-            echo "Starting vms-tasks... vms-tasks (pid $isStart) already running"
-    fi
-
-
-    isStart=$(ps aux |grep 'vms_async.py'|grep -v grep|awk '{print $2}')
-    if [ "$isStart" == '' ];then
-            echo -e "Starting vms-async... \c"
-            echo "" > $app_path/logs/vms_async.log
-            cd $app_path && nohup python -u vms_async.py >> $app_path/logs/vms_async.log &
-            # echo "cd $app_path && nohup python -u vms_async.py >> $app_path/logs/vms_async.log 2>&1 1>&1 &"
-            sleep 0.1
-            isStart=$(ps aux |grep 'vms_async.py'|grep -v grep|awk '{print $2}')
-            if [ "$isStart" == '' ];then
-                    echo -e "\033[31mfailed\033[0m"
-                    echo '------------------------------------------------------'
-                    tail -n 20 $app_path/logs/vms_async.log
-                    echo '------------------------------------------------------'
-                    echo -e "\033[31mError: vms-async service startup failed.\033[0m"
-                    return;
-            fi
-            echo -e "\033[32mdone\033[0m"
-    else
-            echo "Starting vms-async... vms-async (pid $isStart) already running"
-    fi
+    vms_task_start vms_task
+    vms_task_start vms_async
 }
 
 
-mw_stop()
+vms_stop()
 {
-    echo -e "Stopping vms-async... \c";
-    arr=$(ps aux | grep 'vms_async'|grep -v grep|awk '{print $2}')
-    echo -e "${arr} \c"
-    for p in ${arr[@]}
-    do
-        kill -9 $p &>/dev/null
-    done
-    
-    if [ -f $pidfile ];then
-        rm -f $pidfile
-    fi
-    echo -e "\033[32mdone\033[0m"
-
-
-	echo -e "Stopping vms-tasks... \c";
-    arr=$(ps aux | grep 'vms_task'|grep -v grep|awk '{print $2}')
-    echo -e "${arr} \c"
-    for p in ${arr[@]}
-    do
-        kill -9 $p &>/dev/null
-    done
-    echo -e "\033[32mdone\033[0m"
+    vms_task_stop vms_task
+    vms_task_stop vms_async
 
     echo -e "Stopping vms... \c";
     arr=`ps aux|grep 'vms:app'|grep -v grep|awk '{print $2}'`
@@ -129,28 +125,23 @@ mw_stop()
     	rm -f $pidfile
     fi
     echo -e "\033[32mdone\033[0m"
-
 }
 
-mw_status()
+vms_status()
 {
-        isStart=$(ps aux|grep 'gunicorn -c setting.py app:app'|grep -v grep|awk '{print $2}')
+        isStart=$(ps aux|grep 'gunicorn -c setting.py vms:app'|grep -v grep|awk '{print $2}')
         if [ "$isStart" != '' ];then
                 echo -e "\033[32mvms (pid $(echo $isStart)) already running\033[0m"
         else
                 echo -e "\033[31mvms not running\033[0m"
         fi
         
-        isStart=$(ps aux |grep 'task.py'|grep -v grep|awk '{print $2}')
-        if [ "$isStart" != '' ];then
-                echo -e "\033[32mvms-task (pid $isStart) already running\033[0m"
-        else
-                echo -e "\033[31mvms-task not running\033[0m"
-        fi
+        vms_task_status vms_task
+        vms_task_status vms_async
 }
 
 
-mw_reload()
+vms_reload()
 {
 	isStart=$(ps aux|grep 'vms:app'|grep -v grep|awk '{print $2}')
     
@@ -185,14 +176,14 @@ error_logs()
 }
 
 case "$1" in
-    'start') mw_start;;
-    'stop') mw_stop;;
-    'reload') mw_reload;;
+    'start') vms_start;;
+    'stop') vms_stop;;
+    'reload') vms_reload;;
     'restart') 
-        mw_stop
+        vms_stop
         sleep 2
-        mw_start;;
-    'status') mw_status;;
+        vms_start;;
+    'status') vms_status;;
     'logs') error_logs;;
     'default')
         cd $app_path
