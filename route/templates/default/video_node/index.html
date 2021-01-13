@@ -75,8 +75,6 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
         apiDel(data.id);break;
       case 'edit':
         apiEdit(data.id);break;
-      case 'detail':
-        apiPlayer(data);break;
       case 'detail_open':
         apiPlayerOpen(data);break;
       case 'addr':
@@ -93,12 +91,6 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
             location.reload();
         },2000);
     });
-  }
-
-  function apiPlayer(data){
-    var url = '/m3u8/'+data.filename+'/index.m3u8'; 
-    // console.log(url);
-    WeAdminShow('查看['+url+']','/video/player?url='+url ,500, 400);
   }
 
   function apiPlayerOpen(data){
@@ -122,15 +114,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 
   function apiAddr(data){
     var url = location.protocol+"//"+location.host+'/m3u8/'+data.filename+'/index.m3u8';
-    layer.open({
-        title: '播放地址'
-        ,content: url
-        ,id:'addr_cp_id'
-        ,btn:['OK','复制']
-        ,btn2:function(index,layero){
-          copyText(url);
-        }
-    });
+    copyText(url);
   }
 
 ///
@@ -143,9 +127,8 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 </script>
 
 <script type="text/html" id="toolBar">
-  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
   <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail_open">打开</a>
-  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="addr">地址</a>
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="addr">地址复制</a>
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 </body>
