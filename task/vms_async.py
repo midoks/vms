@@ -144,6 +144,14 @@ def isNeedAsync():
     if run_model[0]['value'] == '2' and len(_list) >= 1:
         return True
     return False
+
+
+def getMasterNodeURL():
+    _list = common.M('node').field('id,port,name,ip').where(
+        'ismaster=?', (1,)).select()
+    _url = "http://" + str(_list[0]['ip']) + \
+        ":" + str(_list[0]['port'])
+    return _url
 #------------Public Methods--------------
 
 
@@ -192,9 +200,7 @@ def asyncNodeInfo():
 
 
 def asyncVideoDBData():
-
     while True:
-
         if isNeedAsync():
             print('async VideoDB!!!')
             _list = common.M('node').field('id,port,name,ip').where(
@@ -236,6 +242,16 @@ def asyncVideoDBData():
         time.sleep(20)
 
 
+def asyncVideoFile():
+    while True:
+        if isNeedAsync():
+            url = getMasterNodeURL()
+            print('asyncVideoFile')
+            print(url)
+
+        time.sleep(3)
+
+
 def startTask():
     import time
     try:
@@ -254,6 +270,11 @@ if __name__ == "__main__":
 
     # 全量同步
     t = threading.Thread(target=asyncVideoDBData)
+    t.setDaemon(True)
+    t.start()
+
+    # 同步文件
+    t = threading.Thread(target=asyncVideoFile)
     t.setDaemon(True)
     t.start()
 
