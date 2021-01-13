@@ -106,6 +106,7 @@ class async_api:
         mark = request.form.get('mark', '').encode('utf-8')
         up1 = common.M('node').where(
             'name=?', (mark,)).setField('info', data)
+
         if not up1:
             return common.retFail()
         return common.retOk()
