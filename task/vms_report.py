@@ -80,6 +80,7 @@ def serverReport():
         data['max'] = psutil.cpu_count() * 2
         data['limit'] = data['max']
         data['safe'] = data['max'] * 0.75
+        data['report_time'] = common.getDate()
 
         print(data)
         reportData(data)

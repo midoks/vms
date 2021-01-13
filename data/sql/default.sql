@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `node` (
   `ip` TEXT,
   `port` TEXT,
   `ismaster` INTEGER,
+  `info` TEXT,
   `uptime` TEXT,
   `addtime` TEXT
 );
