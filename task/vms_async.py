@@ -208,7 +208,7 @@ def asyncNodeInfo():
                         if r > 0:
                             print("node add ok")
                     else:
-                        r = nodeM.where('id=?', (i['id'],)).save('name,ip,port,info,ismaster,uptime', (i['id'], i[
+                        r = nodeM.where('id=?', (i['id'],)).save('name,ip,port,info,ismaster,uptime', (i[
                             'name'], i['ip'], i['port'], i['info'], i['ismaster'], common.getDate()))
                         if r > 0:
                             print("node update ok")
@@ -283,14 +283,14 @@ if __name__ == "__main__":
     t.setDaemon(True)
     t.start()
 
-    # 全量同步
-    t = threading.Thread(target=asyncVideoDBData)
-    t.setDaemon(True)
-    t.start()
+    # # 全量同步
+    # t = threading.Thread(target=asyncVideoDBData)
+    # t.setDaemon(True)
+    # t.start()
 
-    # 同步文件
-    t = threading.Thread(target=asyncVideoFile)
-    t.setDaemon(True)
-    t.start()
+    # # 同步文件
+    # t = threading.Thread(target=asyncVideoFile)
+    # t.setDaemon(True)
+    # t.start()
 
     startTask()
