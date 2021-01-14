@@ -283,14 +283,14 @@ if __name__ == "__main__":
     t.setDaemon(True)
     t.start()
 
-    # # 全量同步
-    # t = threading.Thread(target=asyncVideoDBData)
-    # t.setDaemon(True)
-    # t.start()
+    # 全量同步
+    t = threading.Thread(target=asyncVideoDBData)
+    t.setDaemon(True)
+    t.start()
 
-    # # 同步文件
-    # t = threading.Thread(target=asyncVideoFile)
-    # t.setDaemon(True)
-    # t.start()
+    # 同步文件
+    t = threading.Thread(target=asyncVideoFile)
+    t.setDaemon(True)
+    t.start()
 
     startTask()
