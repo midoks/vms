@@ -146,9 +146,14 @@ def isNeedAsync():
     return False
 
 
+def getNodeList(ismaster=1):
+    _list = common.M('node').field('id,info,port,name,ip').where(
+        'ismaster=?', (ismaster,)).select()
+    return _list
+
+
 def getMasterNodeURL():
-    _list = common.M('node').field('id,port,name,ip').where(
-        'ismaster=?', (1,)).select()
+    _list = getNodeList()
     _url = "http://" + str(_list[0]['ip']) + \
         ":" + str(_list[0]['port'])
     return _url
@@ -244,10 +249,9 @@ def asyncVideoDBData():
 
 def asyncVideoFile():
     while True:
-        if isNeedAsync():
-            url = getMasterNodeURL()
-            print('asyncVideoFile')
-            print(url)
+        node_list = getNodeList(0)
+        print('asyncVideoFile')
+        print(node_list)
 
         time.sleep(3)
 
