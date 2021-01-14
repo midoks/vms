@@ -58,12 +58,12 @@ class async_api:
         rr = json.loads(source)
         nodeM = common.M('node')
 
-        retList = nodeM.field('id,name,ip,port,ismaster').where(
+        retList = nodeM.field('id,name,ip,port,info,ismaster').where(
             'name<>?', (rr['name'],)).select()
         if len(retList) > 100:
             return common.retFail('too many nodes!')
 
-        dataList = nodeM.field('id,name,ip,port,ismaster').where(
+        dataList = nodeM.field('id,name,ip,port,info,ismaster').where(
             'name=?', (rr['name'],)).select()
         if len(dataList) < 1:
 

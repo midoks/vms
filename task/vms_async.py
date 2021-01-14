@@ -146,6 +146,14 @@ def isNeedAsync():
     return False
 
 
+def isMasterNode():
+    run_model = common.getSysKV('run_model')
+    run_is_master = common.getSysKV('run_is_master')
+    if run_model == '2' and run_is_master == '1':
+        return True
+    return False
+
+
 def getNodeList(ismaster=1):
     _list = common.M('node').field('id,info,port,name,ip').where(
         'ismaster=?', (ismaster,)).select()
@@ -194,13 +202,16 @@ def asyncNodeInfo():
                 for i in retDic['data']:
                     dataList = nodeM.field('id,name,ip,port,ismaster').where(
                         'id=?', (i['id'],)).select()
-                    # print dataList
-                    # print i
                     if len(dataList) < 1:
-                        r = nodeM.add("id,name,ip,port,ismaster,uptime,addtime",
-                                      (i['id'], i['name'], i['ip'], i['port'], i['ismaster'], common.getDate(), common.getDate()))
+                        r = nodeM.add("id,name,ip,port,info,ismaster,uptime,addtime",
+                                      (i['id'], i['name'], i['ip'], i['port'], i['info'], i['ismaster'], common.getDate(), common.getDate()))
                         if r > 0:
                             print("node add ok")
+                    else:
+                        r = nodeM.where('id=?', (i['id'],)).save('name,ip,port,info,ismaster,uptime', (i['id'], i[
+                            'name'], i['ip'], i['port'], i['info'], i['ismaster'], common.getDate()))
+                        if r > 0:
+                            print("node update ok")
         time.sleep(20)
 
 
