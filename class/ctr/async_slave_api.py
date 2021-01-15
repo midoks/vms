@@ -119,17 +119,26 @@ class async_slave_api:
         if r != '':
             return r
 
-        data = request.form.get('data', '').encode('utf-8')
-        data = data.replace("'", '"').replace("u", '')
         mark = request.form.get('mark', '').encode('utf-8')
-        up1 = common.M('node').where(
-            'name=?', (mark,)).setField('info', data)
+        vid = request.form.get('vid', '').encode('utf-8')
 
-        r = common.M('task').where(
-            'vid=?', (vid,)).limit('1').select()
+        vlist = common.M('video', 'video').where('id=?', vid).select()
+        if len(vlist) < 1:
+            return common.retFail('video doesn\'t exist, maybe syncing data...!!!')
 
-        common.M('task').add("ismaster,sign,vid,mark,status,uptime,addtime",
-                             (1, 'sign', vid, mark, 0, common.getDate(), common.getDate()))
-        if not up1:
-            return common.retFail()
+        nlist = common.M('node').field(
+            'id,info,port,name,ip').where('name=?', (mark,)).select()
+        if len(nlist) < 1:
+            return common.retFail('node info doesn\'t exist, maybe syncing data...!!!')
+
+        rlist = common.M('task').where('vid=?', (vid,)).limit('1').select()
+        if len(mlist) > 0:
+            return common.retFail('the task already exists...!!!')
+
+        url = nlist['ip'] + ':' + nlist['port']
+        sign = 'from:' + url
+        r = common.M('task').add("ismaster,sign,vid,mark,status,uptime,addtime",
+                                 (0, sign, vid, mark, 0, common.getDate(), common.getDate()))
+        if not r:
+            return common.retFail('the task add fail...!!!')
         return common.retOk()
