@@ -28,7 +28,7 @@ import base64
 from threading import Thread
 
 
-class async_api:
+class async_master_api:
 
     def __init__(self):
         pass
