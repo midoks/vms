@@ -47,9 +47,20 @@ CREATE TABLE IF NOT EXISTS `logs` (
   `addtime` TEXT
 );
 
-
 INSERT INTO `logs` (`id`, `type`, `log`, `addtime`) VALUES
 (1, '1', '测试','2016-12-10 15:12:56');
+
+
+CREATE TABLE IF NOT EXISTS `task` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `ismaster` INTEGER,
+  `mark` TEXT,
+  `sign` TEXT,
+  `vid` INTEGER,
+  `status` INTEGER,
+  `uptime` TEXT,
+  `addtime` TEXT
+);
 
 
 CREATE TABLE IF NOT EXISTS `api` (
