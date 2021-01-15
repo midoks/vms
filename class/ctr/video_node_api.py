@@ -47,9 +47,9 @@ class video_node_api:
 
         for x in xrange(0, len(_list)):
             if _list[x]['node_id'] == common.getSysKV('run_mark'):
-                _list[x]['node_id'] = _list[x]['node_id'] + '[本地]'
+                _list[x]['node_id'] = _list[x]['node_id'] + '[在本地]'
             else:
-                _list[x]['node_id'] = _list[x]['node_id'] + '[从服务器]'
+                _list[x]['node_id'] = _list[x]['node_id'] + '[不在本地]'
 
         count = videoM.count()
 
