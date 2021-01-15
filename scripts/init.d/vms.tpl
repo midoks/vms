@@ -43,6 +43,28 @@ vms_task_start(){
 }
 
 
+vms_task_f_start(){
+    NAME="$1"
+    FILE_NAME="$1.py"
+
+    echo -e "Starting ${NAME}... \c"
+    echo "" > $app_path/logs/${NAME}.log
+    cd $app_path
+    nohup python -u task/${NAME}.py >> $app_path/logs/${NAME}.log 2>&1 & 
+    sleep 0.1
+    isStart=$(ps aux |grep "${FILE_NAME}"|grep -v grep|awk '{print $2}')
+    if [ "$isStart" == '' ];then
+            echo -e "\033[31mfailed\033[0m"
+            echo '------------------------------------------------------'
+            tail -n 20 $app_path/logs/${NAME}.log
+            echo '------------------------------------------------------'
+            echo -e "\033[31mError: ${NAME} service startup failed.\033[0m"
+            return;
+    fi
+    echo -e "\033[32mdone\033[0m"
+ 
+}
+
 vms_task_stop()
 {
     NAME="$1"
@@ -186,6 +208,11 @@ case "$1" in
         vms_stop
         sleep 2
         vms_start;;
+    'fstart')
+        vms_task_f_start vms_task
+        vms_task_f_start vms_report
+        vms_task_f_start vms_async_master
+        ;;
     'status') vms_status;;
     'logs') error_logs;;
     'default')
