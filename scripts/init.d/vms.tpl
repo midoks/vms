@@ -132,6 +132,39 @@ vms_start(){
 }
 
 
+vms_f_start(){
+
+    echo -e "Starting vms... \c"
+    cd $app_path && gunicorn -c setting.py vms:app
+    port=$(cat ${app_path}/data/port.pl)
+    isStart=""
+    while [[ "$isStart" == "" ]];
+    do
+        echo -e ".\c"
+        sleep 0.2
+        isStart=$(lsof -n -P -i:$port|grep LISTEN|grep -v grep|awk '{print $2}'|xargs)
+        let n+=1
+        if [ $n -gt 15 ];then
+            break;
+        fi
+    done
+    if [ "$isStart" == '' ];then
+            echo -e "\033[31mfailed\033[0m"
+            echo '------------------------------------------------------'
+            tail -n 20 ${app_path}/logs/error.log
+            echo '------------------------------------------------------'
+            echo -e "\033[31mError: vms service startup failed.\033[0m"
+            return;
+    fi
+    echo -e "\033[32mdone\033[0m"
+   
+
+
+    vms_task_f_start vms_task
+    vms_task_f_start vms_report
+    vms_task_f_start vms_async_master
+}
+
 vms_stop()
 {
     vms_task_stop vms_task
@@ -209,9 +242,7 @@ case "$1" in
         sleep 2
         vms_start;;
     'fstart')
-        vms_task_f_start vms_task
-        vms_task_f_start vms_report
-        vms_task_f_start vms_async_master
+        vms_f_start
         ;;
     'status') vms_status;;
     'logs') error_logs;;
