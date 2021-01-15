@@ -181,7 +181,7 @@ def postFileStart(url, vid, name):
         'mark': common.getSysKV('run_mark'),
         'name': name
     })
-    return ret
+    return json.loads(ret)
 
 #------------Public Methods--------------
 
@@ -204,18 +204,16 @@ def asyncVideoFile():
 
                 url = getNodeURL(pos)
                 apiURL = url + '/async_slave_api/fileStart'
-                r = postFileStart(apiURL, vid, data['name'])
-                print(r)
                 if len(taskData) == 0:
-
-                    print(apiURL, data)
                     r = postFileStart(apiURL, vid, data['name'])
-                    print(r)
-                    if data:
-                        sign = 'to:' + url
-                        r = addTask(vid, sign, data['name'])
-                        if r:
-                            print(apiURL + ':' + name + '发送成功...')
+                    if r['code'] == '0':
+                        if data:
+                            sign = 'to:' + url
+                            r = addTask(vid, sign, data['name'])
+                            if r:
+                                print(apiURL + ':' + name + '发送成功...')
+                    else:
+                        print(r['msg'])
                 else:
                     print(apiURL + ':' + name + ' 同步中...')
         time.sleep(3)
