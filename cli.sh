@@ -49,7 +49,6 @@ case "$1" in
 		mvg_start
 		;;
 	'debug') 
-		mvg_stop 
 		mvg_start_debug
 		;;
 esac
