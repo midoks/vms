@@ -213,7 +213,7 @@ def asyncVideoFile():
                             if r:
                                 print(apiURL + ':' + name + '发送成功...')
                     else:
-                        print(r['msg'])
+                        print(common.getSysKV('run_mark') + ':' + r['msg'])
                 else:
                     print(apiURL + ':' + name + ' 同步中...')
         time.sleep(3)
