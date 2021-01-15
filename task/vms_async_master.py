@@ -139,16 +139,19 @@ def getMostIdleServer():
     node_list = getNodeList(0)
     mi = 1000000
     pos = 0
-    for i in range(0, len(node_list)):
-        info = json.loads(node_list[i]['info'])
 
-        runLoad = info['one'] / info['max'] * 100
-        if runLoad < mi:
-            mi = runLoad
-            pos = i
+    if len(node_list) > 0:
+        for i in range(0, len(node_list)):
+            info = json.loads(node_list[i]['info'])
 
-    ii = node_list[pos]
-    return ii['id'], ii
+            runLoad = info['one'] / info['max'] * 100
+            if runLoad < mi:
+                mi = runLoad
+                pos = i
+
+        ii = node_list[pos]
+        return ii['id'], ii
+    return '', False
 
 
 def getTask(vid):
@@ -157,34 +160,33 @@ def getTask(vid):
     return r
 
 
-def addTask(vid):
-    return common.M('task').add("ismaster,sign,vid,status,uptime,addtime",
-                                (1, 'sign', vid, 0, common.getDate(), common.getDate()))
+def addTask(vid, mark):
+    return common.M('task').add("ismaster,sign,mark,vid,status,uptime,addtime",
+                                (1, 'sign', vid, mark, 0, common.getDate(), common.getDate()))
 
 #------------Public Methods--------------
 
-##
-# 由主服务器选择文件同步到那从服务器上
-##
-
 
 def asyncVideoFile():
+    '''
+    # 由主服务器选择文件同步到那从服务器上
+    '''
     while True:
-
         if isMasterNode():
             vlist = common.M('video', 'video').field('id,name').where(
                 'node_num=?', (1,)).limit('1').select()
 
             if len(vlist) > 0:
                 vid = vlist[0]['id']
-
+                name = vlist[0]['name']
                 taskData = getTask(vid)
-                print(taskData)
                 if len(taskData) == 0:
-                    addTask(vid)
-
-                    #pos, data = getMostIdleServer()
-                    # print(pos, data)
+                    pos, data = getMostIdleServer()
+                    if data:
+                        print(data)
+                        addTask(vid, data['name'])
+                else:
+                    print(name + ' 同步中...')
         time.sleep(3)
 
 

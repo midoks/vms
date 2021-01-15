@@ -6,7 +6,8 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin:/usr/loc
 mvg_start(){
 	gunicorn -c setting.py vms:app
 	python task/vms_task.py &
-	python task/vms_async.py &
+	python task/vms_async_master.py &
+	python task/vms_async_slave.py &
 	python task/vms_report.py &
 }
 
@@ -35,7 +36,8 @@ mvg_stop()
 	done
 
 	mvg_task_stop vms_task
-	mvg_task_stop vms_async
+	mvg_task_stop vms_async_master
+	mvg_task_stop vms_async_slave
 	mvg_task_stop vms_report
 }
 

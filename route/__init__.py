@@ -166,7 +166,7 @@ def index(reqClass=None, reqAction=None, reqData=None):
         reqClass = 'index'
     classFile = ('config', 'index', 'user', 'system',
                  'node', 'video', 'video_node',
-                 'api', 'logs', 'login', 'async', 'admin')
+                 'api', 'logs', 'task', 'login', 'async', 'admin')
 
     if reqClass in classFile:
         import config_api

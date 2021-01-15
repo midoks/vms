@@ -3,65 +3,77 @@
 	"msg": "ok",
 	"data": [
 		{
-			"id": 4,
+			"id": 1,
 			"name": "系统管理",
 			"icon": "&#xe6b8;",
 			"url": "",
 			"children": [{
-				"id": 41,
+				"id": 11,
 				"name": "基本",
 				"icon": "",
 				"url": "/system/index"
 			},{
-				"id": 42,
+				"id": 12,
 				"name": "节点管理",
 				"icon": "",
 				"url": "/node/index"
 			}]
 		},
 		{
-			"id": 1,
+			"id": 2,
 			"name": "视频管理",
 			"icon": "&#xe6b8;",
 			"url": "",
 			"children": [{
-				"id": 11,
+				"id": 21,
 				"name": "列表",
 				"icon": "",
 				"url": "/video/index"
 			},
 			{
-				"id": 12,
+				"id": 22,
 				"name": "临时",
 				"icon": "",
 				"url": "/video/tmp"
 			},
 			{
-				"id": 13,
+				"id": 23,
 				"name": "视频上传",
 				"icon": "",
 				"url": "/video/upload"
 			}]
 		},
 		{
-			"id": 2,
+			"id": 3,
 			"name": "API管理",
 			"icon": "&#xe714;",
 			"url": "",
 			"children": [{
-				"id": 21,
+				"id": 31,
 				"name": "列表",
 				"icon": "",
 				"url": "/api/index"
 			}]
 		},
 		{
-			"id": 3,
+			"id": 4,
+			"name": "任务管理",
+			"icon": "&#xe714;",
+			"url": "",
+			"children": [{
+				"id": 41,
+				"name": "列表",
+				"icon": "",
+				"url": "/task/index"
+			}]
+		},
+		{
+			"id": 5,
 			"name": "日志管理",
 			"icon": "&#xe6ce;",
 			"url": "",
 			"children": [{
-				"id": 31,
+				"id": 51,
 				"name": "列表",
 				"icon": "",
 				"url": "/logs/index"
