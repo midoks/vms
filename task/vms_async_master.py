@@ -170,19 +170,16 @@ def getTask(vid):
     return r
 
 
-def addTask(vid, mark):
+def addTask(vid, sign, mark):
     return common.M('task').add("ismaster,sign,vid,mark,status,uptime,addtime",
-                                (1, 'sign', vid, mark, 0, common.getDate(), common.getDate()))
+                                (1, sign, vid, mark, 0, common.getDate(), common.getDate()))
 
 
-def postFileStart(url, data):
+def postFileStart(url, vid, name):
     ret = common.httpPost(url, {
-        'source': {
-            "name": common.getSysKV('run_mark'),
-            "ip": common.getLocalIp(),
-            "ismaster": common.getSysKV('run_is_master')
-        },
-        'name': data['name']
+        'vid': vid,
+        'mark': common.getSysKV('run_mark'),
+        'name': name
     })
     return ret
 
@@ -206,16 +203,17 @@ def asyncVideoFile():
                 pos, data = getMostIdleServer()
 
                 url = getNodeURL(pos)
-                apiURL = url + '/async_slave_api/fileStartApi'
-                r = postFileStart(apiURL, data)
+                apiURL = url + '/async_slave_api/fileStart'
+                r = postFileStart(apiURL, vid, data['name'])
                 print(r)
                 if len(taskData) == 0:
 
                     print(apiURL, data)
-                    r = postFileStart(apiURL, data)
+                    r = postFileStart(apiURL, vid, data['name'])
                     print(r)
                     if data:
-                        r = addTask(vid, data['name'])
+                        sign = 'to:' + url
+                        r = addTask(vid, sign, data['name'])
                         if r:
                             print(apiURL + ':' + name + '发送成功...')
                 else:

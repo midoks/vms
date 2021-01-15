@@ -80,6 +80,8 @@ class task_api:
 
     def clearApi(self):
         common.M('task').delete()
+        common.M('task').execute(
+            "update sqlite_sequence set seq ='0' where name ='task'", [])
         _ret = {}
         _ret['code'] = 0
         _ret['msg'] = '清空成功'

@@ -125,6 +125,11 @@ class async_slave_api:
         up1 = common.M('node').where(
             'name=?', (mark,)).setField('info', data)
 
+        r = common.M('task').where(
+            'vid=?', (vid,)).limit('1').select()
+
+        common.M('task').add("ismaster,sign,vid,mark,status,uptime,addtime",
+                             (1, 'sign', vid, mark, 0, common.getDate(), common.getDate()))
         if not up1:
             return common.retFail()
         return common.retOk()

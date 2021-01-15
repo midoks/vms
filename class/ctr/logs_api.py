@@ -61,8 +61,9 @@ class logs_api:
         return common.getJson(_ret)
 
     def clearApi(self):
-
         common.M('logs').delete()
+        common.M('logs').execute(
+            "update sqlite_sequence set seq ='0' where name ='logs'", [])
         _ret = {}
         _ret['code'] = 0
         _ret['msg'] = '清空成功'
