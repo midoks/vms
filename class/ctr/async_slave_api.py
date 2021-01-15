@@ -132,7 +132,7 @@ class async_slave_api:
             return common.retFail('node info doesn\'t exist, maybe syncing data...!!!')
 
         rlist = common.M('task').where('vid=?', (vid,)).limit('1').select()
-        if len(mlist) > 0:
+        if len(rlist) > 0:
             return common.retFail('the task already exists...!!!')
 
         url = nlist['ip'] + ':' + nlist['port']
