@@ -23,8 +23,6 @@ sys.setdefaultencoding('utf-8')
 
 
 import requests
-
-
 import db
 import common
 
@@ -154,6 +152,18 @@ def getMostIdleServer():
     return '', False
 
 
+def getNodeByID(nid):
+    _list = common.M('node').field(
+        'id,ip,port,name').where('id=?', (nid,)).select()
+    return _list[0]
+
+
+def getNodeURL(nid):
+    d = getNodeByID(nid)
+    url = "http://" + str(d['ip']) + ":" + str(d['port'])
+    return url
+
+
 def getTask(vid):
     r = common.M('task').where(
         'vid=?', (vid,)).limit('1').select()
@@ -161,8 +171,20 @@ def getTask(vid):
 
 
 def addTask(vid, mark):
-    return common.M('task').add("ismaster,sign,mark,vid,status,uptime,addtime",
+    return common.M('task').add("ismaster,sign,vid,mark,status,uptime,addtime",
                                 (1, 'sign', vid, mark, 0, common.getDate(), common.getDate()))
+
+
+def postFileStart(url, data):
+    ret = common.httpPost(url, {
+        'source': {
+            "name": common.getSysKV('run_mark'),
+            "ip": common.getLocalIp(),
+            "ismaster": common.getSysKV('run_is_master')
+        },
+        'name': data['name']
+    })
+    return ret
 
 #------------Public Methods--------------
 
@@ -180,13 +202,24 @@ def asyncVideoFile():
                 vid = vlist[0]['id']
                 name = vlist[0]['name']
                 taskData = getTask(vid)
+
+                pos, data = getMostIdleServer()
+
+                url = getNodeURL(pos)
+                apiURL = url + '/async_slave_api/fileStartApi'
+                r = postFileStart(apiURL, data)
+                print(r)
                 if len(taskData) == 0:
-                    pos, data = getMostIdleServer()
+
+                    print(apiURL, data)
+                    r = postFileStart(apiURL, data)
+                    print(r)
                     if data:
-                        print(data)
-                        addTask(vid, data['name'])
+                        r = addTask(vid, data['name'])
+                        if r:
+                            print(apiURL + ':' + name + '发送成功...')
                 else:
-                    print(name + ' 同步中...')
+                    print(apiURL + ':' + name + ' 同步中...')
         time.sleep(3)
 
 

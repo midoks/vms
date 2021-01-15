@@ -14,7 +14,7 @@
 <body>
   <div class="weadmin-nav">
     <span class="layui-breadcrumb">
-      <a href="javascript:;">首页</a> <a href="javascript:;">API管理</a>
+      <a href="javascript:;">首页</a> <a href="javascript:;">任务管理</a>
       <a href="javascript:;"> <cite>列表</cite></a>
     </span>
     <a class="layui-btn layui-btn-sm" style="margin-top:3px;float:right"
@@ -53,10 +53,11 @@ layui.use(['jquery','laydate', 'laypage', 'admin','layer', 'table', 'carousel', 
     ,cols: [[ //表头
       {type: 'checkbox', fixed: 'left'}
       ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
-      ,{field: 'ismaster', title: '主', width:150}
-      ,{field: 'sign', title: 'sign', width: 300, sort: true}
-      ,{field: 'vid', title: '视频ID', width: 300, sort: true}
-      ,{field: 'status', title: '状态', width: 300, sort: true}
+      ,{field: 'ismaster', title: '主', width:80}
+      ,{field: 'mark', title: 'mark', width: 285, sort: true}
+      ,{field: 'sign', title: 'sign', width: 80, sort: true}
+      ,{field: 'vid', title: '视频ID', width: 120, sort: true}
+      ,{field: 'status', title: '状态', width: 80, sort: true}
       ,{field: 'uptime', title: '更新时间', width: 200, sort: true}
       ,{field: 'addtime', title: '添加时间', width: 200, sort: true}
       ,{fixed: 'right', width: 165, align:'center', toolbar: '#toolBar'}
@@ -66,9 +67,8 @@ layui.use(['jquery','laydate', 'laypage', 'admin','layer', 'table', 'carousel', 
   table.on("toolbar(tableFilter)", function (obj) {
     let data = obj.data;
     switch (obj.event) {
-      case "add":
-        apiAdd();
-        break;
+      // case "add":apiAdd();break;
+      case "clear":apiClear();break;
     }
   });
 
@@ -76,13 +76,12 @@ layui.use(['jquery','laydate', 'laypage', 'admin','layer', 'table', 'carousel', 
     let data = obj.data;
     console.log(obj.event);
     switch (obj.event) {
-      case "del":
-        apiDel(data.id);
+      case "del":apiDel(data.id);break;
     }
   });
 
   function apiDel(id){
-    $.post('/api_api/del',{id:id},function(data){
+    $.post('/task_api/del',{id:id},function(data){
         data = $.parseJSON(data);
         layer.msg(data.msg);
         setTimeout(function(){
@@ -91,10 +90,17 @@ layui.use(['jquery','laydate', 'laypage', 'admin','layer', 'table', 'carousel', 
     });
   }
 
-  function apiAdd(){
-    WeAdminShow('添加','/api/add' ,500, 230);
+  function apiClear(){
+    $.post('/task_api/clear',function(data){
+        data = $.parseJSON(data);
+        layer.msg(data.msg);
+        setTimeout(function(){
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            window.parent.window.location.reload();
+        },2000);
+    });
   }
-
 ///
 });
   
@@ -103,7 +109,8 @@ layui.use(['jquery','laydate', 'laypage', 'admin','layer', 'table', 'carousel', 
 <!-- 头工具栏模板 -->
 <script type="text/html" id="toolbarTpl">
   <div class="layui-btn-container">
-    <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+    <!-- <button class="layui-btn layui-btn-sm" lay-event="add">添加</button> -->
+    <button class="layui-btn layui-btn-sm" lay-event="clear">清空</button>
   </div>
 </script>
 

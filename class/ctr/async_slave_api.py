@@ -111,7 +111,7 @@ class async_slave_api:
             return common.retFail()
         return common.retOk()
 
-    def asyncFileStartApi(self):
+    def fileStartApi(self):
         '''
         由主服务器发送请求,从服务器同步文件
         '''

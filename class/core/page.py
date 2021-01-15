@@ -2,7 +2,7 @@
 
 import math
 import string
-import mw
+import common
 
 
 class Page():
@@ -29,7 +29,6 @@ class Page():
     __END_NUM = None  # 结束行
 
     def __init__(self):
-        # tmp = mw.getMsg('PAGE')
         if False:
             self.__PREV = tmp['PREV']
             self.__NEXT = tmp['NEXT']

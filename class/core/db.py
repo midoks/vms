@@ -5,6 +5,9 @@ import sqlite3
 import os
 
 
+import common
+
+
 class Sql():
     #------------------------------
     # 数据库操作类 For sqlite3
@@ -194,7 +197,6 @@ class Sql():
             opt = opt[0:len(opt) - 1]
             sql = "UPDATE " + self.__DB_TABLE + " SET " + opt + self.__OPT_WHERE
 
-            import common
             common.writeFile('/tmp/test.pl', sql)
 
             # 处理拼接WHERE与UPDATE参数
@@ -249,8 +251,7 @@ class Sql():
     def create(self, name):
         # 创建数据表
         self.__GetConn()
-        import mw
-        script = mw.readFile('data/' + name + '.sql')
+        script = common.readFile('data/' + name + '.sql')
         result = self.__DB_CONN.executescript(script)
         self.__DB_CONN.commit()
         return result.rowcount
@@ -258,8 +259,7 @@ class Sql():
     def fofile(self, filename):
         # 执行脚本
         self.__GetConn()
-        import mw
-        script = mw.readFile(filename)
+        script = common.readFile(filename)
         result = self.__DB_CONN.executescript(script)
         self.__DB_CONN.commit()
         return result.rowcount
