@@ -26,46 +26,12 @@ import requests
 import db
 import common
 
-_has_suffix = ['mp4', 'rmvb', 'flv', 'avi',
-               'mpg', 'mkv', 'wmv', 'avi', 'rm']
-has_suffix = []
-for x in range(len(_has_suffix)):
-    has_suffix.append('.' + _has_suffix[x])
-    has_suffix.append('.' + _has_suffix[x].upper())
-
-tmp_cmd = os.getcwd() + "/lib/ffmpeg/ffmpeg"
-if os.path.exists(tmp_cmd):
-    ffmpeg_cmd = tmp_cmd
-else:
-    ffmpeg_cmd = "/usr/local/bin/ffmpeg"
-
-tmp_cmd = '/www/server/lib/ffmpeg/ffmpeg'
-if os.path.exists(tmp_cmd):
-    ffmpeg_cmd = tmp_cmd
-
 
 #------------Private Methods--------------
 
 def updateStatus(sid, status):
     common.M('video_tmp').where(
         "id=?", (sid,)).setField('status', status)
-
-# print(has_suffix, ffmpeg_cmd)
-
-
-def is_video(path):
-    t = os.path.splitext(path)
-    if t[1] in has_suffix:
-        return True
-    return False
-
-
-def is_mp4(path):
-    t = os.path.splitext(path)
-    tlen = len(t) - 1
-    if t[tlen] == '.mp4':
-        return True
-    return False
 
 
 def isDEmpty(data):
@@ -75,27 +41,6 @@ def isDEmpty(data):
 #------------Private Methods--------------
 
 #------------Public Methods--------------
-
-
-def execShell(cmdstring, cwd=None, timeout=None, shell=True):
-
-    if shell:
-        cmdstring_list = cmdstring
-    else:
-        cmdstring_list = shlex.split(cmdstring)
-    if timeout:
-        end_time = datetime.datetime.now() + datetime.timedelta(seconds=timeout)
-
-    sub = subprocess.Popen(cmdstring_list, cwd=cwd, stdin=subprocess.PIPE,
-                           shell=shell, bufsize=4096, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-    while sub.poll() is None:
-        time.sleep(0.1)
-        if timeout:
-            if end_time <= datetime.datetime.now():
-                raise Exception("Timeout：%s" % cmdstring)
-
-    return sub.communicate()
 
 
 def isNeedAsync():
@@ -189,35 +134,46 @@ def postFileStart(url, vid, name):
 #------------Public Methods--------------
 
 
+def funcAsyncVideoFile():
+    vlist = common.M('video', 'video').field('id,name').where(
+        'node_num=?', (1,)).limit('1').select()
+    if len(vlist) > 0:
+        print('asyncVideoFile evnet start!!!')
+
+        vid = vlist[0]['id']
+        name = vlist[0]['name']
+        taskData = getTask(vid)
+
+        pos, data = getMostIdleServer()
+
+        url = getNodeURL(pos)
+        apiURL = url + '/async_slave_api/fileStart'
+        print(apiURL)
+        if len(taskData) == 0:
+            r = postFileStart(apiURL, vid, data['name'])
+            if r['code'] == 0:
+                sign = 'to:' + url
+                r = addTask(vid, sign, data['name'])
+                if r:
+                    print(apiURL + ':' + name + ' 发送成功...')
+            else:
+                print(common.getSysKV('run_mark') + ':' + r['msg'])
+        else:
+            print(apiURL + ':' + name + ' 同步中...')
+
+        print('asyncVideoFile evnet end!!!')
+
+
 def asyncVideoFile():
     '''
     # 由主服务器选择文件同步到那从服务器上
     '''
     while True:
         if isMasterNode():
-            vlist = common.M('video', 'video').field('id,name').where(
-                'node_num=?', (1,)).limit('1').select()
-
-            if len(vlist) > 0:
-                vid = vlist[0]['id']
-                name = vlist[0]['name']
-                taskData = getTask(vid)
-
-                pos, data = getMostIdleServer()
-
-                url = getNodeURL(pos)
-                apiURL = url + '/async_slave_api/fileStart'
-                if len(taskData) == 0:
-                    r = postFileStart(apiURL, vid, data['name'])
-                    if r['code'] == 0:
-                        sign = 'to:' + url
-                        r = addTask(vid, sign, data['name'])
-                        if r:
-                            print(apiURL + ':' + name + ' 发送成功...')
-                    else:
-                        print(common.getSysKV('run_mark') + ':' + r['msg'])
-                else:
-                    print(apiURL + ':' + name + ' 同步中...')
+            try:
+                funcAsyncVideoFile()
+            except Exception as e:
+                print(e)
         time.sleep(3)
 
 
