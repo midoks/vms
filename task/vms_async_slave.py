@@ -28,46 +28,12 @@ import requests
 import db
 import common
 
-_has_suffix = ['mp4', 'rmvb', 'flv', 'avi',
-               'mpg', 'mkv', 'wmv', 'avi', 'rm']
-has_suffix = []
-for x in range(len(_has_suffix)):
-    has_suffix.append('.' + _has_suffix[x])
-    has_suffix.append('.' + _has_suffix[x].upper())
-
-tmp_cmd = os.getcwd() + "/lib/ffmpeg/ffmpeg"
-if os.path.exists(tmp_cmd):
-    ffmpeg_cmd = tmp_cmd
-else:
-    ffmpeg_cmd = "/usr/local/bin/ffmpeg"
-
-tmp_cmd = '/www/server/lib/ffmpeg/ffmpeg'
-if os.path.exists(tmp_cmd):
-    ffmpeg_cmd = tmp_cmd
-
-
 #------------Private Methods--------------
+
 
 def updateStatus(sid, status):
     common.M('video_tmp').where(
         "id=?", (sid,)).setField('status', status)
-
-# print(has_suffix, ffmpeg_cmd)
-
-
-def is_video(path):
-    t = os.path.splitext(path)
-    if t[1] in has_suffix:
-        return True
-    return False
-
-
-def is_mp4(path):
-    t = os.path.splitext(path)
-    tlen = len(t) - 1
-    if t[tlen] == '.mp4':
-        return True
-    return False
 
 
 def isDEmpty(data):
@@ -77,27 +43,6 @@ def isDEmpty(data):
 #------------Private Methods--------------
 
 #------------Public Methods--------------
-
-
-def execShell(cmdstring, cwd=None, timeout=None, shell=True):
-
-    if shell:
-        cmdstring_list = cmdstring
-    else:
-        cmdstring_list = shlex.split(cmdstring)
-    if timeout:
-        end_time = datetime.datetime.now() + datetime.timedelta(seconds=timeout)
-
-    sub = subprocess.Popen(cmdstring_list, cwd=cwd, stdin=subprocess.PIPE,
-                           shell=shell, bufsize=4096, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-    while sub.poll() is None:
-        time.sleep(0.1)
-        if timeout:
-            if end_time <= datetime.datetime.now():
-                raise Exception("Timeout：%s" % cmdstring)
-
-    return sub.communicate()
 
 
 def download(url, file_path):

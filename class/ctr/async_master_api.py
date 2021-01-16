@@ -120,12 +120,15 @@ class async_master_api:
             return r
 
         vid = request.form.get('vid', '').encode('utf-8')
-        dd = common.M('video', 'video').where('id=?', (vid,)).select()
+
+        dd = common.M('video', 'video').field(
+            'id,name,filename,size,status,node_num,uptime,addtime').where('id=?', (vid,)).select()
 
         if len(dd) < 1:
             return common.retFail('video not exists!!!')
 
         fdir = "app/" + dd[0]['filename']
+
         if not os.path.exists(fdir):
             return common.retFail('dir not exists!!!')
 
@@ -150,11 +153,9 @@ class async_master_api:
             "pid=? and mark=?", (vid, mark,)).select()
 
         node_num = common.M('video_node', 'video').where(
-            "pid=?", (vid,)).count().setField('status', 1)
-
-        common.M('video', 'video').where(
-            'vid=?', (vid, mark)).setField('node_num', node_num)
-
+            "pid=?", (vid,)).count()
+        r = common.M('video', 'video').where(
+            'id=?', (vid, mark)).setField('node_num', node_num)
         if len(vlist) > 1:
             return common.retFail('already exists!!!')
 
