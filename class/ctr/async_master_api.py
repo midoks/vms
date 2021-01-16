@@ -120,8 +120,8 @@ class async_master_api:
             return r
 
         vid = request.form.get('vid', '').encode('utf-8')
-        dd = common.M('video', 'video').field(
-            'id,name,filename,size,status,uptime,addtime').where('id=?', (vid,)).select()
+        dd = common.M('video', 'video').where('id=?', (vid,)).select()
+
         if len(dd) < 1:
             return common.retFail('video not exists!!!')
 
@@ -132,3 +132,29 @@ class async_master_api:
         flist = common.fileList(fdir)
 
         return common.retOk('ok', flist)
+
+    def fileAsyncCallBackApi(self):
+        '''
+        文件完成回调
+        '''
+        r = self.isNameRight()
+        if r != '':
+            return r
+        vid = request.form.get('vid', '').encode('utf-8')
+        mark = request.form.get('mark', '').encode('utf-8')
+
+        r = common.M('task').where(
+            'vid=? and mark=?', (vid, mark)).setField('status', 1)
+
+        vlist = common.M('video_node', 'video').where(
+            "pid=? and mark=?", (vid, mark, common.getDate())).select()
+
+        if len(vlist) > 1:
+            return common.retFail('already exists!!!')
+
+        common.M('video_node', 'video').add(
+            "pid,node_id,addtime", (vid, mark, common.getDate()))
+
+        if not r:
+            return common.retFail()
+        return common.retOk()
