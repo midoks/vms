@@ -271,9 +271,9 @@ def videoDownload(url, pos):
 def asyncVideoFile():
     while True:
         if not isMasterNode():
-            print('async VideoFile!!!')
             task_list = getTaskList(0, 0)
             if len(task_list) > 0:
+                print('async VideoFile!!!')
                 url = getMasterNodeURL()
 
                 api_url = url + "/async_master_api/fileList"
@@ -282,8 +282,14 @@ def asyncVideoFile():
                     'name': task_list[0]['mark']
                 })
 
+                print(api_url)
+
                 if ret:
                     r = json.loads(ret)
+                    if r['code'] != 0:
+                        print(r['msg'])
+                        continue
+
                     for i in r['data']:
                         file_url = url + '/' + i.replace('app', 'm3u8')
                         videoDownload(file_url, i)
@@ -296,8 +302,11 @@ def asyncVideoFile():
 def asyncVideoFileCallback():
     while True:
         if not isMasterNode():
-            print('async VideoFile Callback!!!')
+
             task_list = getTaskList(0, 1)
+
+            if len(task_list) > 0:
+                print('async VideoFile Callback!!!')
 
             for x in xrange(0, len(task_list)):
                 url = getMasterNodeURL()
