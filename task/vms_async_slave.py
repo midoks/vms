@@ -176,7 +176,7 @@ def getMasterNodeURL():
 
 def asyncNodeInfo():
     while True:
-        if isNeedAsync():
+        if not isMasterNode():
             print("async Node info !!!")
             _list = common.M('node').field('id,port,name,ip').where(
                 'ismaster=?', (1,)).select()
@@ -217,7 +217,7 @@ def asyncNodeInfo():
 
 def asyncVideoDBData():
     while True:
-        if isNeedAsync():
+        if not isMasterNode():
             print('async VideoDB!!!')
             _list = common.M('node').field('id,port,name,ip').where(
                 'ismaster=?', (1,)).select()
@@ -270,45 +270,47 @@ def videoDownload(url, pos):
 
 def asyncVideoFile():
     while True:
-        print('async VideoFile!!!')
-        task_list = getTaskList(0, 0)
-        if len(task_list) > 0:
-            url = getMasterNodeURL()
+        if not isMasterNode():
+            print('async VideoFile!!!')
+            task_list = getTaskList(0, 0)
+            if len(task_list) > 0:
+                url = getMasterNodeURL()
 
-            api_url = url + "/async_master_api/fileList"
-            ret = common.httpPost(api_url, {
-                'vid': task_list[0]['vid'],
-                'name': task_list[0]['mark']
-            })
+                api_url = url + "/async_master_api/fileList"
+                ret = common.httpPost(api_url, {
+                    'vid': task_list[0]['vid'],
+                    'name': task_list[0]['mark']
+                })
 
-            if ret:
-                r = json.loads(ret)
-                for i in r['data']:
-                    file_url = url + '/' + i.replace('app', 'm3u8')
-                    videoDownload(file_url, i)
+                if ret:
+                    r = json.loads(ret)
+                    for i in r['data']:
+                        file_url = url + '/' + i.replace('app', 'm3u8')
+                        videoDownload(file_url, i)
 
-            common.M('task').where(
-                'id=?', (task_list[0]['id'],)).setField('status', 1)
+                common.M('task').where(
+                    'id=?', (task_list[0]['id'],)).setField('status', 1)
         time.sleep(10)
 
 
 def asyncVideoFileCallback():
     while True:
-        print('async VideoFile Callback!!!')
-        task_list = getTaskList(0, 1)
+        if not isMasterNode():
+            print('async VideoFile Callback!!!')
+            task_list = getTaskList(0, 1)
 
-        for x in xrange(0, len(task_list)):
-            url = getMasterNodeURL()
-            api_url = url + "/async_master_api/fileAsyncCallBack"
+            for x in xrange(0, len(task_list)):
+                url = getMasterNodeURL()
+                api_url = url + "/async_master_api/fileAsyncCallBack"
 
-            ret = common.httpPost(api_url, {
-                'mark': common.getSysKV('run_mark'),
-                'name': task_list[x]['mark'],
-                'vid': task_list[x]['vid'],
-            })
-            data = json.loads(ret)
-            if data['code'] != 0:
-                print(data['msg'])
+                ret = common.httpPost(api_url, {
+                    'mark': common.getSysKV('run_mark'),
+                    'name': task_list[x]['mark'],
+                    'vid': task_list[x]['vid'],
+                })
+                data = json.loads(ret)
+                if data['code'] != 0:
+                    print(data['msg'])
         time.sleep(3)
 
 
