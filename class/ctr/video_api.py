@@ -186,6 +186,8 @@ class video_api:
                 raise e
 
         r = videoM.where("id=?", (sid,)).delete()
+
+        common.M('video_node', 'video').where("pid=?", (sid,)).delete()
         # print(sid, r)
         _ret = {}
         _ret['code'] = 0
