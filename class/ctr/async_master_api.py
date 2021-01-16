@@ -115,5 +115,19 @@ class async_master_api:
         '''
         文件信息列表
         '''
+        r = self.isNameRight()
+        if r != '':
+            return r
 
-        return common.retOk()
+        md5 = request.form.get('md5', '').encode('utf-8')
+
+        if md5 == '':
+            return common.retFail('args not empty!!!')
+
+        fdir = "app/" + md5
+        if not os.path.exists(fdir):
+            return common.retFail('dir not exists!!!')
+
+        flist = common.fileList(fdir)
+
+        return common.retOk('ok', flist)
