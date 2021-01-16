@@ -263,6 +263,8 @@ def asyncVideoFileCallback():
                 data = json.loads(ret)
                 if data['code'] != 0:
                     print(data['msg'])
+            common.M('task').where(
+                'id=?', (task_list[0]['id'],)).setField('status', 2)
         time.sleep(3)
 
 
