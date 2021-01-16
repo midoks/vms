@@ -153,7 +153,7 @@ class async_master_api:
             "pid=? and mark=?", (vid, mark,)).select()
 
         node_num = common.M('video_node', 'video').where(
-            "pid=?", (vid,)).count().setField('status', 1)
+            "pid=?", (vid,)).count()
         common.M('video', 'video').where(
             'vid=?', (vid, mark)).setField('node_num', node_num)
 
