@@ -152,15 +152,16 @@ class async_master_api:
         vlist = common.M('video_node', 'video').where(
             "pid=? and mark=?", (vid, mark,)).select()
 
-        node_num = common.M('video_node', 'video').where(
-            "pid=?", (vid,)).count()
-        r = common.M('video', 'video').where(
-            'id=?', (vid, mark)).setField('node_num', node_num)
         if len(vlist) > 1:
             return common.retFail('already exists!!!')
 
         common.M('video_node', 'video').add(
             "pid,node_id,addtime", (vid, mark, common.getDate()))
+
+        node_num = common.M('video_node', 'video').where(
+            "pid=?", (vid,)).count()
+        r = common.M('video', 'video').where(
+            'id=?', (vid, mark)).setField('node_num', node_num)
 
         if not r:
             return common.retFail()
