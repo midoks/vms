@@ -177,7 +177,7 @@ def getMasterNodeURL():
 def asyncNodeInfo():
     while True:
         if isNeedAsync():
-            print("async node info !!!")
+            print("async Node info !!!")
             _list = common.M('node').field('id,port,name,ip').where(
                 'ismaster=?', (1,)).select()
             _url = "http://" + str(_list[0]['ip']) + \
@@ -258,20 +258,57 @@ def asyncVideoDBData():
         time.sleep(20)
 
 
+def videoDownload(url, pos):
+    print(pos, url)
+    fdir = os.path.dirname(pos)
+    if not os.path.exists(fdir):
+        os.mkdir(fdir)
+
+    c = common.httpGet(url)
+    common.writeFile(pos, c)
+
+
 def asyncVideoFile():
     while True:
+        print('async VideoFile!!!')
         task_list = getTaskList(0, 0)
+        if len(task_list) > 0:
+            url = getMasterNodeURL()
 
-        print(task_list)
+            api_url = url + "/async_master_api/fileList"
+            ret = common.httpPost(api_url, {
+                'vid': task_list[0]['vid'],
+                'name': task_list[0]['mark']
+            })
 
-        url = getMasterNodeURL()
+            if ret:
+                r = json.loads(ret)
+                for i in r['data']:
+                    file_url = url + '/' + i.replace('app', 'm3u8')
+                    videoDownload(file_url, i)
 
-        api_url = url + "/async_master_api/fileList"
-        ret = common.httpPost(api_url, {
-            'vid': task_list[0]['vid'],
-            'name': task_list[0]['mark']
-        })
-        print(api_url, ret)
+            common.M('task').where(
+                'id=?', (task_list[0]['id'],)).setField('status', 1)
+        time.sleep(10)
+
+
+def asyncVideoFileCallback():
+    while True:
+        print('async VideoFile Callback!!!')
+        task_list = getTaskList(0, 1)
+
+        for x in xrange(0, len(task_list)):
+            url = getMasterNodeURL()
+            api_url = url + "/async_master_api/fileAsyncCallBack"
+
+            ret = common.httpPost(api_url, {
+                'mark': common.getSysKV('run_mark'),
+                'name': task_list[x]['mark'],
+                'vid': task_list[x]['vid'],
+            })
+            data = json.loads(ret)
+            if data['code'] != 0:
+                print(data['msg'])
         time.sleep(3)
 
 
@@ -298,6 +335,11 @@ if __name__ == "__main__":
 
     # 同步文件
     t = threading.Thread(target=asyncVideoFile)
+    t.setDaemon(True)
+    t.start()
+
+    # 同步文件完成回调
+    t = threading.Thread(target=asyncVideoFileCallback)
     t.setDaemon(True)
     t.start()
 
