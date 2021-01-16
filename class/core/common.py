@@ -50,6 +50,21 @@ def getRootDir():
     return os.path.dirname(os.path.dirname(getRunDir()))
 
 
+def fileList(f_dir):
+    flist = []
+    vlist = os.listdir(f_dir)
+    for i in xrange(0, len(vlist)):
+        print(i, vlist[i])
+        f = f_dir + '/' + vlist[i]
+        if os.path.isdir(f):
+            return fileList(f)
+        else:
+            if vlist[i] == '.DS_Store':
+                continue
+            flist.append(f)
+    return flist
+
+
 def getPluginDir():
     return getRunDir() + '/plugins'
 
