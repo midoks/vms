@@ -140,12 +140,13 @@ def getMostIdleServer():
 
     if len(node_list) > 0:
         for i in range(0, len(node_list)):
-            info = json.loads(node_list[i]['info'])
+            if node_list[i]['info']:
+                info = json.loads(node_list[i]['info'])
 
-            runLoad = info['one'] / info['max'] * 100
-            if runLoad < mi:
-                mi = runLoad
-                pos = i
+                runLoad = info['one'] / info['max'] * 100
+                if runLoad < mi:
+                    mi = runLoad
+                    pos = i
 
         ii = node_list[pos]
         return ii['id'], ii
