@@ -73,9 +73,6 @@ class video_node_api:
     def delApi(self):
         sid = request.form.get('id', '').encode('utf-8')
         videoM = common.M('video_node', 'video')
-
-        data = videoM.field('id').where('id=?', (sid,)).select()
-
         r = videoM.where("id=?", (sid,)).delete()
         _ret = {}
         _ret['code'] = 0

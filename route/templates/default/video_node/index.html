@@ -84,7 +84,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 
 
   function apiDel(id){
-    $.post('/video_api/del',{id:id},function(data){
+    $.post('/video_node_api/del',{id:id},function(data){
         data = $.parseJSON(data);
         layer.msg(data.msg);
         setTimeout(function(){

@@ -145,14 +145,13 @@ class async_master_api:
             return r
         vid = request.form.get('vid', '').encode('utf-8')
         mark = request.form.get('mark', '').encode('utf-8')
-
+        # print(vid, mark)
         r = common.M('task').where(
             'vid=? and mark=?', (vid, mark)).setField('status', 1)
 
         vlist = common.M('video_node', 'video').where(
-            "pid=? and mark=?", (vid, mark,)).select()
-
-        if len(vlist) > 1:
+            "pid=? and node_id=?", (vid, mark,)).select()
+        if len(vlist) > 0:
             return common.retFail('already exists!!!')
 
         common.M('video_node', 'video').add(
@@ -161,8 +160,7 @@ class async_master_api:
         node_num = common.M('video_node', 'video').where(
             "pid=?", (vid,)).count()
         r = common.M('video', 'video').where(
-            'id=?', (vid, mark)).setField('node_num', node_num)
-
+            'id=?', (vid)).setField('node_num', node_num)
         if not r:
             return common.retFail()
         return common.retOk()
