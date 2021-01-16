@@ -160,18 +160,18 @@ def getNodeList(ismaster=1):
     return _list
 
 
+def getTaskList(ismaster=0, status=0):
+    _list = common.M('task').field('id,ismaster,mark,sign,vid,status,uptime,addtime').where(
+        'ismaster=? and status=?', (ismaster, status,)).limit('1').select()
+    return _list
+
+
 def getMasterNodeURL():
     _list = getNodeList()
     _url = "http://" + str(_list[0]['ip']) + \
         ":" + str(_list[0]['port'])
     return _url
 #------------Public Methods--------------
-
-
-def printHL():
-    while True:
-        print("hello world,vms async!!!")
-        time.sleep(3)
 
 
 def asyncNodeInfo():
@@ -260,13 +260,9 @@ def asyncVideoDBData():
 
 def asyncVideoFile():
     while True:
-        node_list = getNodeList(0)
+        task_list = getTaskList(0, 0)
 
-        for i in node_list:
-            info = json.loads(i['info'])
-            runLoad = info['one'] / info['max'] * 100
-
-            print(i['ip'] + ':' + i['port'] + " load:" + str(runLoad))
+        print(task_list)
         time.sleep(3)
 
 
