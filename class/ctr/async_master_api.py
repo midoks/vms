@@ -120,8 +120,8 @@ class async_master_api:
             return r
 
         vid = request.form.get('vid', '').encode('utf-8')
-        dd = common.M('video', 'video').where('id=?', (vid,)).select()
-
+        dd = common.M('video', 'video').field(
+            'id,name,filename,size,status,uptime,addtime').where('id=?', (vid,)).select()
         if len(dd) < 1:
             return common.retFail('video not exists!!!')
 
