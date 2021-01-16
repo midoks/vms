@@ -110,3 +110,10 @@ class async_master_api:
         if not up1:
             return common.retFail()
         return common.retOk()
+
+    def fileListApi(self):
+        '''
+        文件信息列表
+        '''
+
+        return common.retOk()

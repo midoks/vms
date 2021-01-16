@@ -134,8 +134,8 @@ class async_slave_api:
         rlist = common.M('task').where('vid=?', (vid,)).limit('1').select()
         if len(rlist) > 0:
             return common.retFail('the task already exists...!!!')
-
-        url = nlist['ip'] + ':' + nlist['port']
+        # print()
+        url = nlist[0]['ip'] + ':' + nlist[0]['port']
         sign = 'from:' + url
         r = common.M('task').add("ismaster,sign,vid,mark,status,uptime,addtime",
                                  (0, sign, vid, mark, 0, common.getDate(), common.getDate()))
