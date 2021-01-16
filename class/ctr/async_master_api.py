@@ -122,6 +122,9 @@ class async_master_api:
         vid = request.form.get('vid', '').encode('utf-8')
         dd = common.M('video', 'video').where('id=?', (vid,)).select()
 
+        if len(dd) < 1:
+            return common.retFail('video not exists!!!')
+
         fdir = "app/" + dd[0]['filename']
         if not os.path.exists(fdir):
             return common.retFail('dir not exists!!!')
