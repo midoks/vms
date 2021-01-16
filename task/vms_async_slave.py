@@ -259,7 +259,7 @@ def asyncVideoDBData():
 
 
 def videoDownload(url, pos):
-    print(pos, url)
+    #print(pos, url)
     fdir = os.path.dirname(pos)
     if not os.path.exists(fdir):
         os.mkdir(fdir)
@@ -281,8 +281,6 @@ def asyncVideoFile():
                     'vid': task_list[0]['vid'],
                     'name': task_list[0]['mark']
                 })
-
-                print(api_url)
 
                 if ret:
                     r = json.loads(ret)
