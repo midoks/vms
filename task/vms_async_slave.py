@@ -263,6 +263,15 @@ def asyncVideoFile():
         task_list = getTaskList(0, 0)
 
         print(task_list)
+
+        url = getMasterNodeURL()
+
+        api_url = url + "/async_master_api/fileList"
+        ret = common.httpPost(api_url, {
+            'vid': task_list[0]['vid'],
+            'name': task_list[0]['mark']
+        })
+        print(api_url, ret)
         time.sleep(3)
 
 

@@ -119,12 +119,10 @@ class async_master_api:
         if r != '':
             return r
 
-        md5 = request.form.get('md5', '').encode('utf-8')
+        vid = request.form.get('vid', '').encode('utf-8')
+        dd = common.M('video', 'video').where('id=?', (vid,)).select()
 
-        if md5 == '':
-            return common.retFail('args not empty!!!')
-
-        fdir = "app/" + md5
+        fdir = "app/" + dd[0]['filename']
         if not os.path.exists(fdir):
             return common.retFail('dir not exists!!!')
 
