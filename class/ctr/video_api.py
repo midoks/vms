@@ -179,6 +179,7 @@ class video_api:
         if data:
             try:
                 pathfile = os.getcwd() + "/app/" + str(data[0]['filename'])
+                common.execShell('rm -rf ' + pathfile)
                 if os.path.exists(pathfile):
                     del_file(pathfile)
                     os.removedirs(pathfile)

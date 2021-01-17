@@ -167,6 +167,9 @@ def videoToM3u8():
 
             tmp_dir_app = tmp_dir + str(x["md5"])
 
+            if not os.path.exists(tmp_dir_app):
+                os.mkdir(tmp_dir_app)
+
             mpd_dir = tmp_dir_app + "/mpd"
             mpd_file = mpd_dir + "/index.mpd"
 
@@ -192,7 +195,7 @@ def videoToM3u8():
 
             # m3u8
             if not os.path.exists(m3u8_dir):
-                common.mkdir(m3u8_dir)
+                os.mkdir(m3u8_dir)
 
             if not os.path.exists(m3u8_file):
                 cmd = fg_m3u8_cmd(tofile, m3u8_file, pathfile)
@@ -200,14 +203,15 @@ def videoToM3u8():
                 os.system(cmd)
 
             # mpd
-
             if not os.path.exists(mpd_dir):
-                common.mkdir(mpd_dir)
+                os.mkdir(mpd_dir)
+
             # print(mpd_file)
             if not os.path.exists(mpd_file):
                 mpd_cmd = fg_mdp_cmd(pathfile)
 
                 mpd_cmd = "cd " + mpd_dir + " && " + mpd_cmd
+                print(mpd_cmd)
                 os.system(mpd_cmd)
 
             updateStatus(x['id'], 2)
