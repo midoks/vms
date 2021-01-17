@@ -51,6 +51,12 @@ def isMasterNode():
     return False
 
 
+def getNodeList(ismaster=1):
+    _list = common.M('node').field('id,info,port,name,ip').where(
+        'ismaster=?', (ismaster,)).select()
+    return _list
+
+
 def postVideoDbAsyncTrigger(url, name):
     ret = common.httpPost(url, {
         'name': name
