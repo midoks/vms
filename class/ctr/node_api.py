@@ -40,7 +40,7 @@ class node_api:
         for x in xrange(0, len(_list)):
             # print(x, _list[x])
             _list[x]['load'] = 0
-            if _list[x]['info'] != '':
+            if _list[x]['info'] != None:
                 info = json.loads(_list[x]['info'])
                 runLoad = info['one'] / info['max'] * 100
                 _list[x]['load'] = runLoad
