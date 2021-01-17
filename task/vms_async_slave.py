@@ -148,13 +148,13 @@ def asyncNodeInfo():
                     dataList = nodeM.field('id,name,ip,port,ismaster').where(
                         'id=?', (i['id'],)).select()
                     if len(dataList) < 1:
-                        r = nodeM.add("id,name,ip,port,info,ismaster,uptime,addtime",
-                                      (i['id'], i['name'], i['ip'], i['port'], i['info'], i['ismaster'], common.getDate(), common.getDate()))
+                        r = nodeM.add("name,ip,port,info,ismaster,uptime,addtime",
+                                      (i['name'], i['ip'], i['port'], i['info'], i['ismaster'], common.getDate(), common.getDate()))
                         if r > 0:
                             print("node add ok")
                     else:
-                        r = nodeM.where('id=?', (i['id'],)).save('name,ip,port,info,ismaster,uptime', (i[
-                            'name'], i['ip'], i['port'], i['info'], i['ismaster'], common.getDate()))
+                        r = nodeM.where('name=?', (i['name'],)).save('ip,port,info,ismaster,uptime', (i[
+                            'ip'], i['port'], i['info'], i['ismaster'], common.getDate()))
                         if r > 0:
                             print("node update ok")
         time.sleep(20)

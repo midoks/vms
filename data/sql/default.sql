@@ -27,6 +27,8 @@ INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
 (4, 'run_is_master', '0','2016-12-10 15:12:56');
 INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
 (5, 'run_mark', '4297f44b13955235245b2497399d7a93','2016-12-10 15:12:56');
+INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
+(6, 'video_db_ischange', '0','2016-12-10 15:12:56');
 
 
 CREATE TABLE IF NOT EXISTS `node` (
