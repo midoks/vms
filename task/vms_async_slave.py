@@ -128,7 +128,7 @@ def asyncNodeInfo():
             _url = "http://" + str(_list[0]['ip']) + \
                 ":" + str(_list[0]['port'])
 
-            api_url = _url + "/async_api/node"
+            api_url = _url + "/async_master_api/node"
             ret = common.httpPost(api_url, {
                 'source': {
                     "name": common.getSysKV('run_mark'),
@@ -139,7 +139,6 @@ def asyncNodeInfo():
                 'name': _list[0]['name']
 
             })
-
             retDic = json.loads(ret)
 
             if retDic['code'] == 0:
@@ -169,7 +168,7 @@ def asyncVideoDBData():
             _url = "http://" + str(_list[0]['ip']) + \
                 ":" + str(_list[0]['port'])
 
-            api_url = _url + "/async_api/videoDbInfo"
+            api_url = _url + "/async_master_api/videoDbInfo"
             pageInfo = common.httpPost(api_url)
             pageInfo = json.loads(pageInfo)
 
@@ -177,7 +176,7 @@ def asyncVideoDBData():
             pageNum = int(pageInfo['data']) / pageSize
             # print(pageNum, pageInfo['data'])
 
-            api_range_url = _url + "/async_api/videoDbRange"
+            api_range_url = _url + "/async_master_api/videoDbRange"
 
             common.writeFileClear('data/tmp.db')
             for x in xrange(0, pageNum):
