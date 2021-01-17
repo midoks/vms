@@ -169,7 +169,7 @@ def asyncVideoDBData():
             _url = "http://" + str(_list[0]['ip']) + \
                 ":" + str(_list[0]['port'])
 
-            api_url = _url + "/async_api/videoInfo"
+            api_url = _url + "/async_api/videoDbInfo"
             pageInfo = common.httpPost(api_url)
             pageInfo = json.loads(pageInfo)
 
@@ -177,7 +177,7 @@ def asyncVideoDBData():
             pageNum = int(pageInfo['data']) / pageSize
             # print(pageNum, pageInfo['data'])
 
-            api_range_url = _url + "/async_api/videoRange"
+            api_range_url = _url + "/async_api/videoDbRange"
 
             common.writeFileClear('data/tmp.db')
             for x in xrange(0, pageNum):
