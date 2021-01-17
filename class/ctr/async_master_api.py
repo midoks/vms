@@ -76,14 +76,14 @@ class async_master_api:
         else:
             return common.retOk('already exists!', retList)
 
-    def videoInfoApi(self):
+    def videoDbInfoApi(self):
         '''
         由从服务器发送请求,同步video db 数据
         '''
         dsize = os.path.getsize('data/video.db')
         return common.retOk('ok', dsize)
 
-    def videoRangeApi(self):
+    def videoDbRangeApi(self):
         '''
         由从服务器发送请求,同步video db 数据
         '''
