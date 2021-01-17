@@ -36,7 +36,7 @@ class system_api:
     pids = None
 
     def __init__(self):
-        self.setupPath = common.getServerDir()
+        pass
 
     ##### ----- start ----- ###
 

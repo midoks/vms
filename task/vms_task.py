@@ -176,15 +176,15 @@ def videoToM3u8():
             if os.path.exists(pathfile__tmp):
                 pathfile = pathfile__tmp
 
-            # if not os.path.exists(pathfile):
-            #     updateStatus(x['id'], 3)
-            #     continue
+            if not os.path.exists(pathfile):
+                updateStatus(x['id'], 3)
+                continue
 
-            # if os.path.exists(m3u8_dir):
-            #     os.remove(pathfile)
-            #     print('videoToM3u8----- The file already exists delete ok -----')
-            #     updateStatus(x['id'], 3)
-            #     continue
+            if os.path.exists(m3u8_dir):
+                os.remove(pathfile)
+                print('videoToM3u8----- The file already exists delete ok -----')
+                updateStatus(x['id'], 3)
+                continue
 
             # m3u8
             if not os.path.exists(m3u8_dir):

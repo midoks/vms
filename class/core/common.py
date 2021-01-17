@@ -73,6 +73,10 @@ def mkdir(path):
         mkdir(dirs)
 
 
+def getOs():
+    return sys.platform
+
+
 def isAppleSystem():
     if getOs() == 'darwin':
         return True
