@@ -122,13 +122,13 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   }
 
   function apiPlayer(data){
-    var url = '/m3u8/'+data.filename+'/index.m3u8'; 
+    var url = '/v/'+data.filename+'/index.m3u8'; 
     // console.log(url);
     WeAdminShow('查看['+url+']','/video/player?url='+url ,500, 400);
   }
 
   function apiPlayerOpen(data){
-    var url = '/m3u8/'+data.filename+'/index.m3u8'; 
+    var url = '/v/'+data.filename+'/index.m3u8'; 
     window.open('/video/player?url='+url);
   }
 
@@ -147,7 +147,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 }
 
   function apiAddr(data){
-    var url = location.protocol+"//"+location.host+'/m3u8/'+data.filename+'/index.m3u8';
+    var url = location.protocol+"//"+location.host+'/v/'+data.filename+'/index.m3u8';
 
   
     layer.open({
