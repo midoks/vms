@@ -163,7 +163,7 @@ def asyncVideoDBData():
     while True:
         if not isMasterNode():
 
-            #
+            # 异步通知已经执行
             video_db_ischange = common.getSysKV('video_db_ischange')
             if video_db_ischange == '1':
                 continue
