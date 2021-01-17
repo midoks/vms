@@ -162,6 +162,14 @@ def asyncNodeInfo():
 def asyncVideoDBData():
     while True:
         if not isMasterNode():
+
+            #
+            video_db_ischange = common.getSysKV('video_db_ischange')
+            if video_db_ischange == '1':
+                continue
+            else:
+                common.setSysKV('video_db_ischange', '0')
+
             print('async VideoDB!!!')
             _list = common.M('node').field('id,port,name,ip').where(
                 'ismaster=?', (1,)).select()
