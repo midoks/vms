@@ -65,41 +65,12 @@ def fileList(f_dir):
     return flist
 
 
-def getPluginDir():
-    return getRunDir() + '/plugins'
-
-
-def getServerDir():
-    return getRootDir() + '/server'
-
-
-def getWwwDir():
-    file = getRunDir() + '/data/site.pl'
-    if os.path.exists(file):
-        return readFile(file).strip()
-    return getRootDir() + '/wwwroot'
-
-
-def setWwwDir(wdir):
-    file = getRunDir() + '/data/site.pl'
-    return writeFile(file, wdir)
-
-
-def getLogsDir():
-    return getRootDir() + '/wwwlogs'
-
-
-def getBackupDir():
-    return getRootDir() + '/backup'
-
-
-def setBackupDir(bdir):
-    file = getRunDir() + '/data/backup.pl'
-    return writeFile(file, bdir)
-
-
-def getOs():
-    return sys.platform
+def mkdir(path):
+    dirs = os.path.dirname(path)
+    if os.path.exists(dirs):
+        os.mkdir(path)
+    else:
+        mkdir(dirs)
 
 
 def isAppleSystem():
@@ -668,29 +639,6 @@ def getCpuType():
     return cpuType
 
 
-def isRestart():
-    # 检查是否允许重启
-    num = M('tasks').where('status!=?', ('1',)).count()
-    if num > 0:
-        return False
-    return True
-
-
-def isUpdateLocalSoft():
-    num = M('tasks').where('status!=?', ('1',)).count()
-    if os.path.exists('mdserver-web.zip'):
-        return True
-
-    if num > 0:
-        data = M('tasks').where('status!=?', ('1',)).field(
-            'id,type,execstr').limit('1').select()
-        argv = data[0]['execstr'].split('|dl|')
-        if data[0]['type'] == 'download' and argv[1] == 'mdserver-web.zip':
-            return True
-
-    return False
-
-
 def hasPwd(password):
     # 加密密码字符
     import crypt
@@ -703,32 +651,6 @@ def getTimeout(url):
     if result != 'True':
         return False
     return int((time.time() - start) * 1000)
-
-
-def makeConf():
-    file = getRunDir() + '/data/json/config.json'
-    if not os.path.exists(file):
-        c = {}
-        c['title'] = 'Linux面板'
-        c['home'] = 'http://github/midoks/mdserver-web'
-        c['recycle_bin'] = True
-        c['template'] = 'default'
-        writeFile(file, json.dumps(c))
-        return c
-    c = readFile(file)
-    return json.loads(c)
-
-
-def getConfig(k):
-    c = makeConf()
-    return c[k]
-
-
-def setConfig(k, v):
-    c = makeConf()
-    c[k] = v
-    file = getRunDir() + '/data/json/config.json'
-    return writeFile(file, json.dumps(c))
 
 
 def getHostAddr():
@@ -809,21 +731,6 @@ def auth_encode(data):
 
     # 返回
     return pdata
-
-
-def checkToken(get):
-    # 检查Token
-    tempFile = 'data/tempToken.json'
-    if not os.path.exists(tempFile):
-        return False
-    import json
-    import time
-    tempToken = json.loads(readFile(tempFile))
-    if time.time() > tempToken['timeout']:
-        return False
-    if get.token != tempToken['token']:
-        return False
-    return True
 
 
 def checkInput(data):
