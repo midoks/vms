@@ -1011,6 +1011,10 @@ def getSysKV(name):
         'name=?', (name,)).select()
     return value[0]['value']
 
+
+def setSysKV(name, value):
+    return M('kv').where('name=?', (name,)).setField(name, value)
+
 #----DB----#
 
 

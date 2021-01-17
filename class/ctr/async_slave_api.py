@@ -76,14 +76,14 @@ class async_slave_api:
         else:
             return common.retOk('already exists!', retList)
 
-    def videoInfoApi(self):
+    def videoDbInfoApi(self):
         '''
         由从服务器发送请求,同步video db 数据
         '''
         dsize = os.path.getsize('data/video.db')
         return common.retOk('ok', dsize)
 
-    def videoRangeApi(self):
+    def videoDbRangeApi(self):
         '''
         由从服务器发送请求,同步video db 数据
         '''
@@ -91,6 +91,18 @@ class async_slave_api:
         slen = request.form.get('slen', '1024').encode('utf-8')
         c = common.readFilePos('data/video.db', start, slen)
         return common.retOk('ok', base64.b64encode(c))
+
+    def videoDbAsyncTriggerApi():
+
+        r = self.isNameRight()
+        if r != '':
+            return r
+        video_db_ischange = common.getSysKV('video_db_ischange')
+        if video_db_ischange == '0':
+            common.setSysKV('video_db_ischange', '1')
+        else:
+            common.setSysKV('video_db_ischange', '0')
+        return common.retOk()
 
     def reportDataApi(self):
         '''
