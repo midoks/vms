@@ -30,38 +30,14 @@ def updateStatus(sid, status):
         "id=?", (sid,)).setField('status', status)
 
 
-def isNeedAsync():
-    _list = common.M('node').where(
-        'ismaster=?', (1,)).select()
-    run_model = common.M('kv').field('id,name,value').where(
-        'name=?', ('run_model',)).select()
-    # print(run_model[0]['value'], len(_list))
-    if run_model[0]['value'] == '2' and len(_list) >= 1:
+def isMasterNode():
+    run_model = common.getSysKV('run_model')
+    run_is_master = common.getSysKV('run_is_master')
+    if run_model == '2' and run_is_master == '1':
         return True
     return False
 
 #------------Private Methods--------------
-
-
-def execShell(cmdstring, cwd=None, timeout=None, shell=True):
-
-    if shell:
-        cmdstring_list = cmdstring
-    else:
-        cmdstring_list = shlex.split(cmdstring)
-    if timeout:
-        end_time = datetime.datetime.now() + datetime.timedelta(seconds=timeout)
-
-    sub = subprocess.Popen(cmdstring_list, cwd=cwd, stdin=subprocess.PIPE,
-                           shell=shell, bufsize=4096, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-    while sub.poll() is None:
-        time.sleep(0.1)
-        if timeout:
-            if end_time <= datetime.datetime.now():
-                raise Exception("Timeout：%s" % cmdstring)
-
-    return sub.communicate()
 
 
 def reportData(data):
@@ -72,7 +48,7 @@ def reportData(data):
         _url = "http://" + str(_list[0]['ip']) + \
             ":" + str(_list[0]['port'])
 
-        api_url = _url + "/async_api/reportData"
+        api_url = _url + "/async_master_api/reportData"
         ret = common.httpPost(api_url, {
             "mark": common.getSysKV('run_mark'),
             "data": data,
@@ -83,9 +59,33 @@ def reportData(data):
         return rr
 
 
+def pingServer():
+    _list = common.M('node').field('id,port,name,ip').select()
+
+    for x in xrange(1, len(_list)):
+        _url = "http://" + str(_list[x]['ip']) + \
+            ":" + str(_list[x]['port'])
+
+        api_url = _url + "/async_master_api/ping"
+        try:
+            ret = common.httpPost(api_url, {
+                "mark": common.getSysKV('run_mark'),
+                'name': _list[x]['name']
+            })
+            rr = json.loads(ret)
+            if rr['code'] == 0:
+                common.M('node').where(
+                    'name=?', (_list[x]['name'],)).setField('status', 1)
+        except Exception as e:
+            common.M('node').where(
+                'name=?', (_list[x]['name'],)).setField('status', 0)
+
+        return rr
+
+
 def serverReport():
     while True:
-        if isNeedAsync():
+        if not isMasterNode():
             c = os.getloadavg()
             data = {}
             data['one'] = float(c[0])
@@ -103,6 +103,12 @@ def serverReport():
         time.sleep(3)
 
 
+def serverPing():
+    while True:
+        pingServer()
+        time.sleep(3)
+
+
 def startTask():
     import time
     try:
@@ -115,6 +121,10 @@ def startTask():
 if __name__ == "__main__":
 
     t = threading.Thread(target=serverReport)
+    t.setDaemon(True)
+    t.start()
+
+    t = threading.Thread(target=serverPing)
     t.setDaemon(True)
     t.start()
 

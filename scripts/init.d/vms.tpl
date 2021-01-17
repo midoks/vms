@@ -130,6 +130,7 @@ vms_start(){
     vms_task_start vms_report
     vms_task_start vms_async_master
     vms_task_start vms_async_slave
+    vms_task_start vms_async_monitor
 }
 
 
@@ -165,6 +166,7 @@ vms_f_start(){
     vms_task_f_start vms_report
     vms_task_f_start vms_async_master
     vms_task_f_start vms_async_slave
+    vms_task_f_start vms_async_monitor
 }
 
 vms_stop()
@@ -173,6 +175,7 @@ vms_stop()
     vms_task_stop vms_report
     vms_task_stop vms_async_master
     vms_task_stop vms_async_slave
+    vms_task_stop vms_async_monitor
 
     echo -e "Stopping vms... \c";
     arr=`ps aux|grep 'vms:app'|grep -v grep|awk '{print $2}'`
@@ -200,6 +203,7 @@ vms_status()
         vms_task_status vms_report
         vms_task_status vms_async_master
         vms_task_status vms_async_slave
+        vms_task_status vms_async_monitor
 }
 
 
