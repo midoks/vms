@@ -186,9 +186,9 @@ def index(reqClass=None, reqAction=None, reqData=None):
 
 #from flask_cors import CORS
 #CORS(app, resources=r'/m3u8/*')
-@app.route('/v/<path>/<filename>', methods=['GET'])
-def m3u8(path=None, filename=None):
-    p = os.getcwd() + '/app/' + path + '/' + filename
+@app.route('/v/<path>/<format>/<filename>', methods=['GET'])
+def m3u8(path=None, format=None, filename=None):
+    p = os.getcwd() + '/app/' + path + '/' + format + '/' + filename
     if os.path.exists(p):
         c = common.readFile(p)
         return c
