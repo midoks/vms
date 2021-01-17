@@ -138,3 +138,5 @@ scripts/init.d/vms
 data/port.pl
 *.db
 *.mkv
+*.mpd
+*.m4s

@@ -186,20 +186,29 @@ def videoToM3u8():
             #     updateStatus(x['id'], 3)
             #     continue
 
+            # m3u8
             if not os.path.exists(m3u8_dir):
                 common.mkdir(m3u8_dir)
 
             if not os.path.exists(m3u8_file):
                 cmd = fg_m3u8_cmd(tofile, m3u8_file, pathfile)
-                # data = execShell(cmd)
                 print(cmd)
                 os.system(cmd)
 
-                print(pathfile)
+            # mpd
+            mpd_dir = tmp_dir_app + "/mpd"
+            mpd_file = mpd_dir + "/index.mpd"
+            if not os.path.exists(mpd_dir):
+                common.mkdir(mpd_dir)
+
+            if not os.path.exists(mpd_file):
                 mpd_cmd = fg_mdp_cmd(pathfile)
                 print(mpd_cmd)
+
+                mpd_cmd = "cd " + mpd_dir + " && " + mpd_cmd
                 os.system(mpd_cmd)
-                # updateStatus(x['id'], 2)
+
+            updateStatus(x['id'], 2)
 
         if not isDEmpty(data):
             print('videoToM3u8-----@@@end@@@-----')
