@@ -166,6 +166,10 @@ def videoToM3u8():
         for x in data:
 
             tmp_dir_app = tmp_dir + str(x["md5"])
+
+            mpd_dir = tmp_dir_app + "/mpd"
+            mpd_file = mpd_dir + "/index.mpd"
+
             m3u8_dir = tmp_dir_app + "/m3u8"
             m3u8_file = m3u8_dir + "/index.m3u8"
             tofile = m3u8_dir + "/%010d.ts"
@@ -196,14 +200,12 @@ def videoToM3u8():
                 os.system(cmd)
 
             # mpd
-            mpd_dir = tmp_dir_app + "/mpd"
-            mpd_file = mpd_dir + "/index.mpd"
+
             if not os.path.exists(mpd_dir):
                 common.mkdir(mpd_dir)
-
+            # print(mpd_file)
             if not os.path.exists(mpd_file):
                 mpd_cmd = fg_mdp_cmd(pathfile)
-                print(mpd_cmd)
 
                 mpd_cmd = "cd " + mpd_dir + " && " + mpd_cmd
                 os.system(mpd_cmd)
@@ -212,7 +214,7 @@ def videoToM3u8():
 
         if not isDEmpty(data):
             print('videoToM3u8-----@@@end@@@-----')
-        time.sleep(2)
+        time.sleep(3)
 
 
 def videoToDB():
