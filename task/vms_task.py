@@ -47,8 +47,6 @@ def updateStatus(sid, status):
     common.M('video_tmp').where(
         "id=?", (sid,)).setField('status', status)
 
-# print(has_suffix, ffmpeg_cmd)
-
 
 def is_video(path):
     t = os.path.splitext(path)
@@ -94,6 +92,12 @@ def fg_mkv_mp4_cmd(source_file, to_mp4_file):
 def fg_m3u8_cmd(ts_file, m3u8_file, to_file):
     cmd = ffmpeg_cmd + ' -y -i "' + to_file + '" -c copy -map 0 -f segment -segment_list ' + \
         m3u8_file + ' -segment_time 3 ' + ts_file
+    return cmd
+
+
+def fg_mdp_cmd(to_file):
+    cmd = ffmpeg_cmd + ' -i "' + to_file + \
+        '" -media_seg_name vms-\$RepresentationID\$-\$Number%05d\$.m4s -min_seg_duration 1000 -c copy -f dash index.mpd'
     return cmd
 #------------Private Methods--------------
 
@@ -151,7 +155,8 @@ def videoToMp4():
 def videoToM3u8():
     while True:
         videoM = common.M('video_tmp')
-        data = videoM.field('id,md5,filename').where('status=?', (1,)).select()
+        data = videoM.field('id,md5,filename').where(
+            'status=?', (1,)).limit('1').select()
 
         tmp_dir = root_dir + '/tmp/'
         app_dir = root_dir + '/app/'
@@ -160,34 +165,41 @@ def videoToM3u8():
             print('videoToM3u8-----@@@start@@@-----')
         for x in data:
 
-            app_file = app_dir + str(x["md5"])
-            m3u8_file = tmp_dir + str(x["md5"]) + "/index.m3u8"
-            tofile = tmp_dir + x["md5"] + "/%010d.ts"
+            tmp_dir_app = tmp_dir + str(x["md5"])
+            m3u8_dir = tmp_dir_app + "/m3u8"
+            m3u8_file = m3u8_dir + "/index.m3u8"
+            tofile = m3u8_dir + "/%010d.ts"
+
             pathfile = tmp_dir + str(x["filename"])
 
             pathfile__tmp = tmp_dir + str(x["filename"]) + ".mp4"
             if os.path.exists(pathfile__tmp):
                 pathfile = pathfile__tmp
 
-            if not os.path.exists(pathfile):
-                updateStatus(x['id'], 3)
-                continue
+            # if not os.path.exists(pathfile):
+            #     updateStatus(x['id'], 3)
+            #     continue
 
-            if os.path.exists(app_file):
-                os.remove(pathfile)
-                print('videoToM3u8----- The file already exists delete ok -----')
-                updateStatus(x['id'], 3)
-                continue
+            # if os.path.exists(m3u8_dir):
+            #     os.remove(pathfile)
+            #     print('videoToM3u8----- The file already exists delete ok -----')
+            #     updateStatus(x['id'], 3)
+            #     continue
 
-            if not os.path.exists(tmp_dir + x["md5"]):
-                os.mkdir(tmp_dir + x["md5"])
+            if not os.path.exists(m3u8_dir):
+                common.mkdir(m3u8_dir)
 
             if not os.path.exists(m3u8_file):
                 cmd = fg_m3u8_cmd(tofile, m3u8_file, pathfile)
                 # data = execShell(cmd)
                 print(cmd)
                 os.system(cmd)
-                updateStatus(x['id'], 2)
+
+                print(pathfile)
+                mpd_cmd = fg_mdp_cmd(pathfile)
+                print(mpd_cmd)
+                os.system(mpd_cmd)
+                # updateStatus(x['id'], 2)
 
         if not isDEmpty(data):
             print('videoToM3u8-----@@@end@@@-----')
