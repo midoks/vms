@@ -62,7 +62,7 @@ def reportData(data):
 def pingServer():
     _list = common.M('node').field('id,port,name,ip').select()
 
-    for x in xrange(1, len(_list)):
+    for x in xrange(0, len(_list)):
         _url = "http://" + str(_list[x]['ip']) + \
             ":" + str(_list[x]['port'])
 
@@ -80,7 +80,7 @@ def pingServer():
             common.M('node').where(
                 'name=?', (_list[x]['name'],)).setField('status', 0)
 
-        return rr
+    return True
 
 
 def serverReport():
