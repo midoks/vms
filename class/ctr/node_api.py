@@ -38,7 +38,12 @@ class node_api:
             (str(start)) + ',' + limit).order('id desc').select()
 
         for x in xrange(0, len(_list)):
-            print(x, _list[x])
+            # print(x, _list[x])
+            _list[x]['load'] = 0
+            if _list[x]['info'] != '':
+                info = json.loads(_list[x]['info'])
+                runLoad = info['one'] / info['max'] * 100
+                _list[x]['load'] = runLoad
 
         count = nodeM.count()
 

@@ -148,7 +148,7 @@ def funcAsyncVideoFile():
 
         url = getNodeURL(pos)
         apiURL = url + '/async_slave_api/fileStart'
-        print(apiURL)
+        # print(apiURL)
         if len(taskData) == 0:
             r = postFileStart(apiURL, vid, data['name'])
             if r['code'] == 0:
