@@ -166,9 +166,8 @@ def asyncVideoDBData():
             # 异步通知已经执行
             video_db_ischange = common.getSysKV('video_db_ischange')
             if video_db_ischange == '1':
-                continue
-            else:
                 common.setSysKV('video_db_ischange', '0')
+                continue
 
             print('async VideoDB!!!')
             _list = common.M('node').field('id,port,name,ip').where(
