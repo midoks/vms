@@ -62,9 +62,9 @@ def isMasterNode():
     return False
 
 
-def getNodeList(ismaster=1):
+def getNodeList(ismaster=1, status=0):
     _list = common.M('node').field('id,info,port,name,ip').where(
-        'ismaster=?', (ismaster,)).select()
+        'ismaster=? and status=?', (ismaster, status,)).select()
     return _list
 
 
@@ -79,7 +79,7 @@ def getMostIdleServer():
     '''
     获取最空闲服务器
     '''
-    node_list = getNodeList(0)
+    node_list = getNodeList(0, 1)
     mi = 1000000
     pos = 0
 
@@ -145,6 +145,9 @@ def funcAsyncVideoFile():
         taskData = getTask(vid)
 
         pos, data = getMostIdleServer()
+        if not data:
+            print('node server ping fail!!')
+            return
 
         url = getNodeURL(pos)
         apiURL = url + '/async_slave_api/fileStart'
