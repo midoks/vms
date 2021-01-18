@@ -154,6 +154,7 @@ class async_master_api:
 
         node_num = common.M('video_node', 'video').where(
             "pid=?", (vid,)).count()
+        print(node_num, vid)
         common.M('video', 'video').where(
             'id=?', (vid)).setField('node_num', node_num)
 
@@ -163,6 +164,10 @@ class async_master_api:
         common.M('video_node', 'video').add(
             "pid,node_id,addtime", (vid, mark, common.getDate()))
 
+        node_num = common.M('video_node', 'video').where(
+            "pid=?", (vid,)).count()
+        common.M('video', 'video').where(
+            'id=?', (vid)).setField('node_num', node_num)
         if not r:
             return common.retFail()
         return common.retOk()
