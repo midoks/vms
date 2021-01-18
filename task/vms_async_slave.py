@@ -213,8 +213,8 @@ def asyncVideoDBData():
 def videoDownload(url, pos):
     #print(pos, url)
     fdir = os.path.dirname(pos)
-    if not os.path.exists(fdir):
-        os.mkdir(fdir)
+    # if not os.path.exists(fdir):
+    common.mkdir(fdir)
 
     c = common.httpGet(url)
     common.writeFile(pos, c)
