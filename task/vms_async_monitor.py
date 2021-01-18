@@ -77,7 +77,7 @@ def videoDbIsChange():
         if isMasterNode():
             tmp = os.stat('data/video.db').st_mtime
             if tmp != mtime:
-                node_list = getNodeList(0)
+                node_list = getNodeList(0, 1)
                 for x in xrange(0, len(node_list)):
                     # print(node_list[x])
                     url = 'http://' + node_list[x]['ip'] + \
