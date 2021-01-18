@@ -213,9 +213,8 @@ def asyncVideoDBData():
 def videoDownload(url, pos):
     #print(pos, url)
     fdir = os.path.dirname(pos)
-    # if not os.path.exists(fdir):
-    common.mkdir(fdir)
-
+    if not os.path.exists(fdir):
+        common.mkdir(fdir)
     c = common.httpGet(url)
     common.writeFile(pos, c)
 
@@ -241,7 +240,7 @@ def asyncVideoFile():
                         continue
 
                     for i in r['data']:
-                        file_url = url + '/' + i.replace('app', 'm3u8')
+                        file_url = url + '/' + i.replace('app', 'v')
                         videoDownload(file_url, i)
 
                 common.M('task').where(
