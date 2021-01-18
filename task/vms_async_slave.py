@@ -167,6 +167,7 @@ def asyncVideoDBData():
             video_db_ischange = common.getSysKV('video_db_ischange')
             if video_db_ischange == '1':
                 common.setSysKV('video_db_ischange', '0')
+            else:
                 continue
 
             print('async VideoDB!!!')
