@@ -68,7 +68,6 @@ def fileList(f_dir):
 def mkdir(path):
     dirs = os.path.dirname(path)
     if os.path.exists(dirs):
-        print(path)
         os.mkdir(path)
     else:
         mkdir(dirs)
