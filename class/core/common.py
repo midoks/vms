@@ -54,10 +54,11 @@ def fileList(f_dir):
     flist = []
     vlist = os.listdir(f_dir)
     for i in xrange(0, len(vlist)):
-        # print(i, vlist[i])
         f = f_dir + '/' + vlist[i]
         if os.path.isdir(f):
-            return fileList(f)
+            ff = fileList(f)
+            for x in ff:
+                flist.append(x)
         else:
             if vlist[i] == '.DS_Store':
                 continue

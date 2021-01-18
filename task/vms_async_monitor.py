@@ -51,9 +51,9 @@ def isMasterNode():
     return False
 
 
-def getNodeList(ismaster=1):
+def getNodeList(ismaster=1, status=0):
     _list = common.M('node').field('id,info,port,name,ip').where(
-        'ismaster=?', (ismaster,)).select()
+        'ismaster=? and status=?', (ismaster, status,)).select()
     return _list
 
 
