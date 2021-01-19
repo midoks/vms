@@ -68,21 +68,8 @@
     </form>
   </div>
   <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
-  <script src="/static/js/md5.js" charset="utf-8"></script>
-  
 
   <script>
-
-    function randStr(len=4){
-      var str = '';
-      var chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789';
-      var chrlen = chars.length - 1;
-      for (var i =  0; i <= len; i++) {
-        var random = Math.ceil(Math.random()*chrlen);
-        str += chars[random];
-      }
-      return str
-    }
 
     layui.extend({
       base: '/static/js/'
