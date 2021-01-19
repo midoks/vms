@@ -125,37 +125,38 @@ def asyncNodeInfo():
             print("async Node info !!!")
             _list = common.M('node').field('id,port,name,ip').where(
                 'ismaster=?', (1,)).select()
-            _url = "http://" + str(_list[0]['ip']) + \
-                ":" + str(_list[0]['port'])
+            if len(_list) > 0:
+                _url = "http://" + str(_list[0]['ip']) + \
+                    ":" + str(_list[0]['port'])
 
-            api_url = _url + "/async_master_api/node"
-            ret = common.httpPost(api_url, {
-                'source': {
-                    "name": common.getSysKV('run_mark'),
-                    "ip": common.getLocalIp(),
-                    "port": common.readFile('data/port.pl'),
-                    "ismaster": common.getSysKV('run_is_master')
-                },
-                'name': _list[0]['name']
+                api_url = _url + "/async_master_api/node"
+                ret = common.httpPost(api_url, {
+                    'source': {
+                        "name": common.getSysKV('run_mark'),
+                        "ip": common.getLocalIp(),
+                        "port": common.readFile('data/port.pl'),
+                        "ismaster": common.getSysKV('run_is_master')
+                    },
+                    'name': _list[0]['name']
 
-            })
-            retDic = json.loads(ret)
+                })
+                retDic = json.loads(ret)
 
-            if retDic['code'] == 0:
-                nodeM = common.M('node')
-                for i in retDic['data']:
-                    dataList = nodeM.field('name,ip,port,ismaster').where(
-                        'name=?', (i['name'],)).select()
-                    if len(dataList) < 1:
-                        r = nodeM.add("name,ip,port,info,ismaster,uptime,addtime",
-                                      (i['name'], i['ip'], i['port'], i['info'], i['ismaster'], common.getDate(), common.getDate()))
-                        if r > 0:
-                            print("node add ok")
-                    else:
-                        r = nodeM.where('name=?', (i['name'],)).save('ip,port,info,ismaster,uptime', (i[
-                            'ip'], i['port'], i['info'], i['ismaster'], common.getDate()))
-                        if r > 0:
-                            print("node update ok")
+                if retDic['code'] == 0:
+                    nodeM = common.M('node')
+                    for i in retDic['data']:
+                        dataList = nodeM.field('name,ip,port,ismaster').where(
+                            'name=?', (i['name'],)).select()
+                        if len(dataList) < 1:
+                            r = nodeM.add("name,ip,port,info,ismaster,uptime,addtime",
+                                          (i['name'], i['ip'], i['port'], i['info'], i['ismaster'], common.getDate(), common.getDate()))
+                            if r > 0:
+                                print("node add ok")
+                        else:
+                            r = nodeM.where('name=?', (i['name'],)).save('ip,port,info,ismaster,uptime', (i[
+                                'ip'], i['port'], i['info'], i['ismaster'], common.getDate()))
+                            if r > 0:
+                                print("node update ok")
         time.sleep(20)
 
 
