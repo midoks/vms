@@ -987,6 +987,8 @@ def initInitD():
             import shutil
             shutil.copyfile(script_bin, initd_bin)
             execShell('chmod +x ' + initd_bin)
+        else:
+            writeFile(initd_bin, content)
         # 加入自启动
         execShell('chkconfig --add vms')
 
