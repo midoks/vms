@@ -297,7 +297,7 @@ def asyncVideoFileCallback():
 
         task_list = getTaskList(0, 1)
 
-        if len(task_list) < 0:
+        if len(task_list) < 1:
             time.sleep(sleep_time)
             continue
 
