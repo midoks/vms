@@ -185,7 +185,7 @@ def asyncNodeInfo():
 
 
 def asyncVideoDBData():
-    sleep_time = 20
+    sleep_time = 3
     while True:
         if isMasterNode():
             time.sleep(sleep_time)
@@ -245,7 +245,7 @@ def asyncVideoDBData():
 
 
 def videoDownload(url, pos):
-    #print(pos, url)
+    # print(pos, url)
     fdir = os.path.dirname(pos)
     if not os.path.exists(fdir):
         common.mkdir(fdir)
@@ -289,29 +289,35 @@ def asyncVideoFile():
 
 
 def asyncVideoFileCallback():
+    sleep_time = 3
     while True:
-        if not isMasterNode():
+        if isMasterNode():
+            time.sleep(sleep_time)
+            continue
 
-            task_list = getTaskList(0, 1)
+        task_list = getTaskList(0, 1)
 
-            if len(task_list) > 0:
-                print('async VideoFile Callback!!!')
+        if len(task_list) < 0:
+            time.sleep(sleep_time)
+            continue
 
-            for x in xrange(0, len(task_list)):
-                url = getMasterNodeURL()
-                api_url = url + "/async_master_api/fileAsyncCallBack"
+        print('async VideoFile Callback!!!')
+        for x in xrange(0, len(task_list)):
+            url = getMasterNodeURL()
+            api_url = url + "/async_master_api/fileAsyncCallBack"
 
-                ret = common.httpPost(api_url, {
-                    'mark': common.getSysKV('run_mark'),
-                    'name': task_list[x]['mark'],
-                    'vid': task_list[x]['vid'],
-                })
-                data = json.loads(ret)
-                if data['code'] != 0:
-                    print(data['msg'])
-                else:
-                    common.M('task').where(
-                        'id=?', (task_list[x]['id'],)).setField('status', 2)
+            ret = common.httpPost(api_url, {
+                'mark': common.getSysKV('run_mark'),
+                'name': task_list[x]['mark'],
+                'vid': task_list[x]['vid'],
+            })
+            print(ret)
+            data = json.loads(ret)
+            if data['code'] != 0:
+                print(data['msg'])
+            else:
+                common.M('task').where(
+                    'id=?', (task_list[x]['id'],)).setField('status', 2)
         time.sleep(3)
 
 
