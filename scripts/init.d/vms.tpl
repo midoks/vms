@@ -134,6 +134,11 @@ vms_start(){
 }
 
 
+vms_start_listen(){
+    vms_start
+    vms_task_start vms_nginx_listen
+}
+
 vms_f_start(){
 
     echo -e "Starting vms... \c"
@@ -176,6 +181,7 @@ vms_stop()
     vms_task_stop vms_async_master
     vms_task_stop vms_async_slave
     vms_task_stop vms_async_monitor
+    vms_task_stop vms_nginx_listen
 
     echo -e "Stopping vms... \c";
     arr=`ps aux|grep 'vms:app'|grep -v grep|awk '{print $2}'`
@@ -204,6 +210,7 @@ vms_status()
         vms_task_status vms_async_master
         vms_task_status vms_async_slave
         vms_task_status vms_async_monitor
+        vms_task_status vms_nginx_listen
 }
 
 
@@ -251,6 +258,9 @@ case "$1" in
         vms_start;;
     'fstart')
         vms_f_start
+        ;;
+    'start_and_listen')
+        vms_start_listen
         ;;
     'status') vms_status;;
     'logs') error_logs;;

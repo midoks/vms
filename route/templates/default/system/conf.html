@@ -33,7 +33,18 @@
           <textarea id="nginx_domain" name="nginx_domain" class="layui-textarea"></textarea>
         </div>
 
-        <div style="line-height: 38px;">空,所有都可以访问.</div>
+        <div style="line-height: 38px;">前台访问</div>
+      </div>
+
+      <div class="layui-form-item">
+        <label for="L_username" class="layui-form-label">
+          <span class="we-red">*</span>访问域名
+        </label>
+        <div class="layui-input-inline">
+          <textarea id="nginx_domain_acl" name="nginx_domain_acl" class="layui-textarea"></textarea>
+        </div>
+
+        <div style="line-height: 38px;">权限访问域名[空,所有都可以访问]</div>
       </div>
 
       <div class="layui-form-item">
@@ -45,6 +56,28 @@
         </div>
 
         <div style="line-height: 38px;">(配置文件位置)</div>
+      </div>
+
+      <div class="layui-form-item">
+        <label for="L_email" class="layui-form-label">
+          <span class="we-red">*</span>nginx[WWW]
+        </label>
+        <div class="layui-input-inline">
+          <input type="text" name="nginx_www" class="layui-input">
+        </div>
+
+        <div style="line-height: 38px;">(www路径)</div>
+      </div>
+
+      <div class="layui-form-item">
+        <label for="L_email" class="layui-form-label">
+          <span class="we-red">*</span>nginx[Video]
+        </label>
+        <div class="layui-input-inline">
+          <input type="text" name="nginx_video_www" class="layui-input">
+        </div>
+
+        <div style="line-height: 38px;">(www video 路径)</div>
       </div>
 
 
@@ -92,13 +125,16 @@
               list[key] = value;
             }
             $("textarea[name='nginx_domain']").val(list['nginx_domain']);
+            $("textarea[name='nginx_domain_acl']").val(list['nginx_domain_acl']);
             $("input[name='nginx_path']").val(list['nginx_path']);
+            $("input[name='nginx_www']").val(list['nginx_www']);
+            $("input[name='nginx_video_www']").val(list['nginx_video_www']);
 
             if (list['nginx_listen'] == '1'){
               $(".layui-form-switch").addClass('layui-form-onswitch');
               $(".layui-form-switch").find('em').text('ON');
             }
-            $("checkbox[name='nginx_path']").val(list['nginx_path']);
+            $("checkbox[name='nginx_listen']").val(list['nginx_path']);
             form.render('select');
         } else {
             layer.msg(data.msg);

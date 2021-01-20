@@ -1,0 +1,29 @@
+
+
+server {
+    listen       80;
+    server_name  {$NG_DOMAIN};
+    root {$NG_WWW};
+
+    add_header Access-Control-Allow-Origin '{$NG_DOAMIN_ACL}';
+    add_header Access-Control-Allow-Methods 'GET,POST';
+    add_header Access-Control-Allow-Headers 'DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Authorization';
+    add_header Access-Control-Allow-Credentials true;
+    add_header Accept-Ranges bytes;
+    add_header Access-Control-Allow-Headers Range;
+
+    location / {
+        slice             1m;
+        proxy_cache       cache;
+        proxy_cache_key   $uri$is_args$args$slice_range;
+        proxy_set_header  Range $slice_range;
+        proxy_pass http://127.0.0.1:8000; # 这里是指向 gunicorn host 的服务地址
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    #video to nginx control
+    location /v {
+        alias {$NG_VIDEO_WWW};
+    }
+}

@@ -94,10 +94,15 @@ class system_api:
         nginx_domain = request.form.get('nginx_domain', '').encode('utf-8')
         nginx_path = request.form.get('nginx_path', '').encode('utf-8')
         nginx_listen = request.form.get('nginx_listen', '').encode('utf-8')
+        nginx_www = request.form.get('nginx_www', '').encode('utf-8')
+        nginx_video_www = request.form.get(
+            'nginx_video_www', '').encode('utf-8')
 
         self.updateConfKV('nginx_domain', nginx_domain)
         self.updateConfKV('nginx_path', nginx_path)
         self.updateConfKV('nginx_listen', nginx_listen)
+        self.updateConfKV('nginx_www', nginx_www)
+        self.updateConfKV('nginx_video_www', nginx_video_www)
 
         _ret = {}
         _ret['code'] = 0
