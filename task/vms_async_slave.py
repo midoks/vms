@@ -193,9 +193,9 @@ def asyncVideoDBData():
 
         # 异步通知已经执行
         video_db_ischange = common.getSysKV('video_db_ischange')
-        if video_db_ischange == '1':
-            common.setSysKV('video_db_ischange', '0')
-        else:
+        print(video_db_ischange)
+        if video_db_ischange == '0':
+            time.sleep(sleep_time)
             continue
 
         _list = common.M('node').field('id,port,name,ip').where(
@@ -240,7 +240,7 @@ def asyncVideoDBData():
             os.rename('data/tmp.db', 'data/video.db')
 
         print('async VideoDB ok!!!')
-
+        common.setSysKV('video_db_ischange', '0')
         time.sleep(sleep_time)
 
 
@@ -297,7 +297,7 @@ def asyncVideoFileCallback():
 
         task_list = getTaskList(0, 1)
 
-        if len(task_list) < 1:
+        if len(task_list) < 0:
             time.sleep(sleep_time)
             continue
 
