@@ -63,6 +63,7 @@ class async_slave_api:
 
         mark = request.form.get('mark', '').encode('utf-8')
         vid = request.form.get('vid', '').encode('utf-8')
+        action = request.form.get('action', '').encode('utf-8')
 
         vlist = common.M('video', 'video').where('id=?', vid).select()
         if len(vlist) < 1:
@@ -79,8 +80,8 @@ class async_slave_api:
         # print()
         url = nlist[0]['ip'] + ':' + nlist[0]['port']
         sign = 'from:' + url
-        r = common.M('task').add("ismaster,sign,vid,mark,status,uptime,addtime",
-                                 (0, sign, vid, mark, 0, common.getDate(), common.getDate()))
+        r = common.M('task').add("ismaster,sign,vid,action,mark,status,uptime,addtime",
+                                 (0, sign, vid, action, mark, 0, common.getDate(), common.getDate()))
         if not r:
             return common.retFail('the task add fail...!!!')
         return common.retOk()
