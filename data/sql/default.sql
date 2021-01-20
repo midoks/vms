@@ -57,6 +57,7 @@ INSERT INTO `logs` (`id`, `type`, `log`, `addtime`) VALUES
 CREATE TABLE IF NOT EXISTS `task` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `ismaster` INTEGER,
+  `action` INTEGER,
   `mark` TEXT,
   `sign` TEXT,
   `vid` INTEGER,
