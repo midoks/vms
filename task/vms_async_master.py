@@ -43,17 +43,6 @@ def isDEmpty(data):
 #------------Public Methods--------------
 
 
-def isNeedAsync():
-    _list = common.M('node').where(
-        'ismaster=?', (1,)).select()
-    run_model = common.M('kv').field('id,name,value').where(
-        'name=?', ('run_model',)).select()
-    # print(run_model[0]['value'], len(_list))
-    if run_model[0]['value'] == '2' and len(_list) >= 1:
-        return True
-    return False
-
-
 def isMasterNode():
     run_model = common.getSysKV('run_model')
     run_is_master = common.getSysKV('run_is_master')
