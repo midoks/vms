@@ -171,13 +171,16 @@ def asyncVideoFile():
     '''
     # 由主服务器选择文件同步到那从服务器上
     '''
+    time_sleep = 3
     while True:
-        if isMasterNode():
-            try:
-                funcAsyncVideoFile()
-            except Exception as e:
-                print(e)
-        time.sleep(3)
+        if not isMasterNode():
+            time.sleep(time_sleep)
+            continue
+        try:
+            funcAsyncVideoFile()
+        except Exception as e:
+            print(e)
+        time.sleep(time_sleep)
 
 
 def startTask():
