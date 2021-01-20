@@ -34,7 +34,7 @@ class task_api:
         start = (int(p) - 1) * (int(limit))
 
         apiM = common.M('task')
-        _list = apiM.field('id,ismaster,mark,sign,vid,status,uptime,addtime').limit(
+        _list = apiM.field('id,ismaster,action,mark,sign,vid,status,uptime,addtime').limit(
             (str(start)) + ',' + limit).order('id desc').select()
 
         count = apiM.count()
