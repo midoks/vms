@@ -99,20 +99,27 @@ def getNodeURL(nid):
     return url
 
 
-def getTask(vid):
+def getTask(vid, status=0):
     r = common.M('task').where(
-        'vid=?', (vid,)).limit('1').select()
+        'vid=? and status=?', (vid, status)).limit('1').select()
     return r
 
 
-def addTask(vid, sign, mark):
-    return common.M('task').add("ismaster,sign,vid,mark,status,uptime,addtime",
-                                (1, sign, vid, mark, 0, common.getDate(), common.getDate()))
+def getTaskList(ismaster=0, status=0):
+    _list = common.M('task').field('id,ismaster,mark,sign,vid,status,uptime,addtime').where(
+        'ismaster=? and status=?', (ismaster, status,)).limit('1').select()
+    return _list
 
 
-def postFileStart(url, vid, name):
+def addTask(vid, action, sign, mark):
+    return common.M('task').add("ismaster,action,sign,vid,mark,status,uptime,addtime",
+                                (1, action, sign, vid, mark, 0, common.getDate(), common.getDate()))
+
+
+def postFileStart(url, vid, action, name):
     ret = common.httpPost(url, {
         'vid': vid,
+        'action': action,
         'mark': common.getSysKV('run_mark'),
         'name': name
     })
@@ -126,34 +133,37 @@ def postFileStart(url, vid, name):
 def funcAsyncVideoFile():
     vlist = common.M('video', 'video').field('id,name').where(
         'node_num=?', (1,)).limit('1').select()
-    if len(vlist) > 0:
-        print('asyncVideoFile evnet start!!!')
+    if len(vlist) < 1:
+        return
 
-        vid = vlist[0]['id']
-        name = vlist[0]['name']
-        taskData = getTask(vid)
+    print('asyncVideoFile evnet start!!!')
 
-        pos, data = getMostIdleServer()
-        if not data:
-            print('node server ping fail!!')
-            return
+    vid = vlist[0]['id']
+    name = vlist[0]['name']
+    taskData = getTask(vid)
 
-        url = getNodeURL(pos)
-        apiURL = url + '/async_slave_api/fileStart'
-        # print(apiURL)
-        if len(taskData) == 0:
-            r = postFileStart(apiURL, vid, data['name'])
-            if r['code'] == 0:
-                sign = 'to:' + url
-                r = addTask(vid, sign, data['name'])
-                if r:
-                    print(apiURL + ':' + name + ' 发送成功...')
-            else:
-                print(common.getSysKV('run_mark') + ':' + r['msg'])
+    pos, data = getMostIdleServer()
+    if not data:
+        print('node server ping fail!!')
+        return
+
+    url = getNodeURL(pos)
+    apiURL = url + '/async_slave_api/fileStart'
+    # print(apiURL)
+    if len(taskData) == 0:
+        r = postFileStart(apiURL, vid, 1, data['name'])
+        if r['code'] == 0:
+            sign = 'to:' + url
+            r = addTask(vid, 1, sign, data['name'])
+            if r:
+                print(apiURL + ':' + name + ' 发送成功...')
         else:
-            print(apiURL + ':' + name + ' 同步中...')
+            print(common.getSysKV('run_mark') + ':' + r['msg'])
+    else:
+        print(apiURL + ':' + name + ' 同步中...')
 
-        print('asyncVideoFile evnet end!!!')
+    print('asyncVideoFile evnet end!!!')
+    return
 
 
 def asyncVideoFile():
