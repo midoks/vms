@@ -43,6 +43,9 @@ class system_api:
     def updateKV(self, name, value):
         return common.M('kv').where('name=?', (name,)).setField('value', value)
 
+    def updateConfKV(self, name, value):
+        return common.M('kv', 'video').where('name=?', (name,)).setField('value', value)
+
     def editApi(self):
         run_model = request.form.get('run_model', '').encode('utf-8')
         video_size = request.form.get('video_size', '').encode('utf-8')
@@ -75,6 +78,31 @@ class system_api:
 
         _ret['data'] = _list
         _ret['code'] = 0
+        return common.getJson(_ret)
+
+    def getConfApi(self):
+        sid = request.args.get('id', '').encode('utf-8')
+        kvM = common.M('kv', 'video')
+        _list = kvM.field('name,value').select()
+        _ret = {}
+
+        _ret['data'] = _list
+        _ret['code'] = 0
+        return common.getJson(_ret)
+
+    def editConfApi(self):
+        nginx_domain = request.form.get('nginx_domain', '').encode('utf-8')
+        nginx_path = request.form.get('nginx_path', '').encode('utf-8')
+        nginx_listen = request.form.get('nginx_listen', '').encode('utf-8')
+
+        self.updateConfKV('nginx_domain', nginx_domain)
+        self.updateConfKV('nginx_path', nginx_path)
+        self.updateConfKV('nginx_listen', nginx_listen)
+
+        _ret = {}
+        _ret['code'] = 0
+        _ret['msg'] = '修改成功'
+
         return common.getJson(_ret)
 
     def systemTotalApi(self):

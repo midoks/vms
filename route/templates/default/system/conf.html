@@ -30,7 +30,7 @@
           <span class="we-red">*</span>域名配置
         </label>
         <div class="layui-input-inline">
-          <textarea id="domain" name="domain" class="layui-textarea"></textarea>
+          <textarea id="nginx_domain" name="nginx_domain" class="layui-textarea"></textarea>
         </div>
 
         <div style="line-height: 38px;">空,所有都可以访问.</div>
@@ -41,7 +41,7 @@
           <span class="we-red">*</span>配置文件
         </label>
         <div class="layui-input-inline">
-          <input type="text" name="run_mark" class="layui-input">
+          <input type="text" name="nginx_path" class="layui-input">
         </div>
 
         <div style="line-height: 38px;">(配置文件位置)</div>
@@ -53,7 +53,7 @@
           <span class="we-red">*</span>开启监控
         </label>
         <div class="layui-input-inline">
-          <input type="checkbox" name="switch" lay-skin="switch" lay-text="ON|OFF" lay-filter="switchTest" value="1">
+          <input type="checkbox" name="nginx_listen" lay-skin="switch" lay-text="ON|OFF" lay-filter="switchTest" value="1">
             <div class="layui-unselect layui-form-switch" lay-skin="_switch">
               <em>OFF</em><i></i>
             </div>
@@ -82,7 +82,7 @@
         admin = layui.admin,
         layer = layui.layer;
 
-      $.getJSON('/system_api/get',{}, function(data){
+      $.getJSON('/system_api/getConf',{}, function(data){
         // console.log(data);
         if (data['code'] == 0){
             var list = {};
@@ -91,24 +91,25 @@
               var value = data['data'][v]['value'];
               list[key] = value;
             }
-            $("input[name='video_size']").val(list['video_size']);
-            $("input[name='video_num']").val(list['video_num']);
-            $("#run_model").val(list['run_model']);
-            $("#run_is_master").val(list['run_is_master']);
-            $("input[name='run_mark']").val(list['run_mark']);
-            $("input[name='ip']").val(list['ip']);
+            $("textarea[name='nginx_domain']").val(list['nginx_domain']);
+            $("input[name='nginx_path']").val(list['nginx_path']);
+
+            if (list['nginx_listen'] == '1'){
+              $(".layui-form-switch").addClass('layui-form-onswitch');
+              $(".layui-form-switch").find('em').text('ON');
+            }
+            $("checkbox[name='nginx_path']").val(list['nginx_path']);
             form.render('select');
         } else {
             layer.msg(data.msg);
         }
-        
       });
 
       //监听提交
       form.on('submit(add)', function (data) {
         var f = data.field;
         console.log(f);
-        $.post('/system_api/edit',f,function(data){
+        $.post('/system_api/editConf',f,function(data){
             console.log(data,f);
             data = $.parseJSON(data);
             layer.msg(data.msg);

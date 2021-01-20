@@ -116,6 +116,21 @@ def getMasterNodeURL():
     _url = "http://" + str(_list[0]['ip']) + \
         ":" + str(_list[0]['port'])
     return _url
+
+
+def postNode(_list):
+    ret = common.httpPost(api_url, {
+        'source': {
+            "name": common.getSysKV('run_mark'),
+            "ip": common.getLocalIp(),
+            "port": common.readFile('data/port.pl'),
+            "ismaster": common.getSysKV('run_is_master')
+        },
+        'name': _list[0]['name']
+
+    })
+
+    retDic = json.loads(ret)
 #------------Public Methods--------------
 
 
