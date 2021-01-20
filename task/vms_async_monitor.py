@@ -46,7 +46,7 @@ def isDEmpty(data):
 def isMasterNode():
     run_model = common.getSysKV('run_model')
     run_is_master = common.getSysKV('run_is_master')
-    if run_model == '2' and run_is_master == '1':
+    if (run_model == '1') or (run_is_master == '1'):
         return True
     return False
 
@@ -74,26 +74,29 @@ def videoDbIsChange():
     '''
     mtime = os.stat('data/video.db').st_mtime
     while True:
-        if isMasterNode():
-            tmp = os.stat('data/video.db').st_mtime
-            if tmp != mtime:
-                node_list = getNodeList(0, 1)
-                for x in xrange(0, len(node_list)):
-                    # print(node_list[x])
-                    url = 'http://' + node_list[x]['ip'] + \
-                        ':' + node_list[x]['port'] + \
-                        '/async_slave_api/videoDbAsyncTrigger'
-                    try:
-                        r = postVideoDbAsyncTrigger(url, node_list[x]['name'])
-                        if r and r['code'] == 0:
-                            print("DB文件发生改变通知成功:" + url)
-                        else:
-                            print("DB文件发生改变通知失败:" + url)
-                    except Exception as e:
-                        print("DB文件发生改变通知失败:" + url + ':', e)
+        time_sleep = 2
+        if not isMasterNode():
+            time.sleep(time_sleep)
+            continue
+        tmp = os.stat('data/video.db').st_mtime
+        if tmp != mtime:
+            node_list = getNodeList(0, 1)
+            for x in xrange(0, len(node_list)):
+                # print(node_list[x])
+                url = 'http://' + node_list[x]['ip'] + \
+                    ':' + node_list[x]['port'] + \
+                    '/async_slave_api/videoDbAsyncTrigger'
+                try:
+                    r = postVideoDbAsyncTrigger(url, node_list[x]['name'])
+                    if r and r['code'] == 0:
+                        print("DB文件发生改变通知成功:" + url)
+                    else:
+                        print("DB文件发生改变通知失败:" + url)
+                except Exception as e:
+                    print("DB文件发生改变异常通知失败:" + url + ':', e)
 
-            mtime = tmp
-        time.sleep(2)
+        mtime = tmp
+        time.sleep(time_sleep)
 
 
 def startTask():
