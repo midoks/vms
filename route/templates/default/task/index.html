@@ -53,11 +53,32 @@ layui.use(['jquery','laydate', 'laypage', 'admin','layer', 'table', 'carousel', 
     ,cols: [[ //表头
       {type: 'checkbox', fixed: 'left'}
       ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
-      ,{field: 'ismaster', title: '主', width:80}
-      ,{field: 'mark', title: 'mark', width: 285, sort: true}
-      ,{field: 'sign', title: 'sign', width: 80, sort: true}
-      ,{field: 'vid', title: '视频ID', width: 120, sort: true}
-      ,{field: 'status', title: '状态', width: 80, sort: true}
+      ,{field: 'ismaster', title: '主', width:80,templet: function(d){
+        if (d.action == '1'){
+          return '<span class="layui-btn layui-btn-normal layui-btn-xs">主</span>';
+        } else{
+          return '<span class="layui-btn layui-btn-warm layui-btn-xs">从</span>';
+        }
+      }}
+      ,{field: 'action', title: '动作', width:80,templet: function(d){
+        if (d.action == '1'){
+          return '<span class="layui-btn layui-btn-normal layui-btn-xs">添加</span>';
+        } else if (d.action=='2'){
+          return '<span class="layui-btn layui-btn-warm layui-btn-xs">删除</span>';
+        } else if (d.action=='3'){
+          return '<span class="layui-btn layui-btn-warm layui-btn-xs">转移</span>';
+        }
+      }}
+      ,{field: 'mark', title: 'mark', width: 285}
+      ,{field: 'sign', title: 'sign', width: 80}
+      ,{field: 'vid', title: '视频ID', width: 120}
+      ,{field: 'status', title: '状态', width: 80,templet: function(d){
+        if (d.status == '1'){
+          return '<span class="layui-btn layui-btn-normal layui-btn-xs">已完成</span>';
+        } else{
+          return '<span class="layui-btn layui-btn-warm layui-btn-xs">已发送</span>';
+        }
+      }}
       ,{field: 'uptime', title: '更新时间', width: 200, sort: true}
       ,{field: 'addtime', title: '添加时间', width: 200, sort: true}
       ,{fixed: 'right', width: 165, align:'center', toolbar: '#toolBar'}
