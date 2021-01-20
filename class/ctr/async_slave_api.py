@@ -44,15 +44,13 @@ class async_slave_api:
         return common.retOk('ok')
 
     def videoDbAsyncTriggerApi(self):
-
         r = self.isNameRight()
         if r != '':
             return r
         video_db_ischange = common.getSysKV('video_db_ischange')
         if video_db_ischange == '0':
             common.setSysKV('video_db_ischange', '1')
-        else:
-            common.setSysKV('video_db_ischange', '0')
+
         return common.retOk()
 
     def fileStartApi(self):
