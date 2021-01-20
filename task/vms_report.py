@@ -33,7 +33,7 @@ def updateStatus(sid, status):
 def isMasterNode():
     run_model = common.getSysKV('run_model')
     run_is_master = common.getSysKV('run_is_master')
-    if run_model == '2' and run_is_master == '1':
+    if (run_model == '1') or (run_is_master == '1'):
         return True
     return False
 
