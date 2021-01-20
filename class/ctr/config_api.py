@@ -30,6 +30,13 @@ class config_api:
     def getVersion(self):
         return self.__version
 
+    def isMasterNode(self):
+        run_model = common.getSysKV('run_model')
+        run_is_master = common.getSysKV('run_is_master')
+        if (run_model == '1') or (run_is_master == '1'):
+            return True
+        return False
+
     def get(self):
         data = {}
         data['ip'] = common.getHostAddr()
@@ -38,4 +45,5 @@ class config_api:
         tmp = common.M('users').field('id,username,password,email').where(
             'id=?', (1,)).select()
         data['username'] = tmp[0]['username']
+        data['ismaster'] = self.isMasterNode()
         return data
