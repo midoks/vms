@@ -28,6 +28,14 @@ import base64
 from threading import Thread
 
 
+def updateNodeNum(vid):
+    node_num = common.M('video_node', 'video').where(
+        "pid=?", (vid,)).count()
+    common.M('video', 'video').where(
+        'id=?', (vid,)).setField('node_num', node_num)
+    return True
+
+
 class async_master_api:
 
     def __init__(self):
@@ -140,12 +148,12 @@ class async_master_api:
         '''
         文件完成回调
         '''
-        r = self.isNameRight()
-        if r != '':
-            return r
+        # r = self.isNameRight()
+        # if r != '':
+        #     return r
 
-        vid = request.form.get('vid', '').encode('utf-8')
-        mark = request.form.get('mark', '').encode('utf-8')
+        vid = request.args.get('vid', '').encode('utf-8')
+        mark = request.args.get('mark', '').encode('utf-8')
         # print(vid, mark)
         r = common.M('task').where(
             'vid=? and mark=?', (vid, mark)).setField('status', 1)
@@ -154,15 +162,12 @@ class async_master_api:
             "pid=? and node_id=?", (vid, mark,)).select()
 
         if len(vlist) > 0:
+            updateNodeNum(vid)
             return common.retFail('already exists!!!')
 
         common.M('video_node', 'video').add(
             "pid,node_id,addtime", (vid, mark, common.getDate()))
-
-        node_num = common.M('video_node', 'video').where(
-            "pid=?", (vid,)).count()
-        common.M('video', 'video').where(
-            'id=?', (vid)).setField('node_num', node_num)
+        updateNodeNum(vid)
         if not r:
             return common.retFail()
         return common.retOk()
