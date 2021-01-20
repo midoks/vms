@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `video_node` (
 CREATE TABLE IF NOT EXISTS `kv` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` TEXT,
-  `value` TEXT
+  `value` TEXT,
   `addtime` TEXT
 );
 
