@@ -135,95 +135,113 @@ def postNode(_list):
 
 
 def asyncNodeInfo():
+    sleep_time = 20
     while True:
-        if not isMasterNode():
-            print("async Node info !!!")
-            _list = common.M('node').field('id,port,name,ip').where(
-                'ismaster=?', (1,)).select()
-            if len(_list) > 0:
-                _url = "http://" + str(_list[0]['ip']) + \
-                    ":" + str(_list[0]['port'])
+        if isMasterNode():
+            time.sleep(sleep_time)
+            continue
 
-                api_url = _url + "/async_master_api/node"
-                ret = common.httpPost(api_url, {
-                    'source': {
-                        "name": common.getSysKV('run_mark'),
-                        "ip": common.getLocalIp(),
-                        "port": common.readFile('data/port.pl'),
-                        "ismaster": common.getSysKV('run_is_master')
-                    },
-                    'name': _list[0]['name']
+        _list = common.M('node').field('id,port,name,ip').where(
+            'ismaster=?', (1,)).select()
 
-                })
-                retDic = json.loads(ret)
+        if len(_list) < 1:
+            time.sleep(sleep_time)
+            continue
 
-                if retDic['code'] == 0:
-                    nodeM = common.M('node')
-                    for i in retDic['data']:
-                        dataList = nodeM.field('name,ip,port,ismaster').where(
-                            'name=?', (i['name'],)).select()
-                        if len(dataList) < 1:
-                            r = nodeM.add("name,ip,port,info,ismaster,uptime,addtime",
-                                          (i['name'], i['ip'], i['port'], i['info'], i['ismaster'], common.getDate(), common.getDate()))
-                            if r > 0:
-                                print("node add ok")
-                        else:
-                            r = nodeM.where('name=?', (i['name'],)).save('ip,port,info,ismaster,uptime', (i[
-                                'ip'], i['port'], i['info'], i['ismaster'], common.getDate()))
-                            if r > 0:
-                                print("node update ok")
-        time.sleep(20)
+        print("async Node info !!! start")
+        _url = "http://" + str(_list[0]['ip']) + \
+            ":" + str(_list[0]['port'])
+
+        api_url = _url + "/async_master_api/node"
+        ret = common.httpPost(api_url, {
+            'source': {
+                "name": common.getSysKV('run_mark'),
+                "ip": common.getLocalIp(),
+                "port": common.readFile('data/port.pl'),
+                "ismaster": common.getSysKV('run_is_master')
+            },
+            'name': _list[0]['name']
+
+        })
+        retDic = json.loads(ret)
+
+        if retDic['code'] == 0:
+            nodeM = common.M('node')
+            for i in retDic['data']:
+                dataList = nodeM.field('name,ip,port,ismaster').where(
+                    'name=?', (i['name'],)).select()
+                if len(dataList) < 1:
+                    r = nodeM.add("name,ip,port,info,ismaster,uptime,addtime",
+                                  (i['name'], i['ip'], i['port'], i['info'], i['ismaster'], common.getDate(), common.getDate()))
+                    if r > 0:
+                        print("node add ok")
+                else:
+                    r = nodeM.where('name=?', (i['name'],)).save('ip,port,info,ismaster,uptime', (i[
+                        'ip'], i['port'], i['info'], i['ismaster'], common.getDate()))
+                    if r > 0:
+                        print("node update ok")
+        print("async Node info !!! end")
+        time.sleep(sleep_time)
 
 
 def asyncVideoDBData():
+    sleep_time = 20
     while True:
-        if not isMasterNode():
+        if isMasterNode():
+            time.sleep(sleep_time)
+            continue
 
-            # 异步通知已经执行
-            video_db_ischange = common.getSysKV('video_db_ischange')
-            if video_db_ischange == '1':
-                common.setSysKV('video_db_ischange', '0')
-            else:
-                continue
+        # 异步通知已经执行
+        video_db_ischange = common.getSysKV('video_db_ischange')
+        if video_db_ischange == '1':
+            common.setSysKV('video_db_ischange', '0')
+        else:
+            continue
 
-            print('async VideoDB!!!')
-            _list = common.M('node').field('id,port,name,ip').where(
-                'ismaster=?', (1,)).select()
-            _url = "http://" + str(_list[0]['ip']) + \
-                ":" + str(_list[0]['port'])
+        _list = common.M('node').field('id,port,name,ip').where(
+            'ismaster=?', (1,)).select()
 
-            api_url = _url + "/async_master_api/videoDbInfo"
-            pageInfo = common.httpPost(api_url)
-            pageInfo = json.loads(pageInfo)
+        if len(_list) < 1:
+            time.sleep(20)
+            continue
 
-            pageSize = 1024
-            pageNum = int(pageInfo['data']) / pageSize
-            # print(pageNum, pageInfo['data'])
+        print('async VideoDB!!!')
 
-            api_range_url = _url + "/async_master_api/videoDbRange"
+        _url = "http://" + str(_list[0]['ip']) + \
+            ":" + str(_list[0]['port'])
 
-            common.writeFileClear('data/tmp.db')
-            for x in xrange(0, pageNum):
-                start = x * pageSize
+        api_url = _url + "/async_master_api/videoDbInfo"
+        pageInfo = common.httpPost(api_url)
+        pageInfo = json.loads(pageInfo)
 
-                data = common.httpPost(api_range_url, {
-                    'start': start,
-                    'slen': pageSize,
-                })
-                data = json.loads(data)
-                fdata = base64.b64decode(data['data'])
-                common.writeFileAppend('data/tmp.db', fdata)
+        pageSize = 1024
+        pageNum = int(pageInfo['data']) / pageSize
+        # print(pageNum, pageInfo['data'])
 
-            tmpMd5 = common.calMD5ForFile('data/tmp.db')
-            videoMd5 = common.calMD5ForFile('data/video.db')
+        api_range_url = _url + "/async_master_api/videoDbRange"
 
-            if tmpMd5 != videoMd5:
-                os.remove('data/video.db')
-                os.rename('data/tmp.db', 'data/video.db')
+        common.writeFileClear('data/tmp.db')
+        for x in xrange(0, pageNum):
+            start = x * pageSize
 
-            print('async VideoDB ok!!!')
+            data = common.httpPost(api_range_url, {
+                'start': start,
+                'slen': pageSize,
+            })
+            data = json.loads(data)
+            fdata = base64.b64decode(data['data'])
+            common.writeFileAppend('data/tmp.db', fdata)
 
-        time.sleep(20)
+        tmpMd5 = common.calMD5ForFile('data/tmp.db')
+        videoMd5 = common.calMD5ForFile('data/video.db')
+
+        if tmpMd5 != videoMd5:
+            os.remove('data/video.db')
+            os.rename('data/tmp.db', 'data/video.db')
+
+        print('async VideoDB ok!!!')
+
+        time.sleep(sleep_time)
 
 
 def videoDownload(url, pos):
@@ -236,31 +254,37 @@ def videoDownload(url, pos):
 
 
 def asyncVideoFile():
+    sleep_time = 20
     while True:
-        if not isMasterNode():
-            task_list = getTaskList(0, 0)
-            if len(task_list) > 0:
-                print('async VideoFile!!!')
-                url = getMasterNodeURL()
+        if isMasterNode():
+            time.sleep(sleep_time)
+            continue
+        task_list = getTaskList(0, 0)
+        if len(task_list) < 1:
+            time.sleep(sleep_time)
+            continue
 
-                api_url = url + "/async_master_api/fileList"
-                ret = common.httpPost(api_url, {
-                    'vid': task_list[0]['vid'],
-                    'name': task_list[0]['mark']
-                })
+        url = getMasterNodeURL()
 
-                if ret:
-                    r = json.loads(ret)
-                    if r['code'] != 0:
-                        print(r['msg'])
-                        continue
+        print('async VideoFile!!!')
+        api_url = url + "/async_master_api/fileList"
+        ret = common.httpPost(api_url, {
+            'vid': task_list[0]['vid'],
+            'name': task_list[0]['mark']
+        })
 
-                    for i in r['data']:
-                        file_url = url + '/' + i.replace('app', 'v')
-                        videoDownload(file_url, i)
+        if ret:
+            r = json.loads(ret)
+            if r['code'] != 0:
+                print(r['msg'])
+                continue
 
-                common.M('task').where(
-                    'id=?', (task_list[0]['id'],)).setField('status', 1)
+            for i in r['data']:
+                file_url = url + '/' + i.replace('app', 'v')
+                videoDownload(file_url, i)
+
+        common.M('task').where(
+            'id=?', (task_list[0]['id'],)).setField('status', 1)
         time.sleep(10)
 
 
