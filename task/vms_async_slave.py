@@ -193,7 +193,6 @@ def asyncVideoDBData():
 
         # 异步通知已经执行
         video_db_ischange = common.getSysKV('video_db_ischange')
-        print(video_db_ischange)
         if video_db_ischange == '0':
             time.sleep(sleep_time)
             continue
@@ -202,7 +201,7 @@ def asyncVideoDBData():
             'ismaster=?', (1,)).select()
 
         if len(_list) < 1:
-            time.sleep(20)
+            time.sleep(sleep_time)
             continue
 
         print('async VideoDB!!!')
