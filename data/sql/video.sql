@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS `video_node` (
   `addtime` TEXT
 );
 
-
 CREATE TABLE IF NOT EXISTS `kv` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` TEXT,
@@ -36,4 +35,3 @@ INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
 (5, 'nginx_video_www', '/www/wwwroot/vms/app','2016-12-10 15:12:56');
 INSERT INTO `kv` (`id`, `name`, `value`, `addtime`) VALUES
 (6, 'nginx_domain_acl', '','2016-12-10 15:12:56');
-
