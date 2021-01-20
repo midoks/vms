@@ -925,7 +925,7 @@ def getSysKV(name):
 
 
 def setSysKV(name, value):
-    return M('kv').where('name=?', (name,)).setField(name, value)
+    return M('kv').where('name=?', (name,)).setField('value', value)
 
 #----DB----#
 
