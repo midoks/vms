@@ -43,7 +43,7 @@ class async_slave_api:
     def pingApi(self):
         return common.retOk('ok')
 
-    def videoDbAsyncTriggerApi():
+    def videoDbAsyncTriggerApi(self):
 
         r = self.isNameRight()
         if r != '':
