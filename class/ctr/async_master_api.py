@@ -148,12 +148,12 @@ class async_master_api:
         '''
         文件完成回调
         '''
-        # r = self.isNameRight()
-        # if r != '':
-        #     return r
+        r = self.isNameRight()
+        if r != '':
+            return r
 
-        vid = request.args.get('vid', '').encode('utf-8')
-        mark = request.args.get('mark', '').encode('utf-8')
+        vid = request.form.get('vid', '').encode('utf-8')
+        mark = request.form.get('mark', '').encode('utf-8')
         # print(vid, mark)
         r = common.M('task').where(
             'vid=? and mark=?', (vid, mark)).setField('status', 1)
