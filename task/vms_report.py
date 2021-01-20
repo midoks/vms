@@ -84,23 +84,27 @@ def pingServer():
 
 
 def serverReport():
+    time_sleep = 3
     while True:
-        if not isMasterNode():
-            c = os.getloadavg()
-            data = {}
-            data['one'] = float(c[0])
-            data['five'] = float(c[1])
-            data['fifteen'] = float(c[2])
-            data['max'] = psutil.cpu_count() * 2
-            data['limit'] = data['max']
-            data['safe'] = data['max'] * 0.75
-            data['report_time'] = common.getDate()
+        if isMasterNode():
+            time.sleep(time_sleep)
+            continue
 
-            r = reportData(data)
-            if r['code'] != 0:
-                print('同步失败![%s]', common.getDate())
+        c = os.getloadavg()
+        data = {}
+        data['one'] = float(c[0])
+        data['five'] = float(c[1])
+        data['fifteen'] = float(c[2])
+        data['max'] = psutil.cpu_count() * 2
+        data['limit'] = data['max']
+        data['safe'] = data['max'] * 0.75
+        data['report_time'] = common.getDate()
 
-        time.sleep(3)
+        r = reportData(data)
+        if r['code'] != 0:
+            print('同步失败![%s]', common.getDate())
+
+        time.sleep(time_sleep)
 
 
 def serverPing():
