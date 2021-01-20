@@ -310,7 +310,6 @@ def asyncVideoFileCallback():
                 'name': task_list[x]['mark'],
                 'vid': task_list[x]['vid'],
             })
-            print(ret)
             data = json.loads(ret)
             if data['code'] != 0:
                 print(data['msg'])
