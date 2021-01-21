@@ -70,6 +70,44 @@ class video_node_api:
 
         return common.getJson(_ret)
 
+    def getAddrApi(self):
+        sid = request.args.get('id', '').encode('utf-8')
+
+        _list = common.M('video_node', 'video').field('id,pid,node_id,addtime').where(
+            'id=?', (sid,)).select()
+
+        if len(_list) < 1:
+            return common.retFail('video_node error')
+
+        _d3 = common.M('video', 'video').field(
+            'filename').where('id=?', (_list[0]['pid'],)).select()
+
+        if len(_d3) < 1:
+            return common.retFail('video error')
+
+        node = common.getSysKV('run_mark')
+
+        if node == _list[0]['node_id']:
+            port = common.readFile('data/port.pl')
+            ip = common.readFile('data/iplist.txt')
+            url = 'http://' + ip + ':' + port + '/v/' + \
+                str(_d3[0]['filename']) + '/m3u8/index.m3u8'
+            return common.retOk('ok', {'url': url})
+        else:
+            node = _list[0]['node_id']
+
+            _d2 = common.M('node').field(
+                'ip,port,addtime').where('name=?', (node,)).select()
+
+            if len(_d2) < 1:
+                return common.retFail('node error', [node, _d2])
+
+            url = 'http://' + str(_d2[0]['ip']) + ':' + \
+                str(_d2[0]['port']) + '/v/' + \
+                str(_d3[0]['filename']) + '/m3u8/index.m3u8'
+        #'tmp': [_list, _d2, _d3]
+        return common.retOk('ok', {'url': url})
+
     def delApi(self):
         sid = request.form.get('id', '').encode('utf-8')
         videoM = common.M('video_node', 'video')

@@ -94,9 +94,11 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   }
 
   function apiPlayerOpen(data){
-    console.log(data)
-    var url = '/v/'+data.filename+'/m3u8/index.m3u8'; 
-    window.open('/video/player?url='+url);
+    $.getJSON('/video_node_api/getAddr',{id:data.id},function(data){
+      // console.log(data['data']['url']);
+      window.open('/video/player?url='+data['data']['url']);
+      copyText(data['data']['url']);
+    });
   }
 
 
@@ -114,8 +116,11 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 }
 
   function apiAddr(data){
-    var url = location.protocol+"//"+location.host+'/m3u8/'+data.filename+'/index.m3u8';
-    copyText(url);
+    $.getJSON('/video_node_api/getAddr',{id:data.id},function(data){
+      copyText(data['data']['url']);
+    });
+
+    
   }
 
 ///
