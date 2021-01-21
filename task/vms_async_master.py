@@ -182,6 +182,16 @@ def asyncVideoFile():
         time.sleep(time_sleep)
 
 
+def asyncTask():
+    time_sleep = 3
+    while True:
+        if not isMasterNode():
+            time.sleep(time_sleep)
+            continue
+
+        time.sleep(time_sleep)
+
+
 def startTask():
     import time
     try:
@@ -195,6 +205,10 @@ if __name__ == "__main__":
 
     # 同步文件
     t = threading.Thread(target=asyncVideoFile)
+    t.setDaemon(True)
+    t.start()
+
+    t = threading.Thread(target=asyncTask)
     t.setDaemon(True)
     t.start()
 
