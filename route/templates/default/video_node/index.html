@@ -94,7 +94,8 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
   }
 
   function apiPlayerOpen(data){
-    var url = '/m3u8/'+data.filename+'/index.m3u8'; 
+    console.log(data)
+    var url = '/v/'+data.filename+'/m3u8/index.m3u8'; 
     window.open('/video/player?url='+url);
   }
 
