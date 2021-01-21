@@ -57,7 +57,7 @@ def addTask(vid, action):
         url = "http://" + str(_list[0]['ip']) + ":" + str(_list[0]['port'])
         sign = 'to:' + url
         common.M('task').add("ismaster,action,sign,vid,mark,status,uptime,addtime",
-                             (1, action, sign, vid, vlist[x]['node_id'], 0, common.getDate(), common.getDate()))
+                             (1, action, sign, vid, vlist[x]['node_id'], -1, common.getDate(), common.getDate()))
 
     return True
 
