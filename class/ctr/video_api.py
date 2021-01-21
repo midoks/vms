@@ -42,6 +42,26 @@ def del_file(path_data):
             del_file(file_data)
 
 
+# 添加删除文件计划
+def addTask(vid, action):
+
+    mark = common.getSysKV('run_mark')
+    vlist = common.M('video_node', 'video').field('id,node_id').where(
+        'pid=? and node_id<>?', (vid, mark)).select()
+
+    for x in xrange(0, len(vlist)):
+
+        _list = common.M('node').field(
+            'id,ip,port,name').where('name=?', (vlist[x]['node_id'],)).select()
+
+        url = "http://" + str(_list[0]['ip']) + ":" + str(_list[0]['port'])
+        sign = 'to:' + url
+        common.M('task').add("ismaster,action,sign,vid,mark,status,uptime,addtime",
+                             (1, action, sign, vid, vlist[x]['node_id'], 0, common.getDate(), common.getDate()))
+
+    return True
+
+
 class video_api:
 
     def __init__(self):
@@ -187,9 +207,9 @@ class video_api:
                 raise e
 
         r = videoM.where("id=?", (sid,)).delete()
-
         common.M('video_node', 'video').where("pid=?", (sid,)).delete()
-        # print(sid, r)
+
+        addTask(sid, 2)
         _ret = {}
         _ret['code'] = 0
         _ret['msg'] = '删除成功'
