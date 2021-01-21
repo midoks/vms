@@ -95,32 +95,29 @@ layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'elemen
 
   function apiPlayerOpen(data){
     $.getJSON('/video_node_api/getAddr',{id:data.id},function(data){
-      // console.log(data['data']['url']);
-      window.open('/video/player?url='+data['data']['url']);
       copyText(data['data']['url']);
+      window.open('/video/player?url='+data['data']['url']);
     });
   }
 
 
   function copyText(content){
-    var clipboard = new ClipboardJS('#video_copys');
-    clipboard.on('success', function (e) {
-        layer.msg('复制成功',{icon:1,time:2000});
-    });
+      var clipboard = new ClipboardJS('#video_copys');
+      clipboard.on('success', function (e) {
+          layer.msg('复制成功',{icon:1,time:2000});
+      });
 
-    clipboard.on('error', function (e) {
-        layer.msg('复制失败，浏览器不兼容!',{icon:2,time:2000});
-    });
-    $("#video_copys").attr('data-clipboard-text',content);
-    $("#video_copys").click();
-}
+      clipboard.on('error', function (e) {
+          layer.msg('复制失败，浏览器不兼容!',{icon:2,time:2000});
+      });
+      $("#video_copys").attr('data-clipboard-text',content);
+      $("#video_copys").click();
+  }
 
   function apiAddr(data){
     $.getJSON('/video_node_api/getAddr',{id:data.id},function(data){
       copyText(data['data']['url']);
     });
-
-    
   }
 
 ///
