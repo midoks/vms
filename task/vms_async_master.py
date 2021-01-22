@@ -148,7 +148,7 @@ def postTask(url, vid, action, name):
 
 def postTaskFilename(url, vid, action, name, filename):
     # print('postTaskFilename')
-    # print(url, vid, action, name, filename)
+    print(url, vid, action, name, filename)
     ret = common.httpPost(url, {
         'vid': vid,
         'action': action,
