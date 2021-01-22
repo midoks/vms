@@ -305,6 +305,10 @@ def asyncVideoFileDel():
         data = common.M('video', 'video').field('id,filename,size').where(
             'id=?', (task_list[0]['vid'],)).select()
 
+        if len(data) < 1:
+            time.sleep(sleep_time)
+            continue
+
         if data:
             try:
                 pathfile = os.getcwd() + "/app/" + str(data[0]['filename'])
@@ -316,9 +320,9 @@ def asyncVideoFileDel():
                 common.M('task').where(
                     'id=?', (task_list[0]['id'],)).setField('status', 1)
             except Exception as e:
-                print(e)
+                print('err:', e)
 
-    time.sleep(sleep_time)
+        time.sleep(sleep_time)
 
 
 def asyncVideoFileCallback():
