@@ -323,7 +323,8 @@ def asyncTaskCallBack():
             time.sleep(sleep_time)
             continue
 
-        task_list = getTaskList(0, 1)
+        task_list = _list = common.M('task').field('id,ismaster,mark,sign,vid,status,action,uptime,addtime').where(
+            'ismaster=? and status=?', (0, 1)).limit('1').select()
 
         if len(task_list) < 1:
             time.sleep(sleep_time)
