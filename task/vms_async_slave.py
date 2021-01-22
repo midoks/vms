@@ -105,9 +105,9 @@ def getNodeList(ismaster=1):
     return _list
 
 
-def getTaskList(ismaster=0, status=0):
+def getTaskList(ismaster=0, status=0, action=1):
     _list = common.M('task').field('id,ismaster,mark,sign,vid,status,uptime,addtime').where(
-        'ismaster=? and status=?', (ismaster, status,)).limit('1').select()
+        'ismaster=? and status=? and action=?', (ismaster, status, action)).limit('1').select()
     return _list
 
 
@@ -284,7 +284,40 @@ def asyncVideoFile():
 
         common.M('task').where(
             'id=?', (task_list[0]['id'],)).setField('status', 1)
-        time.sleep(10)
+        time.sleep(sleep_time)
+
+
+def asyncVideoFileDel():
+    sleep_time = 20
+    while True:
+        if isMasterNode():
+            time.sleep(sleep_time)
+            continue
+
+        task_list = task_list = getTaskList(0, 0, 2)
+        if len(task_list) < 1:
+            time.sleep(sleep_time)
+            continue
+
+        print('async asyncVideoFileDel!!!')
+
+        data = common.M('video', 'video').field('id,filename,size').where(
+            'id=?', (task_list[0]['vid'],)).select()
+
+        if data:
+            try:
+                pathfile = os.getcwd() + "/app/" + str(data[0]['filename'])
+                common.execShell('rm -rf ' + pathfile)
+                if os.path.exists(pathfile):
+                    del_file(pathfile)
+                    os.removedirs(pathfile)
+
+                common.M('task').where(
+                    'id=?', (task_list[0]['id'],)).setField('status', 1)
+            except Exception as e:
+                print(e)
+
+        time.sleep(sleep_time)
 
 
 def asyncVideoFileCallback():
@@ -300,10 +333,10 @@ def asyncVideoFileCallback():
             time.sleep(sleep_time)
             continue
 
-        print('async VideoFile Callback!!!')
+        print('async asyncTask Callback!!!')
         for x in xrange(0, len(task_list)):
             url = getMasterNodeURL()
-            api_url = url + "/async_master_api/fileAsyncCallBack"
+            api_url = url + "/async_master_api/asyncTaskCallBack"
 
             ret = common.httpPost(api_url, {
                 'mark': common.getSysKV('run_mark'),
@@ -343,6 +376,11 @@ if __name__ == "__main__":
 
     # 同步文件
     t = threading.Thread(target=asyncVideoFile)
+    t.setDaemon(True)
+    t.start()
+
+    # 同步文件删除
+    t = threading.Thread(target=asyncVideoFileDel)
     t.setDaemon(True)
     t.start()
 
