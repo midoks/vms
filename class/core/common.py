@@ -67,11 +67,13 @@ def fileList(f_dir):
 
 
 def mkdir(path):
+    if os.path.exists(path):
+        return True
     dirs = os.path.dirname(path)
-    if os.path.exists(dirs):
-        os.mkdir(path)
-    else:
+    if not os.path.exists(dirs):
         mkdir(dirs)
+    os.mkdir(path)
+    return True
 
 
 def getOs():
