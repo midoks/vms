@@ -86,3 +86,37 @@ class async_slave_api:
         if not r:
             return common.retFail('the task add fail...!!!')
         return common.retOk()
+
+    def asyncTaskApi(self):
+        '''
+        由主服务器发送请求,从服务器同步任务
+        '''
+        r = self.isNameRight()
+        if r != '':
+            return r
+
+        mark = request.form.get('mark', '').encode('utf-8')
+        vid = request.form.get('vid', '').encode('utf-8')
+        action = request.form.get('action', '').encode('utf-8')
+
+        vlist = common.M('video', 'video').where('id=?', vid).select()
+        if len(vlist) < 1:
+            return common.retFail('video doesn\'t exist, maybe syncing data...!!!')
+
+        nlist = common.M('node').field(
+            'id,info,port,name,ip').where('name=?', (mark,)).select()
+        if len(nlist) < 1:
+            return common.retFail('node info doesn\'t exist, maybe syncing data...!!!')
+
+        rlist = common.M('task').where('vid=? and action=?',
+                                       (vid, action)).limit('1').select()
+        if len(rlist) > 0:
+            return common.retFail('the task already exists...!!!', None, 2)
+        # print()
+        url = nlist[0]['ip'] + ':' + nlist[0]['port']
+        sign = 'from:' + url
+        r = common.M('task').add("ismaster,sign,vid,action,mark,status,uptime,addtime",
+                                 (0, sign, vid, action, mark, 0, common.getDate(), common.getDate()))
+        if not r:
+            return common.retFail('the task add fail...!!!')
+        return common.retOk()

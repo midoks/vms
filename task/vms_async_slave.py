@@ -309,6 +309,7 @@ def asyncVideoFileCallback():
                 'mark': common.getSysKV('run_mark'),
                 'name': task_list[x]['mark'],
                 'vid': task_list[x]['vid'],
+                'action': task_list[x]['action'],
             })
             data = json.loads(ret)
             if data['code'] != 0:
@@ -316,7 +317,7 @@ def asyncVideoFileCallback():
             else:
                 common.M('task').where(
                     'id=?', (task_list[x]['id'],)).setField('status', 2)
-        time.sleep(3)
+        time.sleep(sleep_time)
 
 
 def startTask():

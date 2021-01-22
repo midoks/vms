@@ -209,7 +209,7 @@ def asyncPostTask():
     for x in vlist:
         d = getNodeByName(x['mark'])
         url = "http://" + str(d['ip']) + ":" + str(d['port'])
-        post_url = url + '/async_slave_api/fileStart'
+        post_url = url + '/async_slave_api/asyncTask'
         r = postTask(post_url, x['vid'], x['action'], x['mark'])
         if r:
             if r['code'] == 0 or r['code'] == 2:
