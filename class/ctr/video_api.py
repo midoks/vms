@@ -206,10 +206,10 @@ class video_api:
             except Exception as e:
                 raise e
 
+        addTask(sid, 2)
+
         r = videoM.where("id=?", (sid,)).delete()
         common.M('video_node', 'video').where("pid=?", (sid,)).delete()
-
-        addTask(sid, 2)
         _ret = {}
         _ret['code'] = 0
         _ret['msg'] = '删除成功'

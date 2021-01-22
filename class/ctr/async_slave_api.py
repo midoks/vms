@@ -74,7 +74,8 @@ class async_slave_api:
         if len(nlist) < 1:
             return common.retFail('node info doesn\'t exist, maybe syncing data...!!!')
 
-        rlist = common.M('task').where('vid=?', (vid,)).limit('1').select()
+        rlist = common.M('task').where('vid=? and action=?',
+                                       (vid, action)).limit('1').select()
         if len(rlist) > 0:
             return common.retFail('the task already exists...!!!')
         # print()

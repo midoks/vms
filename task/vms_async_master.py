@@ -93,6 +93,12 @@ def getNodeByID(nid):
     return _list[0]
 
 
+def getNodeByName(name):
+    _list = common.M('node').field(
+        'id,ip,port,name').where('name=?', (name,)).select()
+    return _list[0]
+
+
 def getNodeURL(nid):
     d = getNodeByID(nid)
     url = "http://" + str(d['ip']) + ":" + str(d['port'])
@@ -117,6 +123,18 @@ def addTask(vid, action, sign, mark):
 
 
 def postFileStart(url, vid, action, name):
+    ret = common.httpPost(url, {
+        'vid': vid,
+        'action': action,
+        'mark': common.getSysKV('run_mark'),
+        'name': name
+    })
+    if ret:
+        return json.loads(ret)
+    return False
+
+
+def postTask(url, vid, action, name):
     ret = common.httpPost(url, {
         'vid': vid,
         'action': action,
@@ -182,12 +200,38 @@ def asyncVideoFile():
         time.sleep(time_sleep)
 
 
+def asyncPostTask():
+    vlist = common.M('task').field('id,vid,mark,action').where(
+        'status=?', (-1,)).limit('1').select()
+    if len(vlist) < 1:
+        return
+
+    for x in vlist:
+        d = getNodeByName(x['mark'])
+        url = "http://" + str(d['ip']) + ":" + str(d['port'])
+        post_url = url + '/async_slave_api/fileStart'
+        r = postTask(post_url, x['vid'], x['action'], x['mark'])
+        if r:
+            if r['code'] == '0':
+                print('ok')
+            else:
+                print(r['msg'])
+
+
 def asyncTask():
+    '''
+    # 由主服务器选择文件同步到那从服务器上
+    '''
     time_sleep = 3
     while True:
         if not isMasterNode():
             time.sleep(time_sleep)
             continue
+
+        try:
+            asyncPostTask()
+        except Exception as e:
+            print(e)
 
         time.sleep(time_sleep)
 
