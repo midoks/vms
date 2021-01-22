@@ -81,6 +81,10 @@ class async_slave_api:
         # print()
         url = nlist[0]['ip'] + ':' + nlist[0]['port']
         sign = 'from:' + url
+        if action == 2:
+            filename = request.form.get('filename', '').encode('utf-8')
+            sign = sign + ':' + filename
+
         r = common.M('task').add("ismaster,sign,vid,action,mark,status,uptime,addtime",
                                  (0, sign, vid, action, mark, 0, common.getDate(), common.getDate()))
         if not r:
