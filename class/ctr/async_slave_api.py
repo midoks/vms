@@ -77,7 +77,7 @@ class async_slave_api:
         rlist = common.M('task').where('vid=? and action=?',
                                        (vid, action)).limit('1').select()
         if len(rlist) > 0:
-            return common.retFail('the task already exists...!!!')
+            return common.retFail('the task already exists...!!!', None, 2)
         # print()
         url = nlist[0]['ip'] + ':' + nlist[0]['port']
         sign = 'from:' + url

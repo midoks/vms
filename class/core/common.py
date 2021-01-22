@@ -209,12 +209,12 @@ def returnData(msg='ok', code=0, data=None):
     return {'code': code, 'msg': msg, 'data': data}
 
 
-def retOk(msg='ok', data=None):
-    return getJson(returnData(msg, 0, data))
+def retOk(msg='ok', data=None, code=0):
+    return getJson(returnData(msg, code, data))
 
 
-def retFail(msg='fail', data=None):
-    return getJson(returnData(msg, 1, data))
+def retFail(msg='fail', data=None, code=1):
+    return getJson(returnData(msg, code, data))
 
 
 def returnMsg(status, msg, args=()):
