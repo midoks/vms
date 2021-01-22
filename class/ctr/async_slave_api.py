@@ -120,7 +120,7 @@ class async_slave_api:
         url = nlist[0]['ip'] + ':' + nlist[0]['port']
 
         sign = 'from:' + url
-        if action == 2:
+        if action == '2':
             filename = request.form.get('filename', '').encode('utf-8')
             sign = sign + ':' + filename
         else:
