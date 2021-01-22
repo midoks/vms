@@ -212,9 +212,9 @@ def asyncPostTask():
         post_url = url + '/async_slave_api/fileStart'
         r = postTask(post_url, x['vid'], x['action'], x['mark'])
         if r:
-            if r['code'] == '0' or r['code'] == '2':
-                common.M('task').where('vid=? and action=?',
-                                       (x['vid'], x['action'],)).setField('status', 1)
+            if r['code'] == 0 or r['code'] == 2:
+                done = common.M('task').where('vid=? and action=? and mark=?',
+                                              (x['vid'], x['action'], x['mark'])).setField('status', 0)
             else:
                 print(r['msg'])
 
