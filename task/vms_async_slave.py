@@ -294,7 +294,7 @@ def asyncVideoFileDel():
             time.sleep(sleep_time)
             continue
 
-        task_list = task_list = getTaskList(0, 0, 2)
+        task_list = task_list = getTaskList(0, 1, 2)
         if len(task_list) < 1:
             time.sleep(sleep_time)
             continue
@@ -303,6 +303,8 @@ def asyncVideoFileDel():
 
         sign = task_list[0]['sign']
         filename = sign.split(':')[2]
+
+        print(sign)
 
         pathfile = os.getcwd() + "/app/" + filename
         if os.path.exists(pathfile):
