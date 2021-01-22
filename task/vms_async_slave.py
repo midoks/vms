@@ -302,20 +302,17 @@ def asyncVideoFileDel():
         print('async asyncVideoFileDel!!!')
 
         sign = task_list[0]['sign']
-        filename = sign.split(':')[0]
+        filename = sign.split(':')[2]
 
-        if filename:
-            try:
-                pathfile = os.getcwd() + "/app/" + filename
-                common.execShell('rm -rf ' + pathfile)
-                if os.path.exists(pathfile):
-                    del_file(pathfile)
-                    os.removedirs(pathfile)
+        pathfile = os.getcwd() + "/app/" + filename
+        if os.path.exists(pathfile):
+            common.execShell('rm -rf ' + pathfile)
+            if os.path.exists(pathfile):
+                del_file(pathfile)
+                os.removedirs(pathfile)
 
-                common.M('task').where(
-                    'id=?', (task_list[0]['id'],)).setField('status', 1)
-            except Exception as e:
-                print('err:', e)
+            common.M('task').where(
+                'id=?', (task_list[0]['id'],)).setField('status', 1)
 
         time.sleep(sleep_time)
 
