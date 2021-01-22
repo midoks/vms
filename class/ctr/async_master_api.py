@@ -144,35 +144,6 @@ class async_master_api:
 
         return common.retOk('ok', flist)
 
-    def fileAsyncCallBackApi(self):
-        '''
-        文件完成回调
-        '''
-        r = self.isNameRight()
-        if r != '':
-            return r
-
-        vid = request.form.get('vid', '').encode('utf-8')
-        mark = request.form.get('mark', '').encode('utf-8')
-        action = request.form.get('action', '1').encode('utf-8')
-        # print(vid, mark)
-        r = common.M('task').where(
-            'vid=? and mark=? and action=?', (vid, mark, action)).setField('status', 1)
-
-        vlist = common.M('video_node', 'video').where(
-            "pid=? and node_id=?", (vid, mark,)).select()
-
-        if len(vlist) > 0:
-            updateNodeNum(vid)
-            return common.retFail('already exists!!!')
-
-        common.M('video_node', 'video').add(
-            "pid,node_id,addtime", (vid, mark, common.getDate()))
-        updateNodeNum(vid)
-        if not r:
-            return common.retFail()
-        return common.retOk()
-
     def asyncTaskCallBackApi(self):
         '''
         文件完成回调
