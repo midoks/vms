@@ -294,28 +294,29 @@ def asyncVideoFileDel():
         if isMasterNode():
             time.sleep(sleep_time)
             continue
-    task_list = task_list = getTaskList(0, 0, 2)
-    if len(task_list) < 1:
-        time.sleep(sleep_time)
-        continue
 
-    print('async asyncVideoFileDel!!!')
+        task_list = task_list = getTaskList(0, 0, 2)
+        if len(task_list) < 1:
+            time.sleep(sleep_time)
+            continue
 
-    data = common.M('video', 'video').field('id,filename,size').where(
-        'id=?', (task_list[0]['vid'],)).select()
+        print('async asyncVideoFileDel!!!')
 
-    if data:
-        try:
-            pathfile = os.getcwd() + "/app/" + str(data[0]['filename'])
-            common.execShell('rm -rf ' + pathfile)
-            if os.path.exists(pathfile):
-                del_file(pathfile)
-                os.removedirs(pathfile)
+        data = common.M('video', 'video').field('id,filename,size').where(
+            'id=?', (task_list[0]['vid'],)).select()
 
-            common.M('task').where(
-                'id=?', (task_list[0]['id'],)).setField('status', 1)
-        except Exception as e:
-            print(e)
+        if data:
+            try:
+                pathfile = os.getcwd() + "/app/" + str(data[0]['filename'])
+                common.execShell('rm -rf ' + pathfile)
+                if os.path.exists(pathfile):
+                    del_file(pathfile)
+                    os.removedirs(pathfile)
+
+                common.M('task').where(
+                    'id=?', (task_list[0]['id'],)).setField('status', 1)
+            except Exception as e:
+                print(e)
 
     time.sleep(sleep_time)
 
@@ -328,8 +329,6 @@ def asyncVideoFileCallback():
             continue
 
         task_list = getTaskList(0, 1)
-
-        print(task_list)
 
         if len(task_list) < 1:
             time.sleep(sleep_time)
