@@ -306,7 +306,7 @@ def asyncVideoFileDel():
             'id=?', (task_list[0]['vid'],)).select()
 
         if len(data) < 1:
-            time.sleep(sleep_time)
+            time.sleep(2)
             continue
 
         if data:
