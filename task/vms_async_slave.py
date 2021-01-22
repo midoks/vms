@@ -106,7 +106,7 @@ def getNodeList(ismaster=1):
 
 
 def getTaskList(ismaster=0, status=0, action=1):
-    _list = common.M('task').field('id,ismaster,mark,sign,vid,status,uptime,addtime').where(
+    _list = common.M('task').field('id,ismaster,mark,sign,vid,status,action,uptime,addtime').where(
         'ismaster=? and status=? and action=?', (ismaster, status, action)).limit('1').select()
     return _list
 
@@ -306,7 +306,7 @@ def asyncVideoFileDel():
             'id=?', (task_list[0]['vid'],)).select()
 
         if len(data) < 1:
-            time.sleep(sleep_time)
+            time.sleep(2)
             continue
 
         if data:
