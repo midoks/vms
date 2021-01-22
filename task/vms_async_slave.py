@@ -267,7 +267,6 @@ def asyncVideoFile():
 
         print('async VideoFile!!!')
         api_url = url + "/async_master_api/fileList"
-        print(api_url)
         ret = common.httpPost(api_url, {
             'vid': task_list[0]['vid'],
             'name': task_list[0]['mark']
