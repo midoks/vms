@@ -43,7 +43,7 @@ def del_file(path_data):
 
 
 # 添加删除文件计划
-def addTask(vid, action):
+def addTask(vid, filename, action):
 
     mark = common.getSysKV('run_mark')
     vlist = common.M('video_node', 'video').field('id,node_id').where(
@@ -55,7 +55,7 @@ def addTask(vid, action):
             'id,ip,port,name').where('name=?', (vlist[x]['node_id'],)).select()
 
         url = "http://" + str(_list[0]['ip']) + ":" + str(_list[0]['port'])
-        sign = 'to:' + url
+        sign = 'to:' + url + ":" + filename
         common.M('task').add("ismaster,action,sign,vid,mark,status,uptime,addtime",
                              (1, action, sign, vid, vlist[x]['node_id'], -1, common.getDate(), common.getDate()))
 
@@ -206,7 +206,7 @@ class video_api:
             except Exception as e:
                 raise e
 
-        addTask(sid, 2)
+        addTask(sid, data[0]['filename'], 2)
 
         r = videoM.where("id=?", (sid,)).delete()
         common.M('video_node', 'video').where("pid=?", (sid,)).delete()

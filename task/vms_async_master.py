@@ -145,6 +145,19 @@ def postTask(url, vid, action, name):
         return json.loads(ret)
     return False
 
+
+def postTaskFilename(url, vid, action, name, filename):
+    ret = common.httpPost(url, {
+        'vid': vid,
+        'action': action,
+        'mark': common.getSysKV('run_mark'),
+        'name': name,
+        'filename': filename
+    })
+    if ret:
+        return json.loads(ret)
+    return False
+
 #------------Public Methods--------------
 
 
@@ -201,7 +214,7 @@ def asyncVideoFile():
 
 
 def asyncPostTask():
-    vlist = common.M('task').field('id,vid,mark,action').where(
+    vlist = common.M('task').field('id,vid,mark,sign,action').where(
         'status=?', (-1,)).limit('1').select()
     if len(vlist) < 1:
         return
@@ -210,7 +223,15 @@ def asyncPostTask():
         d = getNodeByName(x['mark'])
         url = "http://" + str(d['ip']) + ":" + str(d['port'])
         post_url = url + '/async_slave_api/asyncTask'
-        r = postTask(post_url, x['vid'], x['action'], x['mark'])
+
+        if x['action'] == 2:
+
+            filename = x['vid'].split(':')[2]
+            r = postTaskFilename(post_url, x['vid'], x[
+                                 'action'], x['mark'], filename)
+        else:
+
+            r = postTask(post_url, x['vid'], x['action'], x['mark'])
         if r:
             if r['code'] == 0 or r['code'] == 2:
                 done = common.M('task').where('vid=? and action=? and mark=?',

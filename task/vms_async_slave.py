@@ -302,16 +302,12 @@ def asyncVideoFileDel():
 
         print('async asyncVideoFileDel!!!')
 
-        data = common.M('video', 'video').field('id,filename,size').where(
-            'id=?', (task_list[0]['vid'],)).select()
+        sign = task_list[0]['sign']
+        filename = sign.split(':')[0]
 
-        if len(data) < 1:
-            time.sleep(2)
-            continue
-
-        if data:
+        if filename:
             try:
-                pathfile = os.getcwd() + "/app/" + str(data[0]['filename'])
+                pathfile = os.getcwd() + "/app/" + filename
                 common.execShell('rm -rf ' + pathfile)
                 if os.path.exists(pathfile):
                     del_file(pathfile)
