@@ -226,7 +226,7 @@ def asyncPostTask():
 
         if x['action'] == 2:
 
-            filename = x['vid'].split(':')[2]
+            filename = x['sign'].split(':')[2]
             r = postTaskFilename(post_url, x['vid'], x[
                                  'action'], x['mark'], filename)
         else:
