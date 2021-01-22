@@ -147,6 +147,8 @@ def postTask(url, vid, action, name):
 
 
 def postTaskFilename(url, vid, action, name, filename):
+    # print('postTaskFilename')
+    # print(url, vid, action, name, filename)
     ret = common.httpPost(url, {
         'vid': vid,
         'action': action,
@@ -225,8 +227,7 @@ def asyncPostTask():
         post_url = url + '/async_slave_api/asyncTask'
 
         if x['action'] == 2:
-
-            filename = x['sign'].split(':')[2]
+            filename = x['sign'].split('|')[1]
             r = postTaskFilename(post_url, x['vid'], x[
                                  'action'], x['mark'], filename)
         else:

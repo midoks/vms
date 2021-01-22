@@ -54,7 +54,7 @@ def addTask(vid, filename, action):
         _list = common.M('node').field(
             'id,ip,port,name').where('name=?', (vlist[x]['node_id'],)).select()
 
-        url = "http://" + str(_list[0]['ip']) + ":" + str(_list[0]['port'])
+        url = "http://" + str(_list[0]['ip']) + "|" + str(_list[0]['port'])
         sign = 'to:' + url + ":" + filename
         common.M('task').add("ismaster,action,sign,vid,mark,status,uptime,addtime",
                              (1, action, sign, vid, vlist[x]['node_id'], -1, common.getDate(), common.getDate()))

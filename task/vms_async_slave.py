@@ -300,9 +300,8 @@ def asyncVideoFileDel():
             continue
 
         print('async asyncVideoFileDel!!!')
-
         sign = task_list[0]['sign']
-        filename = sign.split(':')[2]
+        filename = sign.split('|')[1]
 
         pathfile = os.getcwd() + "/app/" + filename
         if os.path.exists(pathfile):
