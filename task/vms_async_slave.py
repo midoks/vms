@@ -267,7 +267,6 @@ def asyncVideoFile():
 
         print('async VideoFile!!!')
         api_url = url + "/async_master_api/fileList"
-        print(api_url)
         ret = common.httpPost(api_url, {
             'vid': task_list[0]['vid'],
             'name': task_list[0]['mark']
@@ -321,7 +320,7 @@ def asyncVideoFileDel():
         time.sleep(sleep_time)
 
 
-def asyncVideoFileCallback():
+def asyncTaskCallBack():
     sleep_time = 3
     while True:
         if isMasterNode():
@@ -338,7 +337,6 @@ def asyncVideoFileCallback():
         for x in xrange(0, len(task_list)):
             url = getMasterNodeURL()
             api_url = url + "/async_master_api/asyncTaskCallBack"
-
             ret = common.httpPost(api_url, {
                 'mark': common.getSysKV('run_mark'),
                 'name': task_list[x]['mark'],
@@ -386,7 +384,7 @@ if __name__ == "__main__":
     t.start()
 
     # 同步文件完成回调
-    t = threading.Thread(target=asyncVideoFileCallback)
+    t = threading.Thread(target=asyncTaskCallBack)
     t.setDaemon(True)
     t.start()
 
