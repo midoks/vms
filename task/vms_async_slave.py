@@ -253,7 +253,7 @@ def videoDownload(url, pos):
 
 
 def asyncVideoFile():
-    sleep_time = 20
+    sleep_time = 3
     while True:
         if isMasterNode():
             time.sleep(sleep_time)
