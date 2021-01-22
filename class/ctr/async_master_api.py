@@ -173,7 +173,7 @@ class async_master_api:
             return common.retFail()
         return common.retOk()
 
-    def asyncTaskCallBack(self):
+    def asyncTaskCallBackApi(self):
         '''
         文件完成回调
         '''
